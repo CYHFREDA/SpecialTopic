@@ -39,7 +39,8 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - /etc/localtime:/etc/localtime:ro  
+      - /etc/localtime:/etc/localtime:ro 
+      - MONGO_URI=mongodb://db:27017/book-exchange
       - mongodb_data:/data/db      
     networks:
       - webnet
