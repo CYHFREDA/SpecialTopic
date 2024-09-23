@@ -16,6 +16,13 @@
         <button onclick="login()">Login</button>
     </div>
 
+    <div id="register-section">
+        <h2>Register</h2>
+        <input type="text" id="register-username" placeholder="Username">
+        <input type="password" id="register-password" placeholder="Password">
+        <button onclick="register()">Register</button>
+    </div>
+
     <div id="book-section" style="display:none;">
         <h2>Available Books</h2>
         <ul id="book-list"></ul>
@@ -38,6 +45,7 @@
             if (res.ok) {
                 token = data.token;
                 document.getElementById('login-section').style.display = 'none';
+                document.getElementById('register-section').style.display = 'none';
                 document.getElementById('book-section').style.display = 'block';
                 fetchBooks();
             } else {
@@ -45,8 +53,28 @@
             }
         }
 
+        async function register() {
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+
+            const res = await fetch('http://localhost:5001/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                alert('Registration successful! You can now log in.');
+            } else {
+                alert(data.error);
+            }
+        }
+
         async function fetchBooks() {
-            const res = await fetch('http://localhost:5001/books');
+            const res = await fetch('http://localhost:5001/books', {
+                headers: { 'Authorization': token }
+            });
             const books = await res.json();
 
             const bookList = document.getElementById('book-list');
