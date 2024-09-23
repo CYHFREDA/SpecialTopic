@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Exchange</title>
+</head>
+<body>
+    <h1>Book Exchange Platform</h1>
+
+    <div id="login-section">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="book-section" style="display:none;">
+        <h2>Available Books</h2>
+        <ul id="book-list"></ul>
+    </div>
+
+    <script>
+        let token = '';
+
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const res = await fetch('http://localhost:3000/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                token = data.token;
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('book-section').style.display = 'block';
+                fetchBooks();
+            } else {
+                alert(data.error);
+            }
+        }
+
+        async function fetchBooks() {
+            const res = await fetch('http://localhost:3000/books');
+            const books = await res.json();
+
+            const bookList = document.getElementById('book-list');
+            bookList.innerHTML = '';
+            books.forEach(book => {
+                const li = document.createElement('li');
+                li.innerText = `${book.title} by ${book.author} (Owner: ${book.owner.username})`;
+                bookList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
