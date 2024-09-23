@@ -1,0 +1,54 @@
+version: '3.3'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx
+      - ./frontend:/usr/share/nginx/html
+      - ./nginx/log:/var/log/nginx
+      - /etc/localtime:/etc/localtime:ro 
+    depends_on:
+      - backend
+    networks:
+      - webnet
+    restart: always  
+
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "5001:5001"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./backend:/usr/src/app       
+    environment:
+      - MONGO_URI=mongodb://db:27017/book-exchange
+      - ALLOWED_ORIGINS=http://nginx:80
+    depends_on:
+      - db
+    networks:
+      - webnet
+    restart: always  
+
+  db:
+    image: mongo:latest
+    container_name: db
+    ports:
+      - "27017:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro  
+      - mongodb_data:/data/db      
+    networks:
+      - webnet
+    restart: always  
+
+networks:
+  webnet:
+    driver: bridge
+  
+volumes:
+  mongodb_data:
