@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 // 连接到 MongoDB
-mongoose.connect('mongodb://db:27017/book-exchange', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://db:27017/book-exchange')
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err));
 
