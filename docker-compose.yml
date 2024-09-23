@@ -14,7 +14,7 @@ services:
     depends_on:
       - backend
     networks:
-      - host
+      - webnet
     restart: always  
 
   backend:
@@ -26,11 +26,11 @@ services:
       - /etc/localtime:/etc/localtime:ro    
     environment:
       - MONGO_URI=mongodb://db:27017/book-exchange
-      - ALLOWED_ORIGINS=http://nginx:80
+      - ALLOWED_ORIGINS=http://nginx
     depends_on:
       - db
     networks:
-      - host
+      - webnet
     restart: always  
 
   db:
@@ -42,13 +42,12 @@ services:
       - /etc/localtime:/etc/localtime:ro  
       - mongodb_data:/data/db      
     networks:
-      - host
+      - webnet
     restart: always  
 
 networks:
-  host:
-    name: host
-    external: true
+  webnet:
+    driver: bridge
   
 volumes:
   mongodb_data:
