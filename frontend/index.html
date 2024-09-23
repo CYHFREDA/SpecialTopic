@@ -28,7 +28,7 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            const res = await fetch('http://localhost:3000/login', {
+            const res = await fetch('http://localhost:5001/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
@@ -46,7 +46,7 @@
         }
 
         async function fetchBooks() {
-            const res = await fetch('http://localhost:3000/books');
+            const res = await fetch('http://localhost:5001/books');
             const books = await res.json();
 
             const bookList = document.getElementById('book-list');
