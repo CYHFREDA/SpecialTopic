@@ -49,7 +49,7 @@
                 document.getElementById('book-section').style.display = 'block';
                 fetchBooks();
             } else {
-                alert(data.error);
+                alert(data.message || data.error); // 使用返回的 message
             }
         }
 
@@ -65,9 +65,9 @@
 
             const data = await res.json();
             if (res.ok) {
-                alert('Registration successful! You can now log in.');
+                alert(data.message || 'Registration successful! You can now log in.'); // 使用返回的 message
             } else {
-                alert(data.error);
+                alert(data.message || data.error);
             }
         }
 
@@ -75,8 +75,13 @@
             const res = await fetch('/api/books', {
                 headers: { 'Authorization': token }
             });
-            const books = await res.json();
 
+            if (!res.ok) {
+                alert('Failed to fetch books.');
+                return;
+            }
+
+            const books = await res.json();
             const bookList = document.getElementById('book-list');
             bookList.innerHTML = '';
             books.forEach(book => {
