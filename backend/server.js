@@ -1,11 +1,17 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const apiRoutes = require('./routes/api');
 const app = express();
-const apiRoutes = require('./routes/api'); // 引入 API 路由
 
-app.use(express.json()); // 解析 JSON 請求體
+app.use(express.json());
+
+// 連接到 MongoDB
+mongoose.connect('mongodb://localhost:27017/bookExchange', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
 // 使用 API 路由
-app.use('/api', apiRoutes); // 所有 /api 的請求都會轉發到 apiRoutes
+app.use('/api', apiRoutes);
 
 // 启动服务器
 const PORT = process.env.PORT || 5001;
