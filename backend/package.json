@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"  // 改為符合你的啟動文件結構
+    "start": "node server.js" 
   },
   "dependencies": {
     "cors": "^2.8.5",
