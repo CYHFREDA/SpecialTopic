@@ -1,24 +1,33 @@
 const express = require('express');
+const User = require('../models/User'); // 需要創建用戶模型
+const Book = require('../models/Book'); // 需要創建書籍模型
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 
 // 註冊路由
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
-    // 註冊邏輯（例如存儲用戶到數據庫）
-    res.json({ message: 'User registered' }); // 確保返回有效的 JSON
+    const user = new User({ username, password }); // 使用密碼哈希化
+    await user.save();
+    res.json({ message: 'User registered' });
 });
 
 // 登入路由
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    // 登入邏輯（例如檢查用戶名和密碼）
-    res.json({ token: 'some_generated_token', message: 'User logged in' }); // 返回有效的 JSON
+    const user = await User.findOne({ username });
+    if (user && user.password === password) { // 應使用密碼哈希驗證
+        const token = jwt.sign({ id: user._id }, 'your_jwt_secret');
+        res.json({ token });
+    } else {
+        res.status(401).json({ error: 'Invalid credentials' });
+    }
 });
 
 // 獲取書籍列表路由
 router.get('/books', async (req, res) => {
-    // 獲取書籍邏輯（例如從數據庫中獲取書籍）
-    res.json([]); // 返回空陣列作為示範
+    const books = await Book.find();
+    res.json(books);
 });
 
-module.exports = router; // 確保導出的是 router
+module.exports = router;
