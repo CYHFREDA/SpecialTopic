@@ -14,7 +14,7 @@ services:
     depends_on:
       - backend
     networks:
-      - webnet
+      - host
     restart: always  
 
   backend:
@@ -30,7 +30,7 @@ services:
     depends_on:
       - db
     networks:
-      - webnet
+      - host
     restart: always  
 
   db:
@@ -42,12 +42,12 @@ services:
       - /etc/localtime:/etc/localtime:ro  
       - mongodb_data:/data/db      
     networks:
-      - webnet
+      - host
     restart: always  
 
 networks:
-  webnet:
-    driver: bridge
+  host:
+    external: true
   
 volumes:
   mongodb_data:
