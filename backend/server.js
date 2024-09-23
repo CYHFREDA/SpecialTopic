@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// 連接MongoDB
+// 連接 MongoDB
 mongoose.connect('mongodb://localhost:27017/book-exchange', {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -62,7 +62,7 @@ app.post('/login', async (req, res) => {
   res.json({ token });
 });
 
-// 驗證JWT token
+// 驗證 JWT token
 const authenticateToken = (req, res, next) => {
   const token = req.headers['authorization'];
   if (!token) return res.status(401).json({ error: 'Access denied' });
@@ -108,4 +108,7 @@ app.post('/books/request/:id', authenticateToken, async (req, res) => {
   res.json({ message: 'Book request sent' });
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+// 使用環境變量設置端口
+const PORT = process.env.PORT || 5001;
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
