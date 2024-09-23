@@ -5,6 +5,9 @@ const app = express();
 
 app.use(express.json());
 
+// 设置 strictQuery 选项
+mongoose.set('strictQuery', true); // 或者 false，根据需求
+
 // 连接到 MongoDB
 mongoose.connect('mongodb://db:27017/book-exchange')
     .then(() => console.log('MongoDB connected'))
