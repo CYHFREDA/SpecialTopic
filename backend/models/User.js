@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
-const bookSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    author: { type: String, required: true },
-    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } // 參考 User 模型
+const userSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true } // 密碼應該哈希化
 });
 
-module.exports = mongoose.model('Book', bookSchema);
+const User = mongoose.models.User || mongoose.model('User', userSchema);
+
+module.exports = User;
