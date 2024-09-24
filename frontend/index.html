@@ -3,93 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Exchange</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <h1>Book Exchange Platform</h1>
-
-    <div id="login-section">
-        <h2>Login</h2>
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="login()">Login</button>
-    </div>
-
-    <div id="register-section">
-        <h2>Register</h2>
-        <input type="text" id="register-username" placeholder="Username">
-        <input type="password" id="register-password" placeholder="Password">
-        <button onclick="register()">Register</button>
-    </div>
-
-    <div id="book-section" style="display:none;">
-        <h2>Available Books</h2>
-        <ul id="book-list"></ul>
-    </div>
-
+    <title>打卡系統</title>
     <script>
-        let token = '';
-
-        async function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            const res = await fetch('/api/login', {
+        async function clockIn() {
+            const user = document.getElementById('user').value;
+            await fetch('/api/clock-in', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user })
             });
-
-            const data = await res.json();
-            if (res.ok) {
-                token = data.token;
-                document.getElementById('login-section').style.display = 'none';
-                document.getElementById('register-section').style.display = 'none';
-                document.getElementById('book-section').style.display = 'block';
-                fetchBooks();
-            } else {
-                alert(data.message || data.error); // 使用返回的 message
-            }
+            alert('打卡成功！');
         }
 
-        async function register() {
-            const username = document.getElementById('register-username').value;
-            const password = document.getElementById('register-password').value;
-
-            const res = await fetch('/api/register', {
+        async function clockOut() {
+            const user = document.getElementById('user').value;
+            await fetch('/api/clock-out', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user })
             });
-
-            const data = await res.json();
-            if (res.ok) {
-                alert(data.message || 'Registration successful! You can now log in.'); // 使用返回的 message
-            } else {
-                alert(data.message || data.error);
-            }
-        }
-
-        async function fetchBooks() {
-            const res = await fetch('/api/books', {
-                headers: { 'Authorization': token }
-            });
-
-            if (!res.ok) {
-                alert('Failed to fetch books.');
-                return;
-            }
-
-            const books = await res.json();
-            const bookList = document.getElementById('book-list');
-            bookList.innerHTML = '';
-            books.forEach(book => {
-                const li = document.createElement('li');
-                li.innerText = `${book.title} by ${book.author} (Owner: ${book.owner.username})`;
-                bookList.appendChild(li);
-            });
+            alert('打卡出成功！');
         }
     </script>
+</head>
+<body>
+    <h1>打卡系統</h1>
+    <input type="text" id="user" placeholder="請輸入用戶名">
+    <button onclick="clockIn()">打卡進</button>
+    <button onclick="clockOut()">打卡出</button>
 </body>
 </html>
