@@ -29,12 +29,28 @@
             });
             alert('打卡出成功！');
         }
+
+        async function fetchRecords() {
+            const response = await fetch('/api/records');
+            const records = await response.json();
+            const recordsList = document.getElementById('records-list');
+            recordsList.innerHTML = ''; // 清空現有記錄
+            records.forEach(record => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${record.user} ${record.type} at ${new Date(record.time).toLocaleString()}`;
+                recordsList.appendChild(listItem);
+            });
+        }
     </script>
 </head>
 <body>
-    <h1>打卡系統</h1>
-    <input type="text" id="user" placeholder="請輸入用戶名">
-    <button onclick="clockIn()">打卡進</button>
-    <button onclick="clockOut()">打卡出</button>
+    <div class="container">
+        <h1>打卡系統</h1>
+        <input type="text" id="user" placeholder="請輸入用戶名">
+        <button onclick="clockIn()">打卡進</button>
+        <button onclick="clockOut()">打卡出</button>
+        <button onclick="fetchRecords()">查詢打卡記錄</button>
+        <ul id="records-list"></ul> <!-- 用於顯示查詢結果 -->
+    </div>
 </body>
 </html>
