@@ -25,7 +25,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro    
     environment:
-      - MONGO_URI=mongodb://root:1qaz2wsx@mongo:27017/clockdb
+      - MONGO_URI=mongodb://root:1qaz2wsx@mongo:27017/clockdb?authSource=admin
       - ALLOWED_ORIGINS=http://nginx
     depends_on:
       - mongo
@@ -40,7 +40,10 @@ services:
       - "27017:27017"
     volumes:
       - /etc/localtime:/etc/localtime:ro 
-      - mongodb_data:/data/db      
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=1qaz2wsx  
     networks:
       - clock-network
     restart: always  
