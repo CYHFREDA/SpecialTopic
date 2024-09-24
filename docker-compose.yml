@@ -25,10 +25,10 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro    
     environment:
-      - MONGO_URI=mongodb://db:27017/clockdb
+      - MONGO_URI=mongodb://mongo:27017/clockdb
       - ALLOWED_ORIGINS=http://nginx
     depends_on:
-      - db
+      - mongo
     networks:
       - clock-network
     restart: always  
