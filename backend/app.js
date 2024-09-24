@@ -1,49 +1,41 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 const app = express();
-const port = 5001;
+app.use(bodyParser.json());
 
-// 連接 MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log('Connected to MongoDB');
-}).catch(err => {
-  console.error('MongoDB connection error:', err);
-});
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-// 定義打卡資料模型
 const clockSchema = new mongoose.Schema({
-  user: String,
-  clockIn: Date,
-  clockOut: Date
+    user: String,
+    time: Date,
+    type: { type: String, enum: ['clock-in', 'clock-out'] }
 });
 
-const Clock = mongoose.model('Clock', clockSchema);
+const ClockRecord = mongoose.model('ClockRecord', clockSchema);
 
-// 打卡路由
-app.use(express.json());
-
-app.post('/clock-in', async (req, res) => {
-  const clockInData = new Clock({
-    user: req.body.user,
-    clockIn: new Date(),
-    clockOut: null
-  });
-  await clockInData.save();
-  res.send('Clocked in successfully');
+// 打卡進
+app.post('/api/clock-in', async (req, res) => {
+    const record = new ClockRecord({ user: req.body.user, time: new Date(), type: 'clock-in' });
+    await record.save();
+    res.sendStatus(200);
 });
 
-app.post('/clock-out', async (req, res) => {
-  const clockOutData = await Clock.findOneAndUpdate(
-    { user: req.body.user, clockOut: null },
-    { clockOut: new Date() }
-  );
-  res.send('Clocked out successfully');
+// 打卡出
+app.post('/api/clock-out', async (req, res) => {
+    const record = new ClockRecord({ user: req.body.user, time: new Date(), type: 'clock-out' });
+    await record.save();
+    res.sendStatus(200);
 });
 
-app.listen(port, () => {
-  console.log(`Backend server running on port ${port}`);
+// 查詢打卡記錄
+app.get('/api/records', async (req, res) => {
+    const records = await ClockRecord.find();
+    res.json(records);
+});
+
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
