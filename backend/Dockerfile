@@ -1,5 +1,5 @@
 # 使用 Node.js 官方映像
-FROM node:16
+FROM node:18
 
 # 更新包管理器並安裝 telnet 和 mysql-client
 RUN apt-get update && apt-get install -y telnet default-mysql-client && rm -rf /var/lib/apt/lists/*
@@ -20,4 +20,4 @@ COPY . .
 EXPOSE 5001
 
 # 啟動應用
-CMD ["npm", "start"]
+CMD ["npm", "app.js"]
