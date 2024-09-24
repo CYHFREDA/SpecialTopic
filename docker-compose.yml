@@ -13,6 +13,7 @@ services:
       - /etc/localtime:/etc/localtime:ro 
     depends_on:
       - backend
+      - control-backend
     networks:
       - clock-network
     restart: always  
@@ -44,6 +45,17 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=1qaz2wsx  
+    networks:
+      - clock-network
+    restart: always  
+
+  control-backend:
+    build: ./control-backend
+    container_name: control-backend
+    ports:
+      - "5002:5002"
+    environment:
+      - MONGO_URI=mongodb://root:1qaz2wsx@mongo:27017/clockdb?authSource=admin
     networks:
       - clock-network
     restart: always  
