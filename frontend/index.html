@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>打卡系統</title>
+    <title>打卡系統與控制台</title>
     <link rel="stylesheet" href="styles.css">
     <script>
         async function clockIn() {
@@ -41,6 +41,21 @@
                 recordsList.appendChild(listItem);
             });
         }
+
+        async function fetchAnnouncements() {
+            const response = await fetch('/control/api/announcements');
+            const announcements = await response.json();
+            const announcementsDiv = document.getElementById('announcements');
+            announcementsDiv.innerHTML = ''; // 清空現有公告
+            announcements.forEach(announcement => {
+                const p = document.createElement('p');
+                p.textContent = `${announcement.title}: ${announcement.content}`;
+                announcementsDiv.appendChild(p);
+            });
+        }
+
+        // 在頁面加載時獲取公告
+        window.onload = fetchAnnouncements;
     </script>
 </head>
 <body>
@@ -51,6 +66,9 @@
         <button onclick="clockOut()">打卡出</button>
         <button onclick="fetchRecords()">查詢打卡記錄</button>
         <ul id="records-list"></ul> <!-- 用於顯示查詢結果 -->
+
+        <h2>控制台公告</h2>
+        <div id="announcements"></div> <!-- 用於顯示公告 -->
     </div>
 </body>
 </html>
