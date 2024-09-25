@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #a19696; /* 淺灰色 */
+    background-color: #706565;
     margin: 0;
     padding: 0;
 }
@@ -16,16 +16,16 @@ body {
 }
 
 h1 {
-    color: var(--lilac); /* 紫色 */
+    color: #6c5ce7; /* 紫色 */
     text-align: center;
     margin-bottom: 20px;
     font-size: 2.2em; /* 調整標題字體大小 */
 }
 
 h2 {
-    color: var(--charcoal); /* 深灰色 */
+    color: #2d3436; /* 深灰色 */
     margin-top: 20px;
-    border-bottom: 2px solid #4a4a4a; /* 更深的底線顏色 */
+    border-bottom: 2px solid #6c5ce7; /* 紫色底線 */
     padding-bottom: 5px;
     font-size: 1.6em; /* 調整副標題字體大小 */
 }
@@ -35,7 +35,7 @@ textarea {
     width: 100%;
     padding: 10px; /* 減少內邊距 */
     margin: 8px 0; /* 減少上下邊距 */
-    border: 2px solid var(--lilac); /* 紫色邊框 */
+    border: 2px solid #6c5ce7; /* 紫色邊框 */
     border-radius: 5px;
     transition: border 0.3s, box-shadow 0.3s;
     box-sizing: border-box; /* 確保內邊距和邊框計入總寬度 */
@@ -51,7 +51,7 @@ textarea:focus {
 button {
     padding: 12px; /* 調整按鈕內邊距 */
     color: #ffffff;
-    background-color: var(--charcoal); /* 深灰色 */
+    background-color: #4d554f; 
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -63,7 +63,7 @@ button {
 }
 
 button:hover {
-    background-color: #525c54; /* 深綠色 */
+    background-color: #103353; /* 深綠色 */
     transform: translateY(-2px);
 }
 
