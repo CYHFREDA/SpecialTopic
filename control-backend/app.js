@@ -23,13 +23,19 @@ const Announcement = mongoose.model('Announcement', announcementSchema);
 
 // 發佈公告
 app.post('/control/api/announcements', async (req, res) => {
+    const { title, content } = req.body;
+
+    if (!title || !content) {
+        return res.status(400).json({ error: '公告標題和內容是必需的。' });
+    }
+
     try {
         const announcement = new Announcement(req.body);
         await announcement.save();
         res.sendStatus(201); // 201 Created
     } catch (error) {
         console.error('發佈公告錯誤:', error);
-        res.sendStatus(500); // 500 Internal Server Error
+        res.status(500).json({ error: '發佈公告時發生錯誤。請稍後再試。' });
     }
 });
 
