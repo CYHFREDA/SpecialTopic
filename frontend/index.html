@@ -54,6 +54,26 @@
             });
         }
 
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                // 登入成功，導向控制台
+                window.location.href = '/control';
+            } else {
+                alert('登入失敗，請檢查帳號和密碼。');
+            }
+        }
+
         // 在頁面加載時獲取公告
         window.onload = fetchAnnouncements;
     </script>
@@ -70,11 +90,10 @@
         <h2>控制台公告</h2>
         <div id="announcements"></div> <!-- 用於顯示公告 -->
 
-        <!-- 新增一個按鈕來進入控制台 -->
         <h2>管理控制台</h2>
-        <a href="/control" target="_blank">
-            <button>進入控制台</button>
-        </a>
+        <input type="text" id="username" placeholder="用戶名">
+        <input type="password" id="password" placeholder="密碼">
+        <button onclick="login()">登入</button>
     </div>
 </body>
 </html>
