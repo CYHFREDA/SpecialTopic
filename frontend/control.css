@@ -88,3 +88,15 @@ li:hover {
 li:last-child {
     border-bottom: none;
 }
+
+@media (max-width: 600px) {
+    .container {
+        width: 95%;
+    }
+    h1 {
+        font-size: 2em;
+    }
+    h2 {
+        font-size: 1.5em;
+    }
+}
