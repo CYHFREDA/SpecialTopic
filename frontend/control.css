@@ -25,7 +25,7 @@ h1 {
 
 h2 {
     color: #495057;
-    margin-top: 20px;
+    margin: 20px 0 10px; /* 顶部和底部间距 */
     border-bottom: 2px solid #007bff; /* 藍色底線 */
     padding-bottom: 5px; /* 底部內邊距 */
 }
@@ -42,7 +42,7 @@ textarea {
 
 input[type="text"]:focus,
 textarea:focus {
-    border: 2px solid #0056b3; /* 深藍色 */
+    border-color: #0056b3; /* 深藍色 */
     box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
     outline: none;
 }
@@ -58,6 +58,7 @@ button {
     transition: background-color 0.3s, transform 0.3s;
     display: block;
     width: 100%;
+    margin-top: 10px; /* 按钮与上方元素间距 */
 }
 
 button:hover {
@@ -98,5 +99,8 @@ li:last-child {
     }
     h2 {
         font-size: 1.5em;
+    }
+    button {
+        font-size: 16px; /* 更小的按钮字体 */
     }
 }
