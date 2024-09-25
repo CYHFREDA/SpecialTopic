@@ -22,7 +22,7 @@ h2 {
 .container {
     text-align: center; 
     background: white; 
-    padding: 30px; /* 增加內邊距以提高美觀性 */
+    padding: 20px; /* 減少內邊距以縮小容器大小 */
     border-radius: 8px; 
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* 更柔和的陰影效果 */
     width: 100%; /* 使容器寬度為100% */
@@ -31,12 +31,12 @@ h2 {
 
 input[type="text"],
 input[type="password"] {
-    padding: 12px; /* 增加內邊距以提高可讀性 */
-    margin: 10px 0;
+    padding: 10px; /* 減少內邊距 */
+    margin: 8px 0; /* 減少上下間距 */
     width: 100%; /* 寬度為100% */
     border: 2px solid #3498db; /* 藍色邊框 */
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 14px; /* 調整字體大小 */
     transition: border 0.3s, box-shadow 0.3s;
     box-sizing: border-box; /* 確保內邊距和邊框計入總寬度 */
 }
@@ -51,9 +51,9 @@ input[type="password"]:focus {
 /* 按鈕的樣式 */
 .styled {
     border: none;
-    line-height: 2.5;
-    padding: 12px; /* 增加內邊距以與輸入框一致 */
-    font-size: 1rem;
+    line-height: 2;
+    padding: 10px; /* 減少內邊距以縮小按鈕大小 */
+    font-size: 14px; /* 調整字體大小 */
     text-align: center;
     color: #fff; 
     border-radius: 5px; 
