@@ -20,7 +20,7 @@
 
             if (response.ok) {
                 alert('登入成功！');
-                window.location.href = '/control'; // 假設登入成功後跳轉到控制台
+                window.location.href = '/control'; // 登入成功後跳轉到控制台
             } else {
                 const errorResponse = await response.json();
                 alert('登入失敗：' + errorResponse.message);
@@ -132,12 +132,6 @@
 
         <h2>控制台公告</h2>
         <div id="announcements"></div> <!-- 用於顯示公告 -->
-
-        <!-- 新增一個按鈕來進入控制台 -->
-        <h2>管理控制台</h2>
-        <a href="/control" target="_blank">
-            <button>進入控制台</button>
-        </a>
     </div>
 </body>
 </html>
