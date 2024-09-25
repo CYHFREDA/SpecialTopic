@@ -15,6 +15,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
+                        'Authorization': `Bearer ${localStorage.getItem('token')}` // 確保這裡使用了 JWT
                     },
                     body: JSON.stringify({ username, password })
                 });
