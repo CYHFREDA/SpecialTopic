@@ -58,9 +58,9 @@
             });
 
             if (response.ok) {
-                alert('打卡成功！');
+                alert('打卡上班成功！');
             } else {
-                alert('打卡失敗，請檢查用戶名。');
+                alert('打卡上班失敗，請檢查用戶名。');
             }
         }
 
@@ -75,9 +75,9 @@
             });
 
             if (response.ok) {
-                alert('打卡出成功！');
+                alert('打卡下班成功！');
             } else {
-                alert('打卡出失敗，請檢查用戶名。');
+                alert('打卡下班失敗，請檢查用戶名。');
             }
         }
 
@@ -125,8 +125,8 @@
 
         <h2>打卡功能</h2>
         <input type="text" id="user" placeholder="請輸入用戶名" autocomplete="username">
-        <button onclick="clockIn()">打卡進</button>
-        <button onclick="clockOut()">打卡出</button>
+        <button onclick="clockIn()">上班打卡</button>
+        <button onclick="clockOut()">打卡下班</button>
         <button onclick="fetchRecords()">查詢打卡記錄</button>
         <ul id="records-list"></ul> <!-- 用於顯示查詢結果 -->
 
