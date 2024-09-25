@@ -9,7 +9,7 @@ body {
     width: 90%;
     max-width: 800px;
     margin: 30px auto;
-    padding: 30px;
+    padding: 20px; /* 減少內邊距 */
     background-color: #ffffff; /* 白色背景 */
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
     border-radius: 10px; /* 更圓的邊角 */
@@ -32,7 +32,7 @@ h2 {
 input[type="text"],
 textarea {
     width: 100%;
-    padding: 15px;
+    padding: 10px; /* 減少內邊距 */
     margin: 10px 0;
     border: 2px solid #6c5ce7; /* 紫色邊框 */
     border-radius: 5px;
@@ -47,20 +47,20 @@ textarea:focus {
 }
 
 button {
-    padding: 15px 20px;
+    padding: 12px 15px; /* 減少按鈕內邊距 */
     color: #ffffff;
-    background-color: #ff4757; /* 鮮豔的紅色 */
+    background-color: #28a745; /* 新的綠色 */
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px; /* 調整字體大小 */
     transition: background-color 0.3s, transform 0.3s;
     display: block;
     width: 100%;
 }
 
 button:hover {
-    background-color: #e84118; /* 深紅色 */
+    background-color: #218838; /* 深綠色 */
     transform: translateY(-2px);
 }
 
@@ -71,7 +71,7 @@ ul {
 }
 
 li {
-    padding: 15px;
+    padding: 10px; /* 減少格子內部的內邊距 */
     border: 2px solid #ced6e0; /* 淺灰色邊框 */
     border-radius: 5px;
     background-color: #f8f9fa; /* 淺灰色 */
