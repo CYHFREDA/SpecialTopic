@@ -6,16 +6,13 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-// 使用環境變數來讀取 JWT 密鑰
-const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
+// 使用環境變數來讀取 MongoDB 連接字串
 const MONGO_URI = process.env.MONGO_URI; // 確保 MONGO_URI 被加載
-console.log(JWT_SECRET);
 
 mongoose.set('strictQuery', true);
 // 連接 MongoDB
@@ -68,8 +65,8 @@ app.post('/api/login', async (req, res) => {
         const user = await User.findOne({ username });
 
         if (user && await bcrypt.compare(password, user.password)) {
-            const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-            res.json({ token });
+            // 登入成功，不需要返回 JWT
+            res.json({ message: '登入成功' });
         } else {
             return res.status(401).json({ message: '用戶名或密碼錯誤。' }); // 401 Unauthorized
         }
@@ -123,22 +120,6 @@ app.get('/api/records', async (req, res) => {
         res.sendStatus(500); // 500 Internal Server Error
     }
 });
-
-// JWT 驗證中間件
-function authenticateJWT(req, res, next) {
-    const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
-    if (token) {
-        jwt.verify(token, JWT_SECRET, (err, user) => {
-            if (err) {
-                return res.sendStatus(403); // 403 Forbidden
-            }
-            req.user = user;
-            next();
-        });
-    } else {
-        res.status(401).json({ message: '缺少 token' }); // 401 Unauthorized
-    }
-}
 
 const PORT = 5001;
 app.listen(PORT, () => {
