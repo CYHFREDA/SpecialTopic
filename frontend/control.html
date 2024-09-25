@@ -40,11 +40,12 @@
 
             announcements.forEach(announcement => {
                 const listItem = document.createElement('li');
-                listItem.textContent = `${announcement.title}: ${announcement.content} `;
+                listItem.innerHTML = `<strong>${announcement.title}:</strong> ${announcement.content} `;
                 
                 // 創建刪除按鈕
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = '刪除';
+                deleteButton.className = 'delete-button'; // 加入類名以方便樣式設置
                 deleteButton.onclick = () => deleteAnnouncement(announcement._id); // 傳遞公告 ID
                 listItem.appendChild(deleteButton);
                 
