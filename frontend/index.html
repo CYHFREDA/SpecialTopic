@@ -22,7 +22,8 @@
                 alert('登入成功！');
                 window.location.href = '/control'; // 假設登入成功後跳轉到控制台
             } else {
-                alert('登入失敗，請檢查您的帳號和密碼。');
+                const errorResponse = await response.json();
+                alert('登入失敗：' + errorResponse.message);
             }
         }
 
@@ -41,32 +42,43 @@
             if (response.ok) {
                 alert('註冊成功，請登入！');
             } else {
-                alert('註冊失敗，請檢查您的資料。');
+                const errorResponse = await response.json();
+                alert('註冊失敗：' + errorResponse.message);
             }
         }
 
         async function clockIn() {
             const user = document.getElementById('user').value;
-            await fetch('/api/clock-in', {
+            const response = await fetch('/api/clock-in', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ user })
             });
-            alert('打卡成功！');
+
+            if (response.ok) {
+                alert('打卡成功！');
+            } else {
+                alert('打卡失敗，請檢查用戶名。');
+            }
         }
 
         async function clockOut() {
             const user = document.getElementById('user').value;
-            await fetch('/api/clock-out', {
+            const response = await fetch('/api/clock-out', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ user })
             });
-            alert('打卡出成功！');
+
+            if (response.ok) {
+                alert('打卡出成功！');
+            } else {
+                alert('打卡出失敗，請檢查用戶名。');
+            }
         }
 
         async function fetchRecords() {
@@ -102,17 +114,17 @@
         <h1>打卡系統</h1>
         
         <h2>用戶登入</h2>
-        <input type="text" id="username" placeholder="請輸入用戶名">
-        <input type="password" id="password" placeholder="請輸入密碼">
+        <input type="text" id="username" placeholder="請輸入用戶名" autocomplete="username">
+        <input type="password" id="password" placeholder="請輸入密碼" autocomplete="current-password">
         <button onclick="login()">登入</button>
 
         <h2>用戶註冊</h2>
-        <input type="text" id="reg-username" placeholder="請輸入用戶名">
-        <input type="password" id="reg-password" placeholder="請輸入密碼">
+        <input type="text" id="reg-username" placeholder="請輸入用戶名" autocomplete="username">
+        <input type="password" id="reg-password" placeholder="請輸入密碼" autocomplete="new-password">
         <button onclick="register()">註冊</button>
 
         <h2>打卡功能</h2>
-        <input type="text" id="user" placeholder="請輸入用戶名">
+        <input type="text" id="user" placeholder="請輸入用戶名" autocomplete="username">
         <button onclick="clockIn()">打卡進</button>
         <button onclick="clockOut()">打卡出</button>
         <button onclick="fetchRecords()">查詢打卡記錄</button>
