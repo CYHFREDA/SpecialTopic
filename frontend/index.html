@@ -21,7 +21,6 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    localStorage.setItem('token', data.token); // 儲存 token
                     alert('登入成功！');
                     window.location.href = '/control'; // 登入成功後跳轉到控制台
                 } else {
@@ -63,13 +62,11 @@
 
         async function clockIn() {
             const user = document.getElementById('user').value;
-            const token = localStorage.getItem('token'); // 假設你將 token 存儲在 localStorage 中
             try {
                 const response = await fetch('/api/clock-in', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
-                        'Authorization': `Bearer ${token}` // 將 token 添加到請求頭中
                     },
                     body: JSON.stringify({ user })
                 });
