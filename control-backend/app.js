@@ -10,7 +10,9 @@ app.use(cors());
 
 // 連接 MongoDB
 mongoose.set('strictQuery', true);
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
 // 公告 Schema
 const announcementSchema = new mongoose.Schema({
@@ -42,9 +44,9 @@ app.post('/control/api/announcements', async (req, res) => {
     }
 
     try {
-        const announcement = new Announcement(req.body);
+        const announcement = new Announcement({ title, content });
         await announcement.save();
-        res.sendStatus(201); // 201 Created
+        res.status(201).json(announcement); // 返回創建的公告
     } catch (error) {
         console.error('發佈公告錯誤:', error);
         res.status(500).json({ error: '發佈公告時發生錯誤。請稍後再試。' });
@@ -58,7 +60,7 @@ app.get('/control/api/announcements', async (req, res) => {
         res.json(announcements);
     } catch (error) {
         console.error('查詢公告錯誤:', error);
-        res.sendStatus(500); // 500 Internal Server Error
+        res.status(500).json({ error: '查詢公告時發生錯誤。' });
     }
 });
 
@@ -74,7 +76,7 @@ app.delete('/control/api/announcements/:id', async (req, res) => {
         }
     } catch (error) {
         console.error('刪除公告錯誤:', error);
-        res.sendStatus(500); // 500 Internal Server Error
+        res.status(500).json({ error: '刪除公告時發生錯誤。' });
     }
 });
 
@@ -89,7 +91,7 @@ app.post('/control/api/users', async (req, res) => {
     try {
         const user = new User({ username });
         await user.save();
-        res.sendStatus(201); // 201 Created
+        res.status(201).json(user); // 返回創建的使用者
     } catch (error) {
         console.error('添加使用者錯誤:', error);
         res.status(500).json({ error: '添加使用者時發生錯誤。' });
@@ -103,7 +105,7 @@ app.get('/control/api/users', async (req, res) => {
         res.json(users);
     } catch (error) {
         console.error('查詢使用者錯誤:', error);
-        res.sendStatus(500); // 500 Internal Server Error
+        res.status(500).json({ error: '查詢使用者時發生錯誤。' });
     }
 });
 
@@ -119,7 +121,7 @@ app.delete('/control/api/users/:id', async (req, res) => {
         }
     } catch (error) {
         console.error('刪除使用者錯誤:', error);
-        res.sendStatus(500); // 500 Internal Server Error
+        res.status(500).json({ error: '刪除使用者時發生錯誤。' });
     }
 });
 
@@ -134,7 +136,7 @@ app.post('/control/api/checkins', async (req, res) => {
     try {
         const checkIn = new CheckIn({ userId });
         await checkIn.save();
-        res.sendStatus(201); // 201 Created
+        res.status(201).json(checkIn); // 返回創建的打卡記錄
     } catch (error) {
         console.error('打卡錯誤:', error);
         res.status(500).json({ error: '打卡時發生錯誤。' });
@@ -146,6 +148,7 @@ app.get('/control', (req, res) => {
     res.sendFile(path.join(__dirname, 'control.html'));
 });
 
+// 啟動服務
 const PORT = process.env.PORT || 5002;
 app.listen(PORT, () => {
     console.log(`Control backend is running on port ${PORT}`);
