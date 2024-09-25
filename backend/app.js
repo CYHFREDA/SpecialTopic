@@ -73,7 +73,7 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// 打卡進
+// 打卡上班
 app.post('/api/clock-in', authenticateJWT, async (req, res) => {
     try {
         const record = new ClockRecord({ user: req.user.id, time: new Date(), type: 'clock-in' });
@@ -85,7 +85,7 @@ app.post('/api/clock-in', authenticateJWT, async (req, res) => {
     }
 });
 
-// 打卡出
+// 打卡下班
 app.post('/api/clock-out', authenticateJWT, async (req, res) => {
     try {
         const record = new ClockRecord({ user: req.user.id, time: new Date(), type: 'clock-out' });
