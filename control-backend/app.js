@@ -125,21 +125,14 @@ app.delete('/control/api/users/:id', async (req, res) => {
     }
 });
 
-// 打卡
-app.post('/control/api/checkins', async (req, res) => {
-    const { userId } = req.body;
-
-    if (!userId) {
-        return res.status(400).json({ error: '使用者 ID 是必需的。' });
-    }
-
+// 查詢打卡記錄
+app.get('/control/api/checkins', async (req, res) => {
     try {
-        const checkIn = new CheckIn({ userId });
-        await checkIn.save();
-        res.status(201).json(checkIn); // 返回創建的打卡記錄
+        const checkIns = await CheckIn.find().populate('userId', 'username'); // 使用 populate 獲取使用者名稱
+        res.json(checkIns);
     } catch (error) {
-        console.error('打卡錯誤:', error);
-        res.status(500).json({ error: '打卡時發生錯誤。' });
+        console.error('查詢打卡記錄錯誤:', error);
+        res.status(500).json({ error: '查詢打卡記錄時發生錯誤。' });
     }
 });
 
