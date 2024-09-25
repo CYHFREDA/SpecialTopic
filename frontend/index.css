@@ -1,91 +1,75 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>打卡系統與控制台</title>
-    <link rel="stylesheet" href="index.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #d9e5e1; /* 霧面奶茶藍色 */
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #b7c9d9; /* 設定背景顏色為霧面奶茶藍色 */
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
 
-        h1 {
-            color: #333;
-        }
+h1 {
+    color: #333; /* 標題顏色 */
+}
 
-        h2 {
-            color: #555;
-        }
+input[type="text"] {
+    padding: 10px;
+    margin: 10px 0;
+    width: 250px; /* 調整輸入框寬度以保持一致 */
+    border: 2px solid #6c5ce7; /* 設定邊框顏色 */
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border 0.3s, box-shadow 0.3s; /* 增加邊框和陰影的過渡效果 */
+}
 
-        input[type="text"],
-        input[type="password"] {
-            padding: 10px;
-            margin: 10px 0;
-            width: 250px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
+input[type="text"]:focus {
+    border-color: #5c4f9b; /* 當聚焦時改變邊框顏色 */
+    box-shadow: 0 0 5px rgba(108, 87, 227, 0.5); /* 當聚焦時增加陰影 */
+    outline: none; /* 去掉默認的邊框樣式 */
+}
 
-        button {
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            background-color: #28a745; /* 按鈕顏色 */
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+/* 按鈕的樣式 */
+.styled {
+    border: 0; /* 去掉邊框 */
+    line-height: 2.5; /* 調整行高 */
+    padding: 0 20px; /* 設定內邊距 */
+    font-size: 1rem; /* 字體大小 */
+    text-align: center; /* 文字置中 */
+    color: #fff; /* 文字顏色 */
+    text-shadow: 1px 1px 1px #000; /* 文字陰影 */
+    border-radius: 10px; /* 圓角 */
+    background-color: rgba(220, 0, 0, 1); /* 背景顏色 */
+    background-image: linear-gradient( /* 漸變背景 */
+        to top left,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0.2) 30%,
+        rgba(0, 0, 0, 0)
+    );
+    box-shadow: /* 陰影效果 */
+        inset 2px 2px 3px rgba(255, 255, 255, 0.6),
+        inset -2px -2px 3px rgba(0, 0, 0, 0.6);
+    cursor: pointer; /* 鼠標懸停時變成手指形狀 */
+    margin: 5px; /* 上下邊距 */
+    width: 100%; /* 按鈕寬度為100% */
+    max-width: 250px; /* 設定按鈕的最大寬度 */
+}
 
-        button:hover {
-            background-color: #218838; /* 懸停顏色 */
-        }
+.styled:hover {
+    background-color: rgba(255, 0, 0, 1); /* 當懸停時改變背景顏色 */
+}
 
-        .container {
-            text-align: center;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 300px; /* 固定寬度 */
-        }
+.styled:active {
+    box-shadow: /* 點擊時的陰影效果 */
+        inset -2px -2px 3px rgba(255, 255, 255, 0.6),
+        inset 2px 2px 3px rgba(0, 0, 0, 0.6);
+}
 
-        ul {
-            list-style-type: none; /* 無列表樣式 */
-            padding: 0; /* 去掉內邊距 */
-        }
-
-        li {
-            margin: 5px 0; /* 每個列表項的上下邊距 */
-        }
-    </style>
-    <script>
-        async function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
-
-            if (response.ok) {
-                alert('登入成功！');
-                window.location.href = '/control'; // 登入成功後跳轉到控制台
-            } else {
-                const errorResponse = await response.json();
-                alert('登入失敗：' + errorResponse.message
+.container {
+    text-align: center; /* 文字置中 */
+    background: white; /* 背景顏色為白色 */
+    padding: 20px; /* 內邊距 */
+    border-radius: 8px; /* 圓角 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+}
