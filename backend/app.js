@@ -15,7 +15,6 @@ app.use(cors());
 // 使用環境變數來讀取 JWT 密鑰
 const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
 console.log(JWT_SECRET);
-const MONGO_URI = 'mongodb://root:1qaz2wsx@mongo:27017/clockdb?authSource=admin'; // 更換為你的MongoDB連接字串
 
 mongoose.set('strictQuery', true);
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
