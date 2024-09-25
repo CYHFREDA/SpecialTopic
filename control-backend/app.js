@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cors = require('cors'); // 只宣告一次
+const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors()); // 啟用 CORS
+app.use(cors());
 
 // 連接 MongoDB
 mongoose.set('strictQuery', true);
@@ -33,7 +33,12 @@ app.get('/api/announcements', async (req, res) => {
     res.json(announcements);
 });
 
-const PORT = process.env.PORT || 5002; // 使用不同的端口
+// 新增控制台頁面路由
+app.get('/control', (req, res) => {
+    res.sendFile(__dirname + '/control.html');  // 假設你有一個 control.html 作為後台管理頁面
+});
+
+const PORT = process.env.PORT || 5002;
 app.listen(PORT, () => {
     console.log(`Control backend is running on port ${PORT}`);
 });
