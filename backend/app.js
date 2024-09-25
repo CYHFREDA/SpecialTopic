@@ -83,6 +83,12 @@ app.post('/api/clock-in', async (req, res) => {
         if (!username) {
             return res.status(400).json({ message: '缺少用戶名稱' }); // 400 Bad Request
         }
+        
+        // 查找用戶以確認其存在
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: '用戶不存在' }); // 404 Not Found
+        }
 
         const record = new ClockRecord({ user: username, time: new Date(), type: 'clock-in' });
         await record.save();
