@@ -2,15 +2,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const bcrypt = require('bcrypt'); // 加密用戶密碼
-const jwt = require('jsonwebtoken'); // 用於生成和驗證 JSON Web Token
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+// 直接在代碼中定義 JWT 密鑰
+const JWT_SECRET = '123456789'; // 更換為強隨機密鑰
+const MONGO_URI = 'mongodb://root:1qaz2wsx@mongo:27017/clockdb?authSource=admin'; // 更換為你的MongoDB連接字串
+
 mongoose.set('strictQuery', true);
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // 打卡記錄 Schema
 const clockSchema = new mongoose.Schema({
@@ -57,8 +61,7 @@ app.post('/api/login', async (req, res) => {
         const user = await User.findOne({ username });
 
         if (user && await bcrypt.compare(password, user.password)) {
-            // 使用 JSON Web Token 生成 token
-            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
             res.json({ token });
         } else {
             res.sendStatus(401); // 401 Unauthorized
@@ -108,7 +111,7 @@ app.get('/api/records', authenticateJWT, async (req, res) => {
 function authenticateJWT(req, res, next) {
     const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
     if (token) {
-        jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        jwt.verify(token, JWT_SECRET, (err, user) => {
             if (err) {
                 return res.sendStatus(403); // 403 Forbidden
             }
@@ -120,7 +123,7 @@ function authenticateJWT(req, res, next) {
     }
 }
 
-const PORT = process.env.PORT || 5001;
+const PORT = 5001;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
