@@ -80,7 +80,7 @@ app.post('/api/clock-in', authenticateJWT, async (req, res) => {
         await record.save();
         res.sendStatus(200);
     } catch (error) {
-        console.error('打卡進錯誤:', error);
+        console.error('打卡上班錯誤:', error);
         res.sendStatus(500); // 500 Internal Server Error
     }
 });
@@ -92,7 +92,7 @@ app.post('/api/clock-out', authenticateJWT, async (req, res) => {
         await record.save();
         res.sendStatus(200);
     } catch (error) {
-        console.error('打卡出錯誤:', error);
+        console.error('打卡下班錯誤:', error);
         res.sendStatus(500); // 500 Internal Server Error
     }
 });
