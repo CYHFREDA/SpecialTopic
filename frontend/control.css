@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #a19696; /* 淺灰色 */
+    background-color: #f4f4f4; /* 更柔和的背景顏色 */
     margin: 0;
     padding: 0;
 }
@@ -9,57 +9,56 @@ body {
     width: 90%;
     max-width: 600px; /* 減少最大寬度 */
     margin: 30px auto;
-    padding: 20px; /* 減少內邊距 */
+    padding: 20px; /* 增加內邊距 */
     background-color: #ffffff; /* 白色背景 */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 減少陰影強度 */
-    border-radius: 10px; /* 更圓的邊角 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+    border-radius: 8px; /* 圓角 */
 }
 
 h1 {
-    color: #6c5ce7; /* 紫色 */
+    color: #4a4a4a; /* 深灰色 */
     text-align: center;
     margin-bottom: 20px;
-    font-size: 2.2em; /* 調整標題字體大小 */
+    font-size: 2.5em; /* 調整標題字體大小 */
 }
 
 h2 {
-    color: #2d3436; /* 深灰色 */
+    color: #333; /* 深灰色 */
     margin-top: 20px;
     border-bottom: 2px solid #6c5ce7; /* 紫色底線 */
     padding-bottom: 5px;
-    font-size: 1.6em; /* 調整副標題字體大小 */
+    font-size: 1.8em; /* 調整副標題字體大小 */
 }
 
 input[type="text"],
 textarea {
     width: 100%;
-    padding: 10px; /* 減少內邊距 */
-    margin: 8px 0; /* 減少上下邊距 */
-    border: 2px solid #6c5ce7; /* 紫色邊框 */
-    border-radius: 5px;
-    transition: border 0.3s, box-shadow 0.3s;
+    padding: 12px; /* 增加內邊距 */
+    margin: 10px 0; /* 增加上下邊距 */
+    border: 2px solid #ccc; /* 淺灰色邊框 */
+    border-radius: 4px; /* 更圓的邊角 */
+    transition: border 0.3s;
     box-sizing: border-box; /* 確保內邊距和邊框計入總寬度 */
 }
 
 input[type="text"]:focus,
 textarea:focus {
-    border: 2px solid #5c4f9b; /* 更深的紫色 */
-    box-shadow: 0 0 5px rgba(108, 87, 227, 0.5);
+    border: 2px solid #6c5ce7; /* 當聚焦時的顏色 */
     outline: none;
 }
 
 button {
     padding: 12px; /* 調整按鈕內邊距 */
     color: #ffffff;
-    background-color: #6c5ce7; /* 深紫色 */
+    background-color: #6c5ce7; /* 紫色 */
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 16px; /* 調整字體大小 */
     transition: background-color 0.3s, transform 0.3s;
     display: block;
     width: 100%;
-    margin-top: 10px; /* 加入上方間距 */
+    margin-top: 15px; /* 增加上方間距 */
 }
 
 button:hover {
@@ -75,20 +74,15 @@ ul {
 
 li {
     padding: 15px; /* 增加內部邊距 */
-    border: 1px solid #ced6e0; /* 淺灰色邊框 */
-    border-radius: 5px;
-    background-color: #f8f9fa; /* 淺灰色 */
+    border: 1px solid #ccc; /* 淺灰色邊框 */
+    border-radius: 4px;
+    background-color: #fafafa; /* 淺灰色背景 */
     margin-bottom: 15px; /* 增加下方間距 */
-    transition: background-color 0.3s, transform 0.3s;
+    transition: background-color 0.3s;
 }
 
 li:hover {
-    background-color: #dfe6e9; /* 更深的淺灰色 */
-    transform: translateY(-2px);
-}
-
-li:last-child {
-    border-bottom: none;
+    background-color: #f0f0f0; /* 更深的淺灰色 */
 }
 
 .delete-button {
@@ -109,11 +103,5 @@ li:last-child {
 @media (max-width: 600px) {
     .container {
         width: 95%;
-    }
-    h1 {
-        font-size: 1.8em; /* 調整字體大小 */
-    }
-    h2 {
-        font-size: 1.3em; /* 調整字體大小 */
     }
 }
