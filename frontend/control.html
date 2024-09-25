@@ -18,8 +18,6 @@
                 body: JSON.stringify({ title, content })
             });
 
-            const button = document.querySelector('button');
-            button.disabled = true; // 禁用按鈕
             if (response.ok) {
                 alert('公告已成功發佈！');
                 fetchAnnouncements(); // 發佈後重新載入公告列表
@@ -29,7 +27,6 @@
                 const errorMsg = await response.text(); // 獲取錯誤信息
                 alert(`發佈公告時發生錯誤: ${errorMsg}`);
             }
-            button.disabled = false; // 請求完成後重新啟用按鈕
         }
 
         async function fetchAnnouncements() {
@@ -41,8 +38,29 @@
             announcements.forEach(announcement => {
                 const listItem = document.createElement('li');
                 listItem.textContent = `${announcement.title}: ${announcement.content}`;
+                
+                // 添加刪除按鈕
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '刪除';
+                deleteButton.onclick = () => deleteAnnouncement(announcement.id); // 假設每個公告都有唯一的 id
+                listItem.appendChild(deleteButton);
+                
                 announcementsList.appendChild(listItem);
             });
+        }
+
+        async function deleteAnnouncement(id) {
+            const response = await fetch(`/control/api/announcements/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                alert('公告已成功刪除！');
+                fetchAnnouncements(); // 刪除後重新載入公告列表
+            } else {
+                const errorMsg = await response.text();
+                alert(`刪除公告時發生錯誤: ${errorMsg}`);
+            }
         }
 
         // 在頁面加載時獲取公告
