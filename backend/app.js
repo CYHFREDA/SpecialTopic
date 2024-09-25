@@ -17,11 +17,11 @@ const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('he
 const MONGO_URI = process.env.MONGO_URI; // 確保 MONGO_URI 被加載
 console.log(JWT_SECRET);
 
+mongoose.set('strictQuery', true);
 // 連接 MongoDB
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB 連接成功'))
     .catch(err => console.error('MongoDB 連接錯誤:', err));
-mongoose.set('strictQuery', true);
 
 // 打卡記錄 Schema
 const clockSchema = new mongoose.Schema({
