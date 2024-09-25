@@ -35,7 +35,7 @@ services:
     restart: always  
 
   mongo:
-    image: mongo:6.0
+    image: mongo:latest
     container_name: mongo
     ports:
       - "27017:27017"
@@ -56,6 +56,7 @@ services:
       - "5002:5002"
     environment:
       - MONGO_URI=mongodb://root:1qaz2wsx@mongo:27017/clockdb?authSource=admin
+      - ALLOWED_ORIGINS=http://nginx
     networks:
       - clock-network
     restart: always  
