@@ -17,7 +17,7 @@
 /* 主體樣式 */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: var(--persian-pink); /* 奶茶灰色 */
+    background-color: #f4f4f4; /* 淺灰色 */
     margin: 0;
     padding: 0;
 }
