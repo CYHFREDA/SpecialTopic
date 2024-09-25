@@ -66,6 +66,10 @@
             }
         }
 
+        function goBack() {
+            window.history.back(); // 返回到上一頁
+        }
+
         // 在頁面加載時獲取公告
         window.onload = fetchAnnouncements;
     </script>
@@ -80,6 +84,9 @@
 
         <h2>現有公告</h2>
         <ul id="announcements-list"></ul> <!-- 顯示公告列表 -->
+        
+        <!-- 返回按鈕 -->
+        <button onclick="goBack()">返回</button>
     </div>
 </body>
 </html>
