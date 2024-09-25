@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path'); // 引入 path 模組以便處理路徑
 
 const app = express();
 app.use(bodyParser.json());
@@ -21,21 +22,21 @@ const announcementSchema = new mongoose.Schema({
 const Announcement = mongoose.model('Announcement', announcementSchema);
 
 // 發佈公告
-app.post('/api/announcements', async (req, res) => {
+app.post('/control/api/announcements', async (req, res) => { // 修改路由
     const announcement = new Announcement(req.body);
     await announcement.save();
     res.sendStatus(201);
 });
 
 // 查詢公告
-app.get('/api/announcements', async (req, res) => {
+app.get('/control/api/announcements', async (req, res) => { // 修改路由
     const announcements = await Announcement.find();
     res.json(announcements);
 });
 
 // 新增控制台頁面路由
 app.get('/control', (req, res) => {
-    res.sendFile(__dirname + '/control.html');  // 假設你有一個 control.html 作為後台管理頁面
+    res.sendFile(path.join(__dirname, 'control.html'));  // 使用 path.join 確保正確的路徑
 });
 
 const PORT = process.env.PORT || 5002;
