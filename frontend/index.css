@@ -1,57 +1,91 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #b7c9d9; /* 霧面奶茶藍色 */
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打卡系統與控制台</title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d9e5e1; /* 霧面奶茶藍色 */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
 
-h1 {
-    color: #333;
-}
+        h1 {
+            color: #333;
+        }
 
-input[type="text"] {
-    padding: 10px;
-    margin: 10px 0;
-    width: 250px; /* 調整寬度以保持一致性 */
-    border: 2px solid #6c5ce7; /* 紫色邊框 */
-    border-radius: 4px;
-    font-size: 16px;
-    transition: border 0.3s, box-shadow 0.3s;
-}
+        h2 {
+            color: #555;
+        }
 
-input[type="text"]:focus {
-    border-color: #5c4f9b; /* 更深的紫色 */
-    box-shadow: 0 0 5px rgba(108, 87, 227, 0.5);
-    outline: none;
-}
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
 
-button {
-    background-color: #ff4757; /* 鮮豔的紅色 */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 5px;
-    width: 100%; /* 按鈕寬度統一 */
-    max-width: 250px; /* 設定最大寬度 */
-    transition: background-color 0.3s;
-}
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            background-color: #28a745; /* 按鈕顏色 */
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-button:hover {
-    background-color: #e84118; /* 深紅色 */
-}
+        button:hover {
+            background-color: #218838; /* 懸停顏色 */
+        }
 
-.container {
-    text-align: center;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px; /* 固定寬度 */
+        }
+
+        ul {
+            list-style-type: none; /* 無列表樣式 */
+            padding: 0; /* 去掉內邊距 */
+        }
+
+        li {
+            margin: 5px 0; /* 每個列表項的上下邊距 */
+        }
+    </style>
+    <script>
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                alert('登入成功！');
+                window.location.href = '/control'; // 登入成功後跳轉到控制台
+            } else {
+                const errorResponse = await response.json();
+                alert('登入失敗：' + errorResponse.message
