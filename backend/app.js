@@ -64,7 +64,8 @@ app.post('/api/login', async (req, res) => {
             const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
             res.json({ token });
         } else {
-            res.sendStatus(401); // 401 Unauthorized
+            // 返回錯誤消息
+            return res.status(401).json({ message: '用戶名或密碼錯誤。' }); // 401 Unauthorized
         }
     } catch (error) {
         console.error('登入錯誤:', error);
