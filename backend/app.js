@@ -80,11 +80,16 @@ app.post('/api/login', async (req, res) => {
 });
 
 // 打卡上班
-app.post('/api/clock-in', authenticateJWT, async (req, res) => {
+app.post('/api/clock-in', async (req, res) => {
     try {
-        const record = new ClockRecord({ user: req.user.id, time: new Date(), type: 'clock-in' });
+        const { username } = req.body; // 獲取用戶名稱
+        if (!username) {
+            return res.status(400).json({ message: '缺少用戶名稱' }); // 400 Bad Request
+        }
+
+        const record = new ClockRecord({ user: username, time: new Date(), type: 'clock-in' });
         await record.save();
-        res.sendStatus(200);
+        res.sendStatus(200); // 200 OK
     } catch (error) {
         console.error('打卡上班錯誤:', error);
         res.sendStatus(500); // 500 Internal Server Error
@@ -92,11 +97,16 @@ app.post('/api/clock-in', authenticateJWT, async (req, res) => {
 });
 
 // 打卡下班
-app.post('/api/clock-out', authenticateJWT, async (req, res) => {
+app.post('/api/clock-out', async (req, res) => {
     try {
-        const record = new ClockRecord({ user: req.user.id, time: new Date(), type: 'clock-out' });
+        const { username } = req.body; // 獲取用戶名稱
+        if (!username) {
+            return res.status(400).json({ message: '缺少用戶名稱' }); // 400 Bad Request
+        }
+
+        const record = new ClockRecord({ user: username, time: new Date(), type: 'clock-out' });
         await record.save();
-        res.sendStatus(200);
+        res.sendStatus(200); // 200 OK
     } catch (error) {
         console.error('打卡下班錯誤:', error);
         res.sendStatus(500); // 500 Internal Server Error
@@ -104,7 +114,7 @@ app.post('/api/clock-out', authenticateJWT, async (req, res) => {
 });
 
 // 查詢打卡記錄
-app.get('/api/records', authenticateJWT, async (req, res) => {
+app.get('/api/records', async (req, res) => {
     try {
         const records = await ClockRecord.find();
         res.json(records);
