@@ -1,17 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+const cors = require('cors'); // 只宣告一次
 
 const app = express();
 app.use(bodyParser.json());
-
-mongoose.set('strictQuery', true);
-
-const cors = require('cors');
-app.use(cors());
+app.use(cors()); // 啟用 CORS
 
 // 連接 MongoDB
+mongoose.set('strictQuery', true);
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // 公告 Schema
