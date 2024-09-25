@@ -85,14 +85,14 @@
         }
 
         async function clockOut() {
-            const user = document.getElementById('user').value;
+            const username = document.getElementById('user').value;
             try {
                 const response = await fetch('/api/clock-out', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ user })
+                    body: JSON.stringify({ username })
                 });
 
                 if (response.ok) {
