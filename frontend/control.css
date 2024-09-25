@@ -1,69 +1,85 @@
+:root {
+    /* CSS HEX */
+    --mountbatten-pink: #957186ff;
+    --fairy-tale: #d9b8c4ff;
+    --eggplant: #703d57ff;
+    --van-dyke: #402a2cff;
+    --licorice: #241715ff;
+
+    /* CSS HSL */
+    --mountbatten-pink-hsl: hsla(325, 15%, 51%, 1);
+    --fairy-tale-hsl: hsla(338, 30%, 79%, 1);
+    --eggplant-hsl: hsla(329, 29%, 34%, 1);
+    --van-dyke-hsl: hsla(355, 21%, 21%, 1);
+    --licorice-hsl: hsla(8, 26%, 11%, 1);
+}
+
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #d7cfcf; /* 奶茶灰色 */
+    background-color: var(--fairy-tale); /* 使用柔和的底色 */
     margin: 0;
     padding: 0;
 }
 
 .container {
     width: 90%;
-    max-width: 600px; /* 減少最大寬度 */
+    max-width: 600px;
     margin: 30px auto;
-    padding: 20px; /* 減少內邊距 */
+    padding: 20px;
     background-color: #ffffff; /* 白色背景 */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 減少陰影強度 */
-    border-radius: 10px; /* 更圓的邊角 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
 h1 {
-    color: #6c5ce7; /* 紫色 */
+    color: var(--eggplant); /* 使用蛋茄色 */
     text-align: center;
     margin-bottom: 20px;
-    font-size: 2.2em; /* 調整標題字體大小 */
+    font-size: 2.2em;
 }
 
 h2 {
-    color: #2d3436; /* 深灰色 */
+    color: var(--van-dyke); /* 使用深色作為標題 */
     margin-top: 20px;
-    border-bottom: 2px solid #6c5ce7; /* 紫色底線 */
+    border-bottom: 2px solid var(--mountbatten-pink); /* 使用玫瑰色底線 */
     padding-bottom: 5px;
-    font-size: 1.6em; /* 調整副標題字體大小 */
+    font-size: 1.6em;
 }
 
 input[type="text"],
 textarea {
     width: 100%;
-    padding: 10px; /* 減少內邊距 */
-    margin: 8px 0; /* 減少上下邊距 */
-    border: 2px solid #6c5ce7; /* 紫色邊框 */
+    padding: 10px;
+    margin: 8px 0;
+    border: 2px solid var(--eggplant); /* 使用蛋茄色邊框 */
     border-radius: 5px;
     transition: border 0.3s, box-shadow 0.3s;
-    box-sizing: border-box; /* 確保內邊距和邊框計入總寬度 */
+    box-sizing: border-box;
 }
 
 input[type="text"]:focus,
 textarea:focus {
-    border: 2px solid #5c4f9b; /* 更深的紫色 */
-    box-shadow: 0 0 5px rgba(108, 87, 227, 0.5);
+    border: 2px solid var(--mountbatten-pink); /* 使用玫瑰色 */
+    box-shadow: 0 0 5px rgba(149, 113, 134, 0.5);
     outline: none;
 }
 
 button {
-    padding: 12px; /* 調整按鈕內邊距 */
+    padding: 12px;
     color: #ffffff;
-    background-color: #28a745; /* 新的綠色 */
+    background-color: var(--licorice); /* 使用黑色 */
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px; /* 調整字體大小 */
+    font-size: 16px;
     transition: background-color 0.3s, transform 0.3s;
     display: block;
     width: 100%;
-    margin-top: 10px; /* 加入上方間距 */
+    margin-top: 10px;
 }
 
 button:hover {
-    background-color: #218838; /* 深綠色 */
+    background-color: var(--van-dyke); /* 使用深色 */
     transform: translateY(-2px);
 }
 
@@ -74,16 +90,17 @@ ul {
 }
 
 li {
-    padding: 10px; /* 減少格子內部的內邊距 */
-    border: 1px solid #ced6e0; /* 淺灰色邊框 */
+    padding: 10px;
+    border: 1px solid var(--mountbatten-pink); /* 使用玫瑰色邊框 */
     border-radius: 5px;
-    background-color: #f8f9fa; /* 淺灰色 */
+    background-color: var(--fairy-tale); /* 使用柔和的背景色 */
     margin-bottom: 10px;
     transition: background-color 0.3s, transform 0.3s;
 }
 
 li:hover {
-    background-color: #dfe6e9; /* 更深的淺灰色 */
+    background-color: var(--eggplant); /* 使用蛋茄色 */
+    color: #ffffff; /* 白色字體以提高可讀性 */
     transform: translateY(-2px);
 }
 
@@ -96,9 +113,9 @@ li:last-child {
         width: 95%;
     }
     h1 {
-        font-size: 1.8em; /* 調整字體大小 */
+        font-size: 1.8em;
     }
     h2 {
-        font-size: 1.3em; /* 調整字體大小 */
+        font-size: 1.3em;
     }
 }
