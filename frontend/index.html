@@ -6,6 +6,45 @@
     <title>打卡系統與控制台</title>
     <link rel="stylesheet" href="index.css">
     <script>
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                alert('登入成功！');
+                window.location.href = '/control'; // 假設登入成功後跳轉到控制台
+            } else {
+                alert('登入失敗，請檢查您的帳號和密碼。');
+            }
+        }
+
+        async function register() {
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                alert('註冊成功，請登入！');
+            } else {
+                alert('註冊失敗，請檢查您的資料。');
+            }
+        }
+
         async function clockIn() {
             const user = document.getElementById('user').value;
             await fetch('/api/clock-in', {
@@ -54,26 +93,6 @@
             });
         }
 
-        async function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
-
-            if (response.ok) {
-                // 登入成功，導向控制台
-                window.location.href = '/control';
-            } else {
-                alert('登入失敗，請檢查帳號和密碼。');
-            }
-        }
-
         // 在頁面加載時獲取公告
         window.onload = fetchAnnouncements;
     </script>
@@ -81,6 +100,18 @@
 <body>
     <div class="container">
         <h1>打卡系統</h1>
+        
+        <h2>用戶登入</h2>
+        <input type="text" id="username" placeholder="請輸入用戶名">
+        <input type="password" id="password" placeholder="請輸入密碼">
+        <button onclick="login()">登入</button>
+
+        <h2>用戶註冊</h2>
+        <input type="text" id="reg-username" placeholder="請輸入用戶名">
+        <input type="password" id="reg-password" placeholder="請輸入密碼">
+        <button onclick="register()">註冊</button>
+
+        <h2>打卡功能</h2>
         <input type="text" id="user" placeholder="請輸入用戶名">
         <button onclick="clockIn()">打卡進</button>
         <button onclick="clockOut()">打卡出</button>
@@ -90,10 +121,11 @@
         <h2>控制台公告</h2>
         <div id="announcements"></div> <!-- 用於顯示公告 -->
 
+        <!-- 新增一個按鈕來進入控制台 -->
         <h2>管理控制台</h2>
-        <input type="text" id="username" placeholder="用戶名">
-        <input type="password" id="password" placeholder="密碼">
-        <button onclick="login()">登入</button>
+        <a href="/control" target="_blank">
+            <button>進入控制台</button>
+        </a>
     </div>
 </body>
 </html>
