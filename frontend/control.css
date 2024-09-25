@@ -1,48 +1,50 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #e9ecef;
+    background-color: #f0f2f5; /* 更柔和的背景色 */
     margin: 0;
     padding: 0;
 }
 
 .container {
-    width: 80%;
+    width: 90%; /* 更寬的容器 */
     max-width: 800px;
-    margin: 30px auto;
-    padding: 20px;
+    margin: 50px auto; /* 增加上邊距 */
+    padding: 30px; /* 增加內邊距 */
     background-color: #ffffff;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1); /* 更柔和的陰影 */
+    border-radius: 12px; /* 更圓的邊角 */
     border: 1px solid #dee2e6;
 }
 
 h1 {
     color: #343a40;
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 2.5em; /* 更大的標題 */
+    margin-bottom: 30px; /* 增加下邊距 */
+    font-size: 2.8em; /* 更大的標題 */
+    font-weight: 600; /* 加粗標題 */
 }
 
 h2 {
     color: #495057;
-    margin: 20px 0 10px; /* 顶部和底部间距 */
-    border-bottom: 2px solid #007bff; /* 藍色底線 */
-    padding-bottom: 5px; /* 底部內邊距 */
+    margin-top: 30px; /* 增加上邊距 */
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px; /* 增加底部內邊距 */
+    font-size: 1.8em; /* 更大的子標題 */
 }
 
 input[type="text"],
 textarea {
     width: 100%;
     padding: 15px;
-    margin: 10px 0;
-    border: 2px solid #007bff; /* 藍色邊框 */
-    border-radius: 5px;
+    margin: 15px 0; /* 增加上下邊距 */
+    border: 2px solid #007bff;
+    border-radius: 8px; /* 更圓的邊角 */
     transition: border 0.3s, box-shadow 0.3s;
 }
 
 input[type="text"]:focus,
 textarea:focus {
-    border-color: #0056b3; /* 深藍色 */
+    border: 2px solid #0056b3;
     box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
     outline: none;
 }
@@ -50,39 +52,39 @@ textarea:focus {
 button {
     padding: 15px 20px;
     color: #fff;
-    background-color: #28a745; /* 綠色 */
+    background-color: #28a745; 
     border: none;
-    border-radius: 5px;
+    border-radius: 8px; /* 更圓的邊角 */
     cursor: pointer;
     font-size: 18px;
     transition: background-color 0.3s, transform 0.3s;
     display: block;
     width: 100%;
-    margin-top: 10px; /* 按钮与上方元素间距 */
+    margin-top: 20px; /* 增加上邊距 */
 }
 
 button:hover {
-    background-color: #218838; /* 深綠色 */
+    background-color: #218838;
     transform: translateY(-2px);
 }
 
 ul {
     list-style-type: none;
     padding: 0;
-    margin-top: 20px;
+    margin-top: 30px; /* 增加上邊距 */
 }
 
 li {
     padding: 15px;
-    border: 2px solid #6c757d; /* 灰色邊框 */
-    border-radius: 5px;
-    background-color: #f8f9fa; /* 淺灰色 */
-    margin-bottom: 10px;
+    border: 2px solid #6c757d;
+    border-radius: 8px; /* 更圓的邊角 */
+    background-color: #f8f9fa; 
+    margin-bottom: 15px; /* 增加下邊距 */
     transition: background-color 0.3s, transform 0.3s;
 }
 
 li:hover {
-    background-color: #e2e6ea; /* 更深的淺灰色 */
+    background-color: #e2e6ea;
     transform: translateY(-2px);
 }
 
@@ -95,12 +97,9 @@ li:last-child {
         width: 95%;
     }
     h1 {
-        font-size: 2em;
+        font-size: 2.2em; /* 調整手機上標題大小 */
     }
     h2 {
-        font-size: 1.5em;
-    }
-    button {
-        font-size: 16px; /* 更小的按钮字体 */
+        font-size: 1.6em; /* 調整手機上子標題大小 */
     }
 }
