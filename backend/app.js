@@ -1,16 +1,20 @@
+require('dotenv').config(); // 加載環境變數
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-// 直接在代碼中定義 JWT 密鑰
-const JWT_SECRET = '123456789'; // 更換為強隨機密鑰
+// 使用環境變數來讀取 JWT 密鑰
+const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
+console.log(JWT_SECRET);
 const MONGO_URI = 'mongodb://root:1qaz2wsx@mongo:27017/clockdb?authSource=admin'; // 更換為你的MongoDB連接字串
 
 mongoose.set('strictQuery', true);
@@ -119,7 +123,7 @@ function authenticateJWT(req, res, next) {
             next();
         });
     } else {
-        res.sendStatus(401); // 401 Unauthorized
+        res.status(401).json({ message: '缺少 token' }); // 401 Unauthorized
     }
 }
 
