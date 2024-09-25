@@ -74,9 +74,7 @@
                 if (response.ok) {
                     alert('打卡上班成功！');
                 } else {
-                    const errorResponse = await response.json().catch(() => {
-                    return { message: await response.text() };
-                    });
+                    const errorResponse = await response.json();
                     console.error('Clock-in error:', errorResponse);
                     alert('打卡上班失敗，請檢查用戶名。');
                 }
