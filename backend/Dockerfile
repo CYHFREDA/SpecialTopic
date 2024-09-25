@@ -16,6 +16,9 @@ RUN npm install
 # 複製其他源碼文件
 COPY . .
 
+# 複製 .env 文件（如果需要）
+COPY .env ./
+
 # 暴露後端服務的埠
 EXPOSE 5001
 
