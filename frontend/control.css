@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #706565;
+    background-color: #a19696; /* 淺灰色 */
     margin: 0;
     padding: 0;
 }
@@ -51,7 +51,7 @@ textarea:focus {
 button {
     padding: 12px; /* 調整按鈕內邊距 */
     color: #ffffff;
-    background-color: #4d554f; 
+    background-color: #6c5ce7; /* 深紫色 */
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -63,7 +63,7 @@ button {
 }
 
 button:hover {
-    background-color: #103353; /* 深綠色 */
+    background-color: #5c4f9b; /* 更深的紫色 */
     transform: translateY(-2px);
 }
 
@@ -74,13 +74,12 @@ ul {
 }
 
 li {
-    padding: 15px; /* 增加內邊距 */
+    padding: 15px; /* 增加內部邊距 */
     border: 1px solid #ced6e0; /* 淺灰色邊框 */
-    border-radius: 8px; /* 圓角 */
+    border-radius: 5px;
     background-color: #f8f9fa; /* 淺灰色 */
-    margin-bottom: 15px; /* 增加格子之間的距離 */
+    margin-bottom: 15px; /* 增加下方間距 */
     transition: background-color 0.3s, transform 0.3s;
-    position: relative; /* 為絕對定位的刪除按鈕提供參考 */
 }
 
 li:hover {
@@ -93,22 +92,18 @@ li:last-child {
 }
 
 .delete-button {
-    padding: 8px 12px; /* 調整刪除按鈕內邊距 */
-    color: #ffffff;
-    background-color: #d9534f; /* 紅色背景 */
+    margin-left: 10px; /* 添加左側間距 */
+    padding: 5px 10px; /* 調整按鈕內邊距 */
+    background-color: #e74c3c; /* 紅色 */
     border: none;
-    border-radius: 5px;
+    border-radius: 3px; /* 圓角 */
+    color: white;
     cursor: pointer;
-    font-size: 14px; /* 調整字體大小 */
-    margin-left: 10px; /* 加入左側邊距 */
-    position: absolute; /* 絕對定位以便顯示在公告項目右側 */
-    right: 10px; /* 距離右側10px */
-    top: 50%; /* 垂直居中 */
-    transform: translateY(-50%); /* 確保居中 */
+    transition: background-color 0.3s;
 }
 
 .delete-button:hover {
-    background-color: #c9302c; /* 更深的紅色 */
+    background-color: #c0392b; /* 深紅色 */
 }
 
 @media (max-width: 600px) {
