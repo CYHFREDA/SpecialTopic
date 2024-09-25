@@ -74,12 +74,13 @@ ul {
 }
 
 li {
-    padding: 10px; /* 減少格子內部的內邊距 */
+    padding: 15px; /* 增加內邊距 */
     border: 1px solid #ced6e0; /* 淺灰色邊框 */
-    border-radius: 5px;
+    border-radius: 8px; /* 圓角 */
     background-color: #f8f9fa; /* 淺灰色 */
-    margin-bottom: 10px;
+    margin-bottom: 15px; /* 增加格子之間的距離 */
     transition: background-color 0.3s, transform 0.3s;
+    position: relative; /* 為絕對定位的刪除按鈕提供參考 */
 }
 
 li:hover {
@@ -89,6 +90,25 @@ li:hover {
 
 li:last-child {
     border-bottom: none;
+}
+
+.delete-button {
+    padding: 8px 12px; /* 調整刪除按鈕內邊距 */
+    color: #ffffff;
+    background-color: #d9534f; /* 紅色背景 */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px; /* 調整字體大小 */
+    margin-left: 10px; /* 加入左側邊距 */
+    position: absolute; /* 絕對定位以便顯示在公告項目右側 */
+    right: 10px; /* 距離右側10px */
+    top: 50%; /* 垂直居中 */
+    transform: translateY(-50%); /* 確保居中 */
+}
+
+.delete-button:hover {
+    background-color: #c9302c; /* 更深的紅色 */
 }
 
 @media (max-width: 600px) {
