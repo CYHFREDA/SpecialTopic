@@ -18,12 +18,18 @@
                 body: JSON.stringify({ title, content })
             });
 
-            if (response.status === 201) {
+            const button = document.querySelector('button');
+            button.disabled = true; // 禁用按鈕
+            if (response.ok) {
                 alert('公告已成功發佈！');
                 fetchAnnouncements(); // 發佈後重新載入公告列表
+                document.getElementById('title').value = '';
+                document.getElementById('content').value = '';
             } else {
-                alert('發佈公告時發生錯誤');
+                const errorMsg = await response.text(); // 獲取錯誤信息
+                alert(`發佈公告時發生錯誤: ${errorMsg}`);
             }
+            button.disabled = false; // 請求完成後重新啟用按鈕
         }
 
         async function fetchAnnouncements() {
@@ -47,8 +53,8 @@
     <div class="container">
         <h1>控制台</h1>
         <h2>發佈公告</h2>
-        <input type="text" id="title" placeholder="公告標題">
-        <textarea id="content" placeholder="公告內容"></textarea>
+        <input type="text" id="title" placeholder="公告標題" required>
+        <textarea id="content" placeholder="公告內容" required></textarea>
         <button onclick="postAnnouncement()">發佈公告</button>
 
         <h2>現有公告</h2>
