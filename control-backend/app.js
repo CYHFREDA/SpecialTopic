@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const path = require('path'); // 引入 path 模組以便處理路徑
+const path = require('path');
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,8 +18,20 @@ const announcementSchema = new mongoose.Schema({
     content: { type: String, required: true },
     createdAt: { type: Date, default: Date.now }
 });
-
 const Announcement = mongoose.model('Announcement', announcementSchema);
+
+// 使用者 Schema
+const userSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true }
+});
+const User = mongoose.model('User', userSchema);
+
+// 打卡 Schema
+const checkInSchema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    checkedAt: { type: Date, default: Date.now }
+});
+const CheckIn = mongoose.model('CheckIn', checkInSchema);
 
 // 發佈公告
 app.post('/control/api/announcements', async (req, res) => {
@@ -66,9 +78,72 @@ app.delete('/control/api/announcements/:id', async (req, res) => {
     }
 });
 
+// 新增使用者
+app.post('/control/api/users', async (req, res) => {
+    const { username } = req.body;
+
+    if (!username) {
+        return res.status(400).json({ error: '使用者名稱是必需的。' });
+    }
+
+    try {
+        const user = new User({ username });
+        await user.save();
+        res.sendStatus(201); // 201 Created
+    } catch (error) {
+        console.error('添加使用者錯誤:', error);
+        res.status(500).json({ error: '添加使用者時發生錯誤。' });
+    }
+});
+
+// 查詢使用者
+app.get('/control/api/users', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (error) {
+        console.error('查詢使用者錯誤:', error);
+        res.sendStatus(500); // 500 Internal Server Error
+    }
+});
+
+// 刪除使用者
+app.delete('/control/api/users/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await User.findByIdAndDelete(id);
+        if (result) {
+            res.sendStatus(204); // 204 No Content
+        } else {
+            res.sendStatus(404); // 404 Not Found
+        }
+    } catch (error) {
+        console.error('刪除使用者錯誤:', error);
+        res.sendStatus(500); // 500 Internal Server Error
+    }
+});
+
+// 打卡
+app.post('/control/api/checkins', async (req, res) => {
+    const { userId } = req.body;
+
+    if (!userId) {
+        return res.status(400).json({ error: '使用者 ID 是必需的。' });
+    }
+
+    try {
+        const checkIn = new CheckIn({ userId });
+        await checkIn.save();
+        res.sendStatus(201); // 201 Created
+    } catch (error) {
+        console.error('打卡錯誤:', error);
+        res.status(500).json({ error: '打卡時發生錯誤。' });
+    }
+});
+
 // 新增控制台頁面路由
 app.get('/control', (req, res) => {
-    res.sendFile(path.join(__dirname, 'control.html')); // 使用 path.join 確保正確的路徑
+    res.sendFile(path.join(__dirname, 'control.html'));
 });
 
 const PORT = process.env.PORT || 5002;
