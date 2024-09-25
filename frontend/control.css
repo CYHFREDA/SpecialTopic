@@ -1,23 +1,7 @@
-:root {
-    /* CSS HEX */
-    --black: #070707ff;
-    --charcoal: #40434eff;
-    --lilac: #c297b8ff;
-    --mimi-pink: #fdcff3ff;
-    --persian-pink: #de89beff;
 
-    /* CSS HSL */
-    --black-hsl: hsla(0, 0%, 3%, 1);
-    --charcoal-hsl: hsla(227, 10%, 28%, 1);
-    --lilac-hsl: hsla(314, 26%, 68%, 1);
-    --mimi-pink-hsl: hsla(313, 92%, 90%, 1);
-    --persian-pink-hsl: hsla(323, 56%, 70%, 1);
-}
-
-/* 主體樣式 */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4; /* 淺灰色 */
+    background-color: #a19696; /* 淺灰色 */
     margin: 0;
     padding: 0;
 }
@@ -80,7 +64,7 @@ button {
 }
 
 button:hover {
-    background-color: #218838; /* 深綠色 */
+    background-color: #525c54; /* 深綠色 */
     transform: translateY(-2px);
 }
 
