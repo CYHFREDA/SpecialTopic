@@ -143,10 +143,24 @@
 
             if (response.ok) {
                 alert('打卡成功！');
+                fetchCheckInRecords(); // 獲取打卡紀錄
             } else {
                 const { error } = await response.json();
                 alert(`打卡時發生錯誤: ${error}`);
             }
+        }
+
+        async function fetchCheckInRecords() {
+            const response = await fetch('/control/api/checkins');
+            const checkins = await response.json();
+            const checkinsList = document.getElementById('checkins-list');
+            checkinsList.innerHTML = ''; // 清空現有打卡紀錄
+
+            checkins.forEach(checkin => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `使用者: ${checkin.username}, 打卡時間: ${new Date(checkin.occur_time).toLocaleString()}`;
+                checkinsList.appendChild(listItem);
+            });
         }
 
         function goBack() {
@@ -156,6 +170,7 @@
         window.onload = function() {
             fetchAnnouncements(); // 確保在頁面加載時獲取公告
             fetchUsers(); // 確保在頁面加載時獲取使用者
+            fetchCheckInRecords(); // 確保在頁面加載時獲取打卡紀錄
         };
     </script>
 </head>
@@ -181,6 +196,9 @@
             <!-- 此處將填充使用者下拉選單 -->
         </select>
         <button onclick="postCheckIn()">打卡</button>
+
+        <h2>打卡紀錄</h2>
+        <ul id="checkins-list"></ul>
 
         <button onclick="goBack()">返回</button>
     </div>
