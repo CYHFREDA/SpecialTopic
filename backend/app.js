@@ -32,8 +32,16 @@ const User = mongoose.model('User', userSchema);
 // 註冊新用戶
 app.post('/api/register', async (req, res) => {
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const user = new User({ username: req.body.username, password: hashedPassword });
+        const { username, password } = req.body;
+
+        // 檢查用戶是否已存在
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ message: '用戶名已被佔用。' }); // 400 Bad Request
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({ username, password: hashedPassword });
         await user.save();
         res.sendStatus(201); // 201 Created
     } catch (error) {
@@ -44,34 +52,56 @@ app.post('/api/register', async (req, res) => {
 
 // 登入
 app.post('/api/login', async (req, res) => {
-    const user = await User.findOne({ username: req.body.username });
-    if (user && await bcrypt.compare(req.body.password, user.password)) {
-        // 使用 JSON Web Token 生成 token
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
-    } else {
-        res.sendStatus(401); // 401 Unauthorized
+    try {
+        const { username, password } = req.body;
+        const user = await User.findOne({ username });
+
+        if (user && await bcrypt.compare(password, user.password)) {
+            // 使用 JSON Web Token 生成 token
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            res.json({ token });
+        } else {
+            res.sendStatus(401); // 401 Unauthorized
+        }
+    } catch (error) {
+        console.error('登入錯誤:', error);
+        res.sendStatus(500); // 500 Internal Server Error
     }
 });
 
 // 打卡進
 app.post('/api/clock-in', authenticateJWT, async (req, res) => {
-    const record = new ClockRecord({ user: req.body.user, time: new Date(), type: 'clock-in' });
-    await record.save();
-    res.sendStatus(200);
+    try {
+        const record = new ClockRecord({ user: req.user.id, time: new Date(), type: 'clock-in' });
+        await record.save();
+        res.sendStatus(200);
+    } catch (error) {
+        console.error('打卡進錯誤:', error);
+        res.sendStatus(500); // 500 Internal Server Error
+    }
 });
 
 // 打卡出
 app.post('/api/clock-out', authenticateJWT, async (req, res) => {
-    const record = new ClockRecord({ user: req.body.user, time: new Date(), type: 'clock-out' });
-    await record.save();
-    res.sendStatus(200);
+    try {
+        const record = new ClockRecord({ user: req.user.id, time: new Date(), type: 'clock-out' });
+        await record.save();
+        res.sendStatus(200);
+    } catch (error) {
+        console.error('打卡出錯誤:', error);
+        res.sendStatus(500); // 500 Internal Server Error
+    }
 });
 
 // 查詢打卡記錄
 app.get('/api/records', authenticateJWT, async (req, res) => {
-    const records = await ClockRecord.find();
-    res.json(records);
+    try {
+        const records = await ClockRecord.find();
+        res.json(records);
+    } catch (error) {
+        console.error('查詢打卡記錄錯誤:', error);
+        res.sendStatus(500); // 500 Internal Server Error
+    }
 });
 
 // JWT 驗證中間件
