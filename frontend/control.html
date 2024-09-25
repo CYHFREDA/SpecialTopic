@@ -6,87 +6,111 @@
     <title>控制台</title>
     <link rel="stylesheet" type="text/css" href="./control.css">
     <script>
-        async function postAnnouncement() {
-            const title = document.getElementById('title').value;
-            const content = document.getElementById('content').value;
+        // 現有的 JavaScript 函數...
 
-            const response = await fetch('/control/api/announcements', {
+        async function postUser() {
+            const username = document.getElementById('username').value;
+
+            const response = await fetch('/control/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ title, content })
+                body: JSON.stringify({ username })
             });
 
-            const button = document.querySelector('button');
-            button.disabled = true; // 禁用按鈕
             if (response.ok) {
-                alert('公告已成功發佈！');
-                fetchAnnouncements(); // 發佈後重新載入公告列表
-                document.getElementById('title').value = '';
-                document.getElementById('content').value = '';
+                alert('使用者已成功添加！');
+                fetchUsers(); // 添加後重新載入使用者列表
+                document.getElementById('username').value = '';
             } else {
-                const { error } = await response.json(); // 獲取錯誤信息
-                alert(`發佈公告時發生錯誤: ${error}`);
+                const { error } = await response.json();
+                alert(`添加使用者時發生錯誤: ${error}`);
             }
-            button.disabled = false; // 請求完成後重新啟用按鈕
         }
 
-        async function fetchAnnouncements() {
-            const response = await fetch('/control/api/announcements');
-            const announcements = await response.json();
-            const announcementsList = document.getElementById('announcements-list');
-            announcementsList.innerHTML = ''; // 清空現有公告
+        async function fetchUsers() {
+            const response = await fetch('/control/api/users');
+            const users = await response.json();
+            const usersList = document.getElementById('users-list');
+            usersList.innerHTML = ''; // 清空現有使用者
 
-            announcements.forEach(announcement => {
+            users.forEach(user => {
                 const listItem = document.createElement('li');
-                listItem.innerHTML = `<strong>${announcement.title}:</strong> ${announcement.content} `;
+                listItem.innerHTML = `<strong>${user.username}</strong>`;
                 
                 // 創建刪除按鈕
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = '刪除';
-                deleteButton.className = 'delete-button'; // 加入類名以方便樣式設置
-                deleteButton.onclick = () => deleteAnnouncement(announcement._id); // 傳遞公告 ID
+                deleteButton.className = 'delete-button';
+                deleteButton.onclick = () => deleteUser(user._id);
                 listItem.appendChild(deleteButton);
                 
-                announcementsList.appendChild(listItem);
+                usersList.appendChild(listItem);
             });
         }
 
-        async function deleteAnnouncement(id) {
-            const response = await fetch(`/control/api/announcements/${id}`, {
+        async function deleteUser(id) {
+            const response = await fetch(`/control/api/users/${id}`, {
                 method: 'DELETE'
             });
 
             if (response.ok) {
-                alert('公告已成功刪除！');
-                fetchAnnouncements(); // 刪除後重新載入公告列表
+                alert('使用者已成功刪除！');
+                fetchUsers(); // 刪除後重新載入使用者列表
             } else {
-                const { error } = await response.json(); // 獲取錯誤信息
-                alert(`刪除公告時發生錯誤: ${error}`);
+                const { error } = await response.json();
+                alert(`刪除使用者時發生錯誤: ${error}`);
             }
         }
 
-        function goBack() {
-            window.history.back(); // 返回到上一頁
+        async function postCheckIn() {
+            const userId = document.getElementById('checkin-user').value;
+            const response = await fetch('/control/api/checkins', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId })
+            });
+
+            if (response.ok) {
+                alert('打卡成功！');
+            } else {
+                const { error } = await response.json();
+                alert(`打卡時發生錯誤: ${error}`);
+            }
         }
 
-        // 在頁面加載時獲取公告
-        window.onload = fetchAnnouncements;
+        window.onload = function() {
+            fetchAnnouncements();
+            fetchUsers(); // 在頁面加載時獲取使用者
+        };
     </script>
 </head>
 <body>
     <div class="container">
         <h1>控制台</h1>
+        
         <h2>發佈公告</h2>
         <input type="text" id="title" placeholder="公告標題" required>
         <textarea id="content" placeholder="公告內容" required></textarea>
         <button onclick="postAnnouncement()">發佈公告</button>
 
         <h2>現有公告</h2>
-        <ul id="announcements-list"></ul> <!-- 顯示公告列表 -->
+        <ul id="announcements-list"></ul>
         
-        <!-- 返回按鈕 -->
+        <h2>管理使用者</h2>
+        <input type="text" id="username" placeholder="使用者名稱" required>
+        <button onclick="postUser()">添加使用者</button>
+        <ul id="users-list"></ul>
+
+        <h2>打卡</h2>
+        <select id="checkin-user">
+            <!-- 此處應填充使用者下拉選單 -->
+        </select>
+        <button onclick="postCheckIn()">打卡</button>
+
         <button onclick="goBack()">返回</button>
     </div>
 </body>
