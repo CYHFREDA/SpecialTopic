@@ -10,20 +10,27 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
 
-            if (response.ok) {
-                alert('登入成功！');
-                window.location.href = '/control'; // 登入成功後跳轉到控制台
-            } else {
-                const errorResponse = await response.json();
-                alert('登入失敗：' + errorResponse.message);
+                if (response.ok) {
+                    const data = await response.json();
+                    alert('登入成功！');
+                    window.location.href = '/control'; // 登入成功後跳轉到控制台
+                } else {
+                    const errorResponse = await response.json();
+                    console.error('Login error:', errorResponse);
+                    alert('登入失敗：' + (errorResponse.message || '未知錯誤'));
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+                alert('登入失敗：無法連接到伺服器');
             }
         }
 
@@ -31,78 +38,108 @@
             const username = document.getElementById('reg-username').value;
             const password = document.getElementById('reg-password').value;
 
-            const response = await fetch('/api/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
 
-            if (response.ok) {
-                alert('註冊成功，請登入！');
-            } else {
-                const errorResponse = await response.json();
-                alert('註冊失敗：' + errorResponse.message);
+                if (response.ok) {
+                    alert('註冊成功，請登入！');
+                } else {
+                    const errorResponse = await response.json();
+                    console.error('Register error:', errorResponse);
+                    alert('註冊失敗：' + (errorResponse.message || '未知錯誤'));
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+                alert('註冊失敗：無法連接到伺服器');
             }
         }
 
         async function clockIn() {
             const user = document.getElementById('user').value;
-            const response = await fetch('/api/clock-in', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ user })
-            });
+            try {
+                const response = await fetch('/api/clock-in', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ user })
+                });
 
-            if (response.ok) {
-                alert('打卡上班成功！');
-            } else {
-                alert('打卡上班失敗，請檢查用戶名。');
+                if (response.ok) {
+                    alert('打卡上班成功！');
+                } else {
+                    const errorResponse = await response.json();
+                    console.error('Clock-in error:', errorResponse);
+                    alert('打卡上班失敗，請檢查用戶名。');
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+                alert('打卡上班失敗：無法連接到伺服器');
             }
         }
 
         async function clockOut() {
             const user = document.getElementById('user').value;
-            const response = await fetch('/api/clock-out', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ user })
-            });
+            try {
+                const response = await fetch('/api/clock-out', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ user })
+                });
 
-            if (response.ok) {
-                alert('打卡下班成功！');
-            } else {
-                alert('打卡下班失敗，請檢查用戶名。');
+                if (response.ok) {
+                    alert('打卡下班成功！');
+                } else {
+                    const errorResponse = await response.json();
+                    console.error('Clock-out error:', errorResponse);
+                    alert('打卡下班失敗，請檢查用戶名。');
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+                alert('打卡下班失敗：無法連接到伺服器');
             }
         }
 
         async function fetchRecords() {
-            const response = await fetch('/api/records');
-            const records = await response.json();
-            const recordsList = document.getElementById('records-list');
-            recordsList.innerHTML = ''; // 清空現有記錄
-            records.forEach(record => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${record.user} ${record.type} at ${new Date(record.time).toLocaleString()}`;
-                recordsList.appendChild(listItem);
-            });
+            try {
+                const response = await fetch('/api/records');
+                const records = await response.json();
+                const recordsList = document.getElementById('records-list');
+                recordsList.innerHTML = ''; // 清空現有記錄
+                records.forEach(record => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${record.user} ${record.type} at ${new Date(record.time).toLocaleString()}`;
+                    recordsList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Fetch records error:', error);
+                alert('查詢打卡記錄失敗：無法連接到伺服器');
+            }
         }
 
         async function fetchAnnouncements() {
-            const response = await fetch('/control/api/announcements');
-            const announcements = await response.json();
-            const announcementsDiv = document.getElementById('announcements');
-            announcementsDiv.innerHTML = ''; // 清空現有公告
-            announcements.forEach(announcement => {
-                const p = document.createElement('p');
-                p.textContent = `${announcement.title}: ${announcement.content}`;
-                announcementsDiv.appendChild(p);
-            });
+            try {
+                const response = await fetch('/control/api/announcements');
+                const announcements = await response.json();
+                const announcementsDiv = document.getElementById('announcements');
+                announcementsDiv.innerHTML = ''; // 清空現有公告
+                announcements.forEach(announcement => {
+                    const p = document.createElement('p');
+                    p.textContent = `${announcement.title}: ${announcement.content}`;
+                    announcementsDiv.appendChild(p);
+                });
+            } catch (error) {
+                console.error('Fetch announcements error:', error);
+                alert('獲取公告失敗：無法連接到伺服器');
+            }
         }
 
         // 在頁面加載時獲取公告
