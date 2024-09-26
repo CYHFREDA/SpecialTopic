@@ -105,7 +105,7 @@
                 
                 usersList.appendChild(listItem);
             });
-        } // 確保這裡有結束大括號
+        }
 
         async function deleteUser(id) {
             const response = await fetch(`/control/api/users/${id}`, {
@@ -131,8 +131,9 @@
                     const listItem = document.createElement('li');
                     listItem.className = 'record-item'; // 新增類別
                     
+                    // 假設 record.user 需要從 userId 找到對應的 username
                     const recordContent = document.createElement('span');
-                    recordContent.textContent = `${record.user} ${record.type} at ${new Date(record.time).toLocaleString()}`;
+                    recordContent.textContent = `${record.userId.username} 打卡於 ${new Date(record.checkedAt).toLocaleString()}`; // 使用 username 和 checkedAt
                     listItem.appendChild(recordContent);
         
                     // 創建刪除按鈕
