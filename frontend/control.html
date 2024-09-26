@@ -106,17 +106,6 @@
                 usersList.appendChild(listItem);
             });
 
-            // 填充打卡使用者下拉選單
-            const checkinUserSelect = document.getElementById('checkin-user');
-            checkinUserSelect.innerHTML = ''; // 清空現有選項
-            users.forEach(user => {
-                const option = document.createElement('option');
-                option.value = user._id;
-                option.textContent = user.username;
-                checkinUserSelect.appendChild(option);
-            });
-        }
-
         async function deleteUser(id) {
             const response = await fetch(`/control/api/users/${id}`, {
                 method: 'DELETE'
@@ -176,12 +165,6 @@
         <input type="text" id="username" placeholder="使用者名稱" required>
         <button onclick="postUser()">添加使用者</button>
         <ul id="users-list"></ul>
-
-        <h2>打卡</h2>
-        <select id="checkin-user">
-            <!-- 此處將填充使用者下拉選單 -->
-        </select>
-        <button onclick="postCheckIn()">打卡</button>
 
         <h2>打卡紀錄</h2>
         <ul id="records-list"></ul>
