@@ -88,51 +88,6 @@ li:hover {
     background-color: #f0f0f0; /* 更深的淺灰色 */
 }
 
-/* 刪除按鈕樣式 */
-.delete-button {
-    margin-left: 10px; /* 添加左側間距 */
-    padding: 5px 10px; /* 調整按鈕內邊距 */
-    background-color: #e74c3c; /* 紅色 */
-    border: none;
-    border-radius: 3px; /* 圓角 */
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: 14px; /* 調整字體大小 */
-}
-
-.delete-button:hover {
-    background-color: #c0392b; /* 深紅色 */
-}
-
-/* 打卡記錄樣式 */
-.record-item {
-    display: flex; /* 使用 Flexbox */
-    justify-content: space-between; /* 在水平方向上分配空間 */
-    align-items: center; /* 垂直居中對齊 */
-    padding: 10px; /* 添加內邊距 */
-    border-bottom: 1px solid #ccc; /* 添加底部邊框 */
-}
-
-/* 公告列表樣式 */
-#announcements-list {
-    list-style-type: none; /* 去掉默认的列表样式 */
-    padding: 0; /* 去掉内边距 */
-}
-
-#announcements-list li {
-    margin: 10px 0; /* 每个公告之间的间隔 */
-    padding: 10px; /* 每个公告的内边距 */
-    border: 1px solid #ddd; /* 边框样式 */
-    border-radius: 5px; /* 圆角 */
-    background-color: #f9f9f9; /* 背景颜色 */
-    transition: background-color 0.3s; /* 添加过渡效果 */
-}
-
-#announcements-list li:hover {
-    background-color: #e0e0e0; /* 鼠标悬停时背景颜色 */
-}
-
 /* 響應式樣式 */
 @media (max-width: 600px) {
     .container {
