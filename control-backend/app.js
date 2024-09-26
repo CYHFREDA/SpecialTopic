@@ -98,7 +98,7 @@ app.post('/control/api/users', async (req, res) => {
         res.status(201).json(user); // 返回創建的使用者
     } catch (error) {
         console.error('添加使用者錯誤:', error);
-        res.status(500).json({ error: '添加使用者時發生錯誤。' });
+        res.status(500).json({ error: '此名稱已佔用。' });
     }
 });
 
