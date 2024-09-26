@@ -128,7 +128,7 @@ app.delete('/control/api/users/:id', async (req, res) => {
 // 查詢打卡記錄
 app.get('/api/records', async (req, res) => {
     try {
-        const records = await ClockRecord.find();
+        const records = await CheckIn.find().populate('userId', 'username'); // 確保你從 CheckIn 中查詢資料
         res.json(records);
     } catch (error) {
         console.error('查詢打卡記錄錯誤:', error);
