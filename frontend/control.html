@@ -160,21 +160,6 @@
             }
         }
         
-        async function deleteRecord(id) {
-            console.log(`Attempting to delete record with ID: ${id}`); // 添加日誌
-            const response = await fetch(`/api/records/${id}`, {
-                method: 'DELETE'
-            });
-        
-            if (response.ok) {
-                alert('打卡紀錄已成功刪除！');
-                fetchRecords(); // 刪除後重新載入打卡紀錄列表
-            } else {
-                const { error } = await response.json();
-                console.error(`Error deleting record: ${response.status}, ${errorText}`); // 日誌錯誤詳情
-                alert(`刪除打卡紀錄時發生錯誤: ${error}`);
-            }
-        }
         
         function goBack() {
             window.history.back(); // 返回上一頁
