@@ -133,7 +133,20 @@ li:hover {
 /* 密碼輸入框與按鈕對齊 */
 li input[type="password"] {
     margin-right: 10px;
-    flex: 1; /* 使密碼輸入框填滿可用空間 */
+    flex: 1;
+    padding: 6px 8px; /* 調整內邊距，讓輸入框更小 */
+    font-size: 0.85rem; /* 縮小字體大小 */
+    border: 1.5px solid #bdc3c7;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease-in-out;
+}
+
+/* 聚焦時的樣式 */
+li input[type="password"]:focus {
+    border-color: #3498db; /* 當聚焦時的顏色 */
+    background-color: #ffffff;
+    outline: none;
 }
 
 /* 響應式樣式 */
