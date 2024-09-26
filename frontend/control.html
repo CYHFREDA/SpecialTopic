@@ -131,6 +131,14 @@
                     const listItem = document.createElement('li');
                     listItem.className = 'list-group-item';
                     listItem.textContent = `${record.user} ${record.type} at ${new Date(record.time).toLocaleString()}`;
+        
+                    // 創建刪除按鈕
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = '刪除';
+                    deleteButton.className = 'delete-button';
+                    deleteButton.onclick = () => deleteRecord(record._id); // 調用刪除函數
+                    listItem.appendChild(deleteButton);
+                    
                     recordsList.appendChild(listItem);
                 });
             } catch (error) {
@@ -138,7 +146,21 @@
                 alert('查詢打卡記錄失敗：無法連接到伺服器');
             }
         }
-
+        
+        async function deleteRecord(id) {
+            const response = await fetch(`/api/records/${id}`, {
+                method: 'DELETE'
+            });
+        
+            if (response.ok) {
+                alert('打卡紀錄已成功刪除！');
+                fetchRecords(); // 刪除後重新載入打卡紀錄列表
+            } else {
+                const { error } = await response.json();
+                alert(`刪除打卡紀錄時發生錯誤: ${error}`);
+            }
+        }
+        
         function goBack() {
             window.history.back(); // 返回上一頁
         }
@@ -148,6 +170,7 @@
             fetchUsers(); // 確保在頁面加載時獲取使用者
             fetchRecords(); // 確保在頁面加載時獲取打卡紀錄
         };
+        
     </script>
 </head>
 <body>
