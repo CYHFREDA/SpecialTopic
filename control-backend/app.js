@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(bodyParser.json());
@@ -84,9 +85,9 @@ app.delete('/control/api/announcements/:id', async (req, res) => {
 
 // 新增使用者
 app.post('/control/api/users', async (req, res) => {
-    const { username } = req.body;
+    const { username, password } = req.body; // 同時提取 username 和 password
 
-    if (!username || !password ) {
+    if (!username || !password) {
         return res.status(400).json({ error: '使用者名稱和密碼是必需的。' });
     }
 
