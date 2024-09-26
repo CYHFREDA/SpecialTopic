@@ -24,7 +24,7 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 const clockSchema = new mongoose.Schema({
     user: String,
     time: Date,
-    type: { type: String, enum: ['clock-in', 'clock-out'] }
+    type: { type: String, enum: ['上班打卡', '下班打卡'] }
 });
 
 const ClockRecord = mongoose.model('ClockRecord', clockSchema);
