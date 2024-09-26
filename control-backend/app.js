@@ -126,13 +126,13 @@ app.delete('/control/api/users/:id', async (req, res) => {
 });
 
 // 查詢打卡記錄
-app.get('/control/api/checkins', async (req, res) => {
+app.get('/api/records', async (req, res) => {
     try {
-        const checkIns = await CheckIn.find().populate('userId', 'username'); // 使用 populate 獲取使用者名稱
-        res.json(checkIns);
+        const records = await ClockRecord.find();
+        res.json(records);
     } catch (error) {
         console.error('查詢打卡記錄錯誤:', error);
-        res.status(500).json({ error: '查詢打卡記錄時發生錯誤。' });
+        res.sendStatus(500); // 500 Internal Server Error
     }
 });
 
