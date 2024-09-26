@@ -15,23 +15,27 @@
         
         <!-- 用戶登入/註冊 -->
         <h2>用戶登入/註冊</h2>
-        <div class="form-group">
-            <input type="text" id="username" class="form-control" placeholder="請輸入用戶名" autocomplete="username">
-        </div>
-        <div class="form-group">
-            <input type="password" id="password" class="form-control" placeholder="請輸入密碼" autocomplete="current-password">
-        </div>
-        <button class="btn btn-primary" onclick="authenticate('login')">登入</button>
-        <button class="btn btn-secondary" onclick="authenticate('register')">註冊</button>
+        <form id="auth-form">
+            <div class="form-group">
+                <input type="text" id="username" class="form-control" placeholder="請輸入用戶名" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" class="form-control" placeholder="請輸入密碼" required>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="authenticate('login')">登入</button>
+            <button type="button" class="btn btn-secondary" onclick="authenticate('register')">註冊</button>
+        </form>
 
         <!-- 打卡功能 -->
         <h2>打卡功能</h2>
-        <div class="form-group">
-            <input type="text" id="user" class="form-control" placeholder="請輸入用戶名" autocomplete="username">
-        </div>
-        <button class="btn btn-success" onclick="clockIn()">上班打卡</button>
-        <button class="btn btn-danger" onclick="clockOut()">打卡下班</button>
-        <button class="btn btn-info" onclick="fetchRecords()">查詢打卡記錄</button>
+        <form id="clock-form">
+            <div class="form-group">
+                <input type="text" id="user" class="form-control" placeholder="請輸入用戶名" required>
+            </div>
+            <button type="button" class="btn btn-success" onclick="clockIn()">上班打卡</button>
+            <button type="button" class="btn btn-danger" onclick="clockOut()">打卡下班</button>
+            <button type="button" class="btn btn-info" onclick="fetchRecords()">查詢打卡記錄</button>
+        </form>
 
         <!-- 查詢打卡記錄 -->
         <ul id="records-list" class="list-group"></ul>
