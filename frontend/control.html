@@ -129,8 +129,11 @@
                 recordsList.innerHTML = ''; // 清空現有記錄
                 records.forEach(record => {
                     const listItem = document.createElement('li');
-                    listItem.className = 'list-group-item';
-                    listItem.textContent = `${record.user} ${record.type} at ${new Date(record.time).toLocaleString()}`;
+                    listItem.className = 'record-item'; // 新增類別
+                    
+                    const recordContent = document.createElement('span');
+                    recordContent.textContent = `${record.user} ${record.type} at ${new Date(record.time).toLocaleString()}`;
+                    listItem.appendChild(recordContent);
         
                     // 創建刪除按鈕
                     const deleteButton = document.createElement('button');
