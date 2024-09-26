@@ -90,7 +90,7 @@ app.post('/api/clock-in', async (req, res) => {
             return res.status(404).json({ message: '用戶不存在' }); // 404 Not Found
         }
 
-        const record = new ClockRecord({ user: username, time: new Date(), type: 'clock-in' });
+        const record = new ClockRecord({ user: username, time: new Date(), type: '上班打卡' });
         await record.save();
         res.sendStatus(200); // 200 OK
     } catch (error) {
@@ -113,7 +113,7 @@ app.post('/api/clock-out', async (req, res) => {
             return res.status(404).json({ message: '用戶不存在' }); // 404 Not Found
         }
 
-        const record = new ClockRecord({ user: username, time: new Date(), type: 'clock-out' });
+        const record = new ClockRecord({ user: username, time: new Date(), type: '下班打卡' });
         await record.save();
         res.sendStatus(200); // 200 OK
     } catch (error) {
