@@ -54,8 +54,11 @@ textarea:focus {
     outline: none;
 }
 
-button {
-    padding: 10px 20px;
+/* 統一按鈕樣式 */
+button,
+.change-password-button,
+.delete-button {
+    padding: 8px 16px;
     color: #fff;
     background-color: #3498db;
     border: none;
@@ -65,11 +68,31 @@ button {
     font-weight: 500;
     transition: background-color 0.3s ease, transform 0.2s ease;
     display: inline-block;
+    margin-left: 10px; /* 調整按鈕之間的間距 */
 }
 
-button:hover {
+button:hover,
+.change-password-button:hover,
+.delete-button:hover {
     background-color: #2980b9;
     transform: translateY(-2px);
+}
+
+/* 修改密碼和刪除按鈕的配色 */
+.change-password-button {
+    background-color: #27ae60; /* 綠色 */
+}
+
+.change-password-button:hover {
+    background-color: #219150; /* 更深的綠色 */
+}
+
+.delete-button {
+    background-color: #e74c3c; /* 紅色 */
+}
+
+.delete-button:hover {
+    background-color: #c0392b; /* 更深的紅色 */
 }
 
 /* 列表樣式 */
@@ -86,8 +109,8 @@ li {
     border-radius: 8px;
     background-color: #ffffff;
     margin-bottom: 15px;
-    display: flex; /* 使用 flexbox 佈局 */
-    justify-content: space-between; /* 讓內容和按鈕分開 */
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     transition: background-color 0.3s ease;
 }
@@ -96,18 +119,10 @@ li:hover {
     background-color: #f9f9f9;
 }
 
-/* 更小、更緊湊的刪除按鈕 */
-.delete-button {
-    background-color: #e74c3c;
-    color: #fff;
-    border: none;
-    padding: 6px 12px; /* 減小按鈕大小 */
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.delete-button:hover {
-    background-color: #c0392b;
+/* 密碼輸入框與按鈕對齊 */
+li input[type="password"] {
+    margin-right: 10px;
+    flex: 1; /* 使密碼輸入框填滿可用空間 */
 }
 
 @media (max-width: 768px) {
