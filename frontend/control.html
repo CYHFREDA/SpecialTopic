@@ -124,18 +124,26 @@
         async function fetchRecords() {
             try {
                 const response = await fetch('/api/records');
+                if (!response.ok) { // 檢查響應是否為 2xx
+                    const errorText = await response.text();
+                    console.error('Fetch records error:', response.status, errorText);
+                    alert('查詢打卡記錄失敗：' + response.statusText);
+                    return; // 返回，避免後面處理錯誤
+                }
+                
                 const records = await response.json();
                 const recordsList = document.getElementById('records-list');
                 recordsList.innerHTML = ''; // 清空現有記錄
+                
                 records.forEach(record => {
                     const listItem = document.createElement('li');
                     listItem.className = 'record-item'; // 新增類別
                     
-                    // 假設 record.user 需要從 userId 找到對應的 username
+                    // 假設 record.userId 已經在查詢中被 populate
                     const recordContent = document.createElement('span');
-                    recordContent.textContent = `${record.userId.username} 打卡於 ${new Date(record.checkedAt).toLocaleString()}`; // 使用 username 和 checkedAt
+                    recordContent.textContent = `${record.userId.username} 打卡於 ${new Date(record.checkInTime).toLocaleString()}`; // 使用         username 和 checkInTime
                     listItem.appendChild(recordContent);
-        
+            
                     // 創建刪除按鈕
                     const deleteButton = document.createElement('button');
                     deleteButton.textContent = '刪除';
