@@ -35,23 +35,34 @@ h2 {
     border-bottom: 2px solid #3498db;
 }
 
+/* 輸入框樣式調整 */
 input[type="text"],
 input[type="password"],
 textarea {
     width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 2px solid #bdc3c7;
-    border-radius: 8px;
-    font-size: 1rem;
+    max-width: 100%;
+    padding: 8px 10px; /* 減少內邊距，使框框變小 */
+    margin: 8px 0; /* 調整上下邊距 */
+    border: 1.5px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 0.95rem; /* 調小字體 */
+    background-color: #f9f9f9; /* 柔和背景色 */
+    color: #333;
     transition: border-color 0.3s ease-in-out;
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus,
 textarea:focus {
-    border-color: #3498db;
+    border-color: #3498db; /* 聚焦時顏色 */
     outline: none;
+    background-color: #ffffff;
+}
+
+/* 調整 textarea 框框高度 */
+textarea {
+    height: 100px; /* 調小高度 */
+    resize: vertical; /* 允許垂直調整高度 */
 }
 
 /* 統一按鈕樣式 */
@@ -104,7 +115,7 @@ ul {
 
 /* Flexbox 佈局，將按鈕放到列表項目的右側 */
 li {
-    padding: 15px;
+    padding: 12px;
     border: 1px solid #ecf0f1;
     border-radius: 8px;
     background-color: #ffffff;
@@ -125,6 +136,7 @@ li input[type="password"] {
     flex: 1; /* 使密碼輸入框填滿可用空間 */
 }
 
+/* 響應式樣式 */
 @media (max-width: 768px) {
     .container {
         width: 95%;
