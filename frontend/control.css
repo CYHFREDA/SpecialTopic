@@ -135,8 +135,10 @@ li:hover {
     background-color: #ff4d4d; /* 按鈕顏色 */
     color: white; /* 按鈕文字顏色 */
     border: none; /* 去除邊框 */
-    padding: 5px 10px; /* 添加內邊距 */
+    padding: 4px 8px; /* 添加內邊距，變得更小 */
+    font-size: 14px; /* 調整字體大小 */
     cursor: pointer; /* 鼠標懸停時顯示手型 */
+    border-radius: 4px; /* 添加圓角 */
 }
 
 .delete-button:hover {
