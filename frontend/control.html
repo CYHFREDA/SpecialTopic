@@ -105,6 +105,7 @@
                 
                 usersList.appendChild(listItem);
             });
+        } // 確保這裡有結束大括號
 
         async function deleteUser(id) {
             const response = await fetch(`/control/api/users/${id}`, {
@@ -147,7 +148,6 @@
             fetchUsers(); // 確保在頁面加載時獲取使用者
             fetchRecords(); // 確保在頁面加載時獲取打卡紀錄
         };
-        }          
     </script>
 </head>
 <body>
