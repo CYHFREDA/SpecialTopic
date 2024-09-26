@@ -28,13 +28,6 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-// 打卡 Schema
-const checkInSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    checkedAt: { type: Date, default: Date.now }
-});
-const CheckIn = mongoose.model('CheckIn', checkInSchema);
-
 // 發佈公告
 app.post('/control/api/announcements', async (req, res) => {
     const { title, content } = req.body;
