@@ -93,7 +93,7 @@
             const users = await response.json();
             const usersList = document.getElementById('users-list');
             usersList.innerHTML = ''; // 清空現有使用者
-
+        
             users.forEach(user => {
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `<strong>${user.username}</strong>`;
@@ -105,8 +105,11 @@
                 
                 const changePasswordButton = document.createElement('button');
                 changePasswordButton.textContent = '修改密碼';
-                changePasswordButton.onclick = () => changePassword(user._id, passwordInput.value);
-
+                changePasswordButton.onclick = () => {
+                    const newPassword = passwordInput.value; // 確保從輸入框獲取最新的密碼
+                    changePassword(user._id, newPassword); // 傳遞最新的密碼
+                };
+        
                 listItem.appendChild(passwordInput);
                 listItem.appendChild(changePasswordButton);
                 
