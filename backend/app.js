@@ -1,37 +1,47 @@
 require('dotenv').config(); // 加載環境變數
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+
 // 使用環境變數來讀取 MongoDB 連接字串
 const MONGO_URI = process.env.MONGO_URI; // 確保 MONGO_URI 被加載
+
 mongoose.set('strictQuery', true);
 // 連接 MongoDB
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB 連接成功'))
     .catch(err => console.error('MongoDB 連接錯誤:', err));
+
 // 打卡記錄 Schema
 const clockSchema = new mongoose.Schema({
     user: String,
     time: Date,
     type: { type: String, enum: ['clock-in', 'clock-out'] }
 });
+
 const ClockRecord = mongoose.model('ClockRecord', clockSchema);
+
 // 用戶 Schema
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true }
 });
+
 const User = mongoose.model('User', userSchema);
+
 // 註冊新用戶
 app.post('/api/register', async (req, res) => {
     try {
         const { username, password } = req.body;
+
         // 檢查用戶是否已存在
         const existingUser = await User.findOne({ username });
         if (existingUser) {
@@ -47,11 +57,13 @@ app.post('/api/register', async (req, res) => {
         res.sendStatus(500); // 500 Internal Server Error
     }
 });
+
 // 登入
 app.post('/api/login', async (req, res) => {
     try {
         const { username, password } = req.body;
         const user = await User.findOne({ username });
+
         if (user && await bcrypt.compare(password, user.password)) {
             // 登入成功，不需要返回 JWT
             res.json({ message: '登入成功' });
@@ -63,6 +75,7 @@ app.post('/api/login', async (req, res) => {
         res.sendStatus(500); // 500 Internal Server Error
     }
 });
+
 // 打卡上班
 app.post('/api/clock-in', async (req, res) => {
     try {
@@ -85,6 +98,7 @@ app.post('/api/clock-in', async (req, res) => {
         res.sendStatus(500); // 500 Internal Server Error
     }
 });
+
 // 打卡下班
 app.post('/api/clock-out', async (req, res) => {
     try {
@@ -107,6 +121,7 @@ app.post('/api/clock-out', async (req, res) => {
         res.sendStatus(500); // 500 Internal Server Error
     }
 });
+
 // 查詢打卡記錄
 app.get('/api/records', async (req, res) => {
     try {
@@ -117,6 +132,7 @@ app.get('/api/records', async (req, res) => {
         res.sendStatus(500); // 500 Internal Server Error
     }
 });
+
 const PORT = 5001;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
