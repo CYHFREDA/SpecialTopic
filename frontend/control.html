@@ -150,17 +150,22 @@
             }
         }
 
-        async function fetchCheckInRecords() {
-            const response = await fetch('/control/api/checkins');
-            const checkins = await response.json();
-            const checkinsList = document.getElementById('checkins-list');
-            checkinsList.innerHTML = ''; // 清空現有打卡紀錄
-
-            checkins.forEach(checkin => {
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `使用者: ${checkin.username}, 打卡時間: ${new Date(checkin.occur_time).toLocaleString()}`;
-                checkinsList.appendChild(listItem);
-            });
+        async function fetchRecords() {
+            try {
+                const response = await fetch('/api/records');
+                const records = await response.json();
+                const recordsList = document.getElementById('records-list');
+                recordsList.innerHTML = ''; // 清空現有記錄
+                records.forEach(record => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    listItem.textContent = `${record.user} ${record.type} at ${new Date(record.time).toLocaleString()}`;
+                    recordsList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Fetch records error:', error);
+                alert('查詢打卡記錄失敗：無法連接到伺服器');
+            }
         }
 
         function goBack() {
