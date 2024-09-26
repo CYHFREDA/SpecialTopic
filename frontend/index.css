@@ -30,16 +30,3 @@ h1, h2 {
 .btn:hover {
     opacity: 0.8; /* 懸停時增加透明度 */
 }
-
-#records-list, #announcements {
-    margin-top: 15px;
-}
-
-#announcements {
-    list-style-type: disc; /* 設定條列符號樣式為實心圓 */
-    padding-left: 20px; /* 增加內邊距 */
-    margin-top: 15px;
-    background-color: #f8f9fa; /* 增加背景顏色 */
-    border-radius: 5px; /* 增加圓角 */
-    padding: 10px; /* 增加內邊距 */
-}
