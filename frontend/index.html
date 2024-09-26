@@ -4,7 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>打卡系統</title>
-    <link rel="stylesheet" href="index.css">
+    <!-- 引入 Bootstrap 和 Google Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #d4b896; /* 奶茶灰色背景 */
+            font-family: 'Noto Sans', sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        #records-list, #announcements {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>打卡系統</h1>
+        
+        <!-- 用戶登入/註冊 -->
+        <h2>用戶登入/註冊</h2>
+        <div class="form-group">
+            <input type="text" id="username" class="form-control" placeholder="請輸入用戶名" autocomplete="username">
+        </div>
+        <div class="form-group">
+            <input type="password" id="password" class="form-control" placeholder="請輸入密碼" autocomplete="current-password">
+        </div>
+        <button class="btn btn-primary" onclick="authenticate('login')">登入</button>
+        <button class="btn btn-secondary" onclick="authenticate('register')">註冊</button>
+
+        <!-- 打卡功能 -->
+        <h2>打卡功能</h2>
+        <div class="form-group">
+            <input type="text" id="user" class="form-control" placeholder="請輸入用戶名" autocomplete="username">
+        </div>
+        <button class="btn btn-success" onclick="clockIn()">上班打卡</button>
+        <button class="btn btn-danger" onclick="clockOut()">打卡下班</button>
+        <button class="btn btn-info" onclick="fetchRecords()">查詢打卡記錄</button>
+
+        <!-- 查詢打卡記錄 -->
+        <ul id="records-list" class="list-group"></ul>
+
+        <!-- 控制台公告 -->
+        <h2>控制台公告</h2>
+        <div id="announcements" class="alert alert-secondary"></div>
+    </div>
+
+    <!-- JavaScript 功能 -->
     <script>
         async function authenticate(action) {
             const username = document.getElementById('username').value;
@@ -97,6 +161,7 @@
                 recordsList.innerHTML = ''; // 清空現有記錄
                 records.forEach(record => {
                     const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
                     listItem.textContent = `${record.user} ${record.type} at ${new Date(record.time).toLocaleString()}`;
                     recordsList.appendChild(listItem);
                 });
@@ -126,26 +191,5 @@
         // 在頁面加載時獲取公告
         window.onload = fetchAnnouncements;
     </script>
-</head>
-<body>
-    <div class="container">
-        <h1>打卡系統</h1>
-        
-        <h2>用戶登入/註冊</h2>
-        <input type="text" id="username" placeholder="請輸入用戶名" autocomplete="username">
-        <input type="password" id="password" placeholder="請輸入密碼" autocomplete="current-password">
-        <button onclick="authenticate('login')">登入</button>
-        <button onclick="authenticate('register')">註冊</button>
-
-        <h2>打卡功能</h2>
-        <input type="text" id="user" placeholder="請輸入用戶名" autocomplete="username">
-        <button onclick="clockIn()">上班打卡</button>
-        <button onclick="clockOut()">打卡下班</button>
-        <button onclick="fetchRecords()">查詢打卡記錄</button>
-        <ul id="records-list"></ul> <!-- 用於顯示查詢結果 -->
-
-        <h2>控制台公告</h2>
-        <div id="announcements"></div> <!-- 用於顯示公告 -->
-    </div>
 </body>
 </html>
