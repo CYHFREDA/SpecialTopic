@@ -137,22 +137,6 @@ app.get('/api/records', async (req, res) => {
     }
 });
 
-// 刪除打卡記錄
-app.delete('/api/records/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const result = await CheckIn.findByIdAndDelete(id);
-        if (result) {
-            res.sendStatus(204); // 204 No Content
-        } else {
-            res.sendStatus(404); // 404 Not Found
-        }
-    } catch (error) {
-        console.error('刪除打卡紀錄錯誤:', error);
-        res.status(500).json({ error: '刪除打卡紀錄時發生錯誤。' });
-    }
-});
-
 // 新增控制台頁面路由
 app.get('/control', (req, res) => {
     res.sendFile(path.join(__dirname, 'control.html'));
