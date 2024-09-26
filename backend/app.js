@@ -133,6 +133,22 @@ app.get('/api/records', async (req, res) => {
     }
 });
 
+app.delete('/api/records/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const result = await Record.findByIdAndDelete(id);
+        if (!result) {
+            return res.status(404).json({ error: '紀錄未找到。' });
+        }
+        res.status(200).json({ message: '紀錄已成功刪除。' });
+    } catch (error) {
+        console.error('刪除紀錄錯誤:', error);
+        res.status(500).json({ error: '刪除紀錄時發生錯誤。' });
+    }
+});
+
+
 const PORT = 5001;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
