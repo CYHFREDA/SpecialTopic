@@ -23,8 +23,8 @@
       - `users.js`
 - **nginx/**
   - **conf.d/**
+    - `api.conf`    
   - **`logs/`**
-    - `api.conf`
   - `Dockerfile`
 ---
 - 公開倉庫：使用 GitHub Actions 是免費的，沒有分鐘數限制。
