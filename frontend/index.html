@@ -151,9 +151,9 @@
                 const announcementsDiv = document.getElementById('announcements');
                 announcementsDiv.innerHTML = ''; // 清空現有公告
                 announcements.forEach(announcement => {
-                    const p = document.createElement('p');
-                    p.textContent = `${announcement.title}: ${announcement.content}`;
-                    announcementsDiv.appendChild(p);
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${announcement.title}: ${announcement.content}`;
+                    announcementsList.appendChild(listItem);
                 });
             } catch (error) {
                 console.error('Fetch announcements error:', error);
