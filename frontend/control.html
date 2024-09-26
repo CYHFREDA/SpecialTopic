@@ -131,25 +131,6 @@
             }
         }
 
-        async function postCheckIn() {
-            const userId = document.getElementById('checkin-user').value;
-            const response = await fetch('/control/api/checkins', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ userId })
-            });
-
-            if (response.ok) {
-                alert('打卡成功！');
-                fetchCheckInRecords(); // 獲取打卡紀錄
-            } else {
-                const { error } = await response.json();
-                alert(`打卡時發生錯誤: ${error}`);
-            }
-        }
-
         async function fetchRecords() {
             try {
                 const response = await fetch('/api/records');
