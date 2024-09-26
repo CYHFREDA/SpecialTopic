@@ -92,13 +92,18 @@ app.post('/control/api/users', async (req, res) => {
     }
 
     try {
+        // 檢查使用者名稱是否已存在
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ error: '使用者名稱已存在，請選擇其他名稱。' });
+        }        
         const hashedPassword = await bcrypt.hash(password, 10); // 哈希密碼
         const user = new User({ username, password: hashedPassword });
         await user.save();
         res.status(201).json(user); // 返回創建的使用者
     } catch (error) {
         console.error('添加使用者錯誤:', error);
-        res.status(500).json({ error: '此名稱已佔用。' });
+        res.status(500).json({ error: '添加使用者時發生錯誤。' });
     }
 });
 
