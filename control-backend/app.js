@@ -24,7 +24,8 @@ const Announcement = mongoose.model('Announcement', announcementSchema);
 
 // 使用者 Schema
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true }
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true } // 新增密碼欄位
 });
 const User = mongoose.model('User', userSchema);
 
@@ -85,17 +86,37 @@ app.delete('/control/api/announcements/:id', async (req, res) => {
 app.post('/control/api/users', async (req, res) => {
     const { username } = req.body;
 
-    if (!username) {
-        return res.status(400).json({ error: '使用者名稱是必需的。' });
+    if (!username || !password ) {
+        return res.status(400).json({ error: '使用者名稱和密碼是必需的。' });
     }
 
     try {
-        const user = new User({ username });
+        const hashedPassword = await bcrypt.hash(password, 10); // 哈希密碼
+        const user = new User({ username, password: hashedPassword });
         await user.save();
         res.status(201).json(user); // 返回創建的使用者
     } catch (error) {
         console.error('添加使用者錯誤:', error);
         res.status(500).json({ error: '添加使用者時發生錯誤。' });
+    }
+});
+
+// 修改使用者密碼
+app.patch('/control/api/users/:id/password', async (req, res) => {
+    const { id } = req.params;
+    const { password } = req.body;
+
+    if (!password) {
+        return res.status(400).json({ error: '新密碼是必需的。' });
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10); // 哈希新的密碼
+        await User.findByIdAndUpdate(id, { password: hashedPassword }); // 更新密碼
+        res.sendStatus(204); // 204 No Content
+    } catch (error) {
+        console.error('修改使用者密碼錯誤:', error);
+        res.status(500).json({ error: '修改使用者密碼時發生錯誤。' });
     }
 });
 
