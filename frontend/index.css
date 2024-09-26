@@ -24,13 +24,19 @@ h1, h2 {
 .btn {
     width: 100%;
     margin-bottom: 10px;
+    transition: background-color 0.3s ease; /* 加入過渡效果 */
+}
+
+.btn:hover {
+    opacity: 0.8; /* 懸停時增加透明度 */
 }
 
 #records-list, #announcements {
     margin-top: 15px;
 }
+
 #announcements {
-    list-style-type: disc; /* 設定條列符號樣式為實心圓 */
-    padding-left: 20px; /* 增加內邊距，讓條列更好看 */
+    list-style-type: disc;
+    padding-left: 20px;
     margin-top: 15px;
 }
