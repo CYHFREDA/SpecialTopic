@@ -122,3 +122,23 @@ li:hover {
         width: 95%;
     }
 }
+.record-item {
+    display: flex; /* 使用 Flexbox */
+    justify-content: space-between; /* 在水平方向上分配空間 */
+    align-items: center; /* 垂直居中對齊 */
+    padding: 10px; /* 添加內邊距 */
+    border-bottom: 1px solid #ccc; /* 添加底部邊框 */
+}
+
+.delete-button {
+    margin-left: 10px; /* 按鈕與文本之間的距離 */
+    background-color: #ff4d4d; /* 按鈕顏色 */
+    color: white; /* 按鈕文字顏色 */
+    border: none; /* 去除邊框 */
+    padding: 5px 10px; /* 添加內邊距 */
+    cursor: pointer; /* 鼠標懸停時顯示手型 */
+}
+
+.delete-button:hover {
+    background-color: #ff1a1a; /* 懸停時變色 */
+}
