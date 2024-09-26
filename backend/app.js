@@ -137,7 +137,7 @@ app.get('/api/records', async (req, res) => {
 app.delete('/api/records/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await CheckIn.findByIdAndDelete(id);
+        const result = await ClockRecord.findByIdAndDelete(id);
         if (result) {
             res.sendStatus(204); // 204 No Content
         } else {
