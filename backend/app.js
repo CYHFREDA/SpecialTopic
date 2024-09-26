@@ -133,21 +133,21 @@ app.get('/api/records', async (req, res) => {
     }
 });
 
+// 刪除打卡記錄
 app.delete('/api/records/:id', async (req, res) => {
-    const { id } = req.params;
-
     try {
-        const result = await Record.findByIdAndDelete(id);
-        if (!result) {
-            return res.status(404).json({ error: '紀錄未找到。' });
+        const { id } = req.params;
+        const result = await CheckIn.findByIdAndDelete(id);
+        if (result) {
+            res.sendStatus(204); // 204 No Content
+        } else {
+            res.sendStatus(404); // 404 Not Found
         }
-        res.status(200).json({ message: '紀錄已成功刪除。' });
     } catch (error) {
-        console.error('刪除紀錄錯誤:', error);
-        res.status(500).json({ error: '刪除紀錄時發生錯誤。' });
+        console.error('刪除打卡紀錄錯誤:', error);
+        res.status(500).json({ error: '刪除打卡紀錄時發生錯誤。' });
     }
 });
-
 
 const PORT = 5001;
 app.listen(PORT, () => {
