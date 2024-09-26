@@ -153,7 +153,7 @@
                 announcements.forEach(announcement => {
                     const listItem = document.createElement('li');
                     listItem.textContent = `${announcement.title}: ${announcement.content}`;
-                    announcementsList.appendChild(listItem);
+                    announcementsDiv.appendChild(listItem);
                 });
             } catch (error) {
                 console.error('Fetch announcements error:', error);
