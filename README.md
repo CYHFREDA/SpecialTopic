@@ -17,7 +17,7 @@
   - `index.css`
   - `control.html`
   - `control.css`
-  -  `controll`
+  -  `controll/`
     - `announcements.js`
     - `records.js`
     - `users.js`
