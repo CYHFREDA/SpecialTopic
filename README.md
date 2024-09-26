@@ -17,10 +17,10 @@
   - `index.css`
   - `control.html`
   - `control.css`
-  -  `controll/`
-    - `announcements.js`
-    - `records.js`
-    - `users.js`
+  -  **`controll/`**
+      - `announcements.js`
+      - `records.js`
+      - `users.js`
 - **nginx/**
   - **conf.d/**
     - `api.conf`
