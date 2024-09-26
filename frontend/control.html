@@ -91,38 +91,55 @@
         async function fetchUsers() {
             const response = await fetch('/control/api/users');
             const users = await response.json();
-            const userTable = document.getElementById('user-table');
-
+            const usersList = document.getElementById('users-list');
+            usersList.innerHTML = ''; // 清空現有使用者
+        
             users.forEach(user => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${user.username}</td>
-                    <td>
-                        <input type="password" id="password-${user._id}" placeholder="新密碼">
-                        <button onclick="changePassword('${user._id}')">修改密碼</button>
-                    </td>
-                `;
-                userTable.appendChild(row);
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<strong>${user.username}</strong>`;
+                
+                // 創建修改密碼的按鈕和輸入框
+                const passwordInput = document.createElement('input');
+                passwordInput.type = 'password';
+                passwordInput.placeholder = '新密碼';
+                
+                const changePasswordButton = document.createElement('button');
+                changePasswordButton.textContent = '修改密碼';
+                changePasswordButton.onclick = () => {
+                    const newPassword = passwordInput.value; // 確保從輸入框獲取最新的密碼
+                    changePassword(user._id, newPassword); // 傳遞最新的密碼
+                };
+        
+                listItem.appendChild(passwordInput);
+                listItem.appendChild(changePasswordButton);
+                
+                // 創建刪除按鈕
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '刪除';
+                deleteButton.className = 'delete-button';
+                deleteButton.onclick = () => deleteUser(user._id);
+                listItem.appendChild(deleteButton);
+                
+                usersList.appendChild(listItem);
             });
         }
         // 更改密碼函數
-        async function changePassword(userId) {
-            const newPassword = document.getElementById(`password-${userId}`).value;
-            const response = await fetch(`/control/api/users/${userId}/password`, {
+        async function changePassword(id, newPassword) {
+            const response = await fetch(`/control/api/users/${id}/password`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ password: newPassword })
+                body: JSON.stringify({ password: newPassword }) // 傳送新的密碼
             });
 
             if (response.ok) {
                 alert('密碼已成功修改！');
+                fetchUsers(); // 更新使用者列表
             } else {
-                const error = await response.json();
-                alert(`修改密碼失敗: ${error.error}`);
+                const { error } = await response.json();
+                alert(`修改密碼時發生錯誤: ${error}`);
             }
-        }
         }
         
         async function deleteUser(id) {
@@ -204,7 +221,6 @@
         <ul id="announcements-list"></ul>
         
         <h2>管理使用者</h2>
-        <table id="user-table">
         <input type="text" id="username" placeholder="使用者名稱" required>
         <input type="password" id="password" placeholder="使用者密碼" required> <!-- 新增密碼欄位 -->
         <button onclick="postUser()">添加使用者</button>
