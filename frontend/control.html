@@ -124,34 +124,13 @@
         async function fetchRecords() {
             try {
                 const response = await fetch('/api/records');
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('Fetch records error:', response.status, errorText);
-                    alert('查詢打卡記錄失敗：' + response.statusText);
-                    return;
-                }
-        
                 const records = await response.json();
                 const recordsList = document.getElementById('records-list');
                 recordsList.innerHTML = ''; // 清空現有記錄
-                
                 records.forEach(record => {
                     const listItem = document.createElement('li');
-                    listItem.className = 'record-item';
-        
-                    // 檢查 userId 是否有效
-                    const username = record.userId ? record.userId.username : '未知使用者'; // 如果 userId 無效，顯示 '未知使用者'
-                    const recordContent = document.createElement('span');
-                    recordContent.textContent = `${username} 打卡於 ${new Date(record.checkInTime).toLocaleString()}`;
-                    listItem.appendChild(recordContent);
-            
-                    // 創建刪除按鈕
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = '刪除';
-                    deleteButton.className = 'delete-button';
-                    deleteButton.onclick = () => deleteRecord(record._id);
-                    listItem.appendChild(deleteButton);
-                    
+                    listItem.className = 'list-group-item';
+                    listItem.textContent = `${record.user} ${record.type} at ${new Date(record.time).toLocaleString()}`;
                     recordsList.appendChild(listItem);
                 });
             } catch (error) {
