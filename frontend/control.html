@@ -64,22 +64,24 @@
                 alert(`刪除公告時發生錯誤: ${error}`);
             }
         }
-
+        // 添加使用者的函數
         async function postUser() {
             const username = document.getElementById('username').value;
-
+            const password = document.getElementById('password').value; // 新增密碼欄位
+            
             const response = await fetch('/control/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username })
+                body: JSON.stringify({ username, password })
             });
 
             if (response.ok) {
                 alert('使用者已成功添加！');
                 fetchUsers(); // 添加後重新載入使用者列表
-                document.getElementById('username').value = '';
+                document.getElementById('username').value = ''; // 清空使用者欄位
+                document.getElementById('password').value = ''; // 清空密碼欄位
             } else {
                 const { error } = await response.json();
                 alert(`添加使用者時發生錯誤: ${error}`);
@@ -96,6 +98,18 @@
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `<strong>${user.username}</strong>`;
                 
+                // 創建修改密碼的按鈕和輸入框
+                const passwordInput = document.createElement('input');
+                passwordInput.type = 'password';
+                passwordInput.placeholder = '新密碼';
+                
+                const changePasswordButton = document.createElement('button');
+                changePasswordButton.textContent = '修改密碼';
+                changePasswordButton.onclick = () => changePassword(user._id, passwordInput.value);
+
+                listItem.appendChild(passwordInput);
+                listItem.appendChild(changePasswordButton);
+                
                 // 創建刪除按鈕
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = '刪除';
@@ -106,7 +120,25 @@
                 usersList.appendChild(listItem);
             });
         }
+        // 更改密碼函數
+        async function changePassword(id, newPassword) {
+            const response = await fetch(`/control/api/users/${id}/password`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ password: newPassword }) // 傳送新的密碼
+            });
 
+            if (response.ok) {
+                alert('密碼已成功修改！');
+                fetchUsers(); // 更新使用者列表
+            } else {
+                const { error } = await response.json();
+                alert(`修改密碼時發生錯誤: ${error}`);
+            }
+        }
+        
         async function deleteUser(id) {
             const response = await fetch(`/control/api/users/${id}`, {
                 method: 'DELETE'
@@ -187,6 +219,7 @@
         
         <h2>管理使用者</h2>
         <input type="text" id="username" placeholder="使用者名稱" required>
+        <input type="password" id="password" placeholder="使用者密碼" required> <!-- 新增密碼欄位 -->
         <button onclick="postUser()">添加使用者</button>
         <ul id="users-list"></ul>
 
