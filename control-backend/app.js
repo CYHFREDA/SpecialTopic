@@ -28,6 +28,14 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
+// 打卡記錄 Schema
+const checkInSchema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    checkInTime: { type: Date, default: Date.now }
+});
+
+const CheckIn = mongoose.model('CheckIn', checkInSchema);
+
 // 發佈公告
 app.post('/control/api/announcements', async (req, res) => {
     const { title, content } = req.body;
@@ -126,6 +134,22 @@ app.get('/api/records', async (req, res) => {
     } catch (error) {
         console.error('查詢打卡記錄錯誤:', error);
         res.sendStatus(500); // 500 Internal Server Error
+    }
+});
+
+// 刪除打卡記錄
+app.delete('/api/records/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await CheckIn.findByIdAndDelete(id);
+        if (result) {
+            res.sendStatus(204); // 204 No Content
+        } else {
+            res.sendStatus(404); // 404 Not Found
+        }
+    } catch (error) {
+        console.error('刪除打卡紀錄錯誤:', error);
+        res.status(500).json({ error: '刪除打卡紀錄時發生錯誤。' });
     }
 });
 
