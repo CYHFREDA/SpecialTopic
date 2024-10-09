@@ -196,7 +196,7 @@ async function sendLineMessage(userId, message) {
 
 // Webhook 端點
 app.post('/webhook', async (req, res) => {
-    const currentTime = new Date().toLocaleString(); // 獲取當前時間
+    const currentTime = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });  // 獲取時間
     console.log(`[${currentTime}] Webhook received!`);
 
     const events = req.body.events;
