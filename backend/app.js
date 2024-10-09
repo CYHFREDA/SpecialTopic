@@ -193,3 +193,20 @@ async function sendLineMessage(userId, message) {
         console.error('發送訊息時發生錯誤:', error);
     }
 }
+
+// Webhook 端點
+app.post('/webhook', async (req, res) => {
+    const events = req.body.events;
+
+    for (const event of events) {
+        if (event.type === 'message') {
+            const userId = event.source.userId; // 獲取用戶 ID
+            console.log('接收到的 User ID:', userId);
+
+            // 可以根據需要進行其他處理，例如回覆消息
+            // replyMessage(event.replyToken, '收到你的消息！');
+        }
+    }
+
+    res.sendStatus(200); // 回應 200 OK
+});
