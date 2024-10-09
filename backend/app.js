@@ -10,7 +10,7 @@ const axios = require('axios');
 
 const app = express();
 // Line Messaging API 的 Channel Access Token，請替換為你的 Token
-const channelAccessToken = 'mPsgUlTwfjMxmpTk34VQkaLyVjleuKixbUgfDOHunXfNcUvwEOhHWD0HdGY3SHPqc/ATmziZlgpOIPUZkH38dOo5f8dgkKOKgevfi5UdPWeOnr7Ow9PXaYwMBuiGtMloWrOzdEOWLV95RRKP5w46aQdB04t89/1O/w1cDnyilFU=';
+const channelAccessToken = 'yFIX0XKAtgJykeAfoHdXFqjUIvEdoRfU5dKwzCG4tApHQ7eJRKTTrHd708yY86w01Syqj3u2q794ec2rCF+ctmmEJqQVE0XPspzDLedecfU+SudW232DOWbUr62LSlmBDM4t20xXogjgpx3ZQgCFOQdB04t89/1O/w1cDnyilFU='
 
 app.use(bodyParser.json());
 app.use(cors());
