@@ -196,15 +196,18 @@ async function sendLineMessage(userId, message) {
 
 // Webhook 端點
 app.post('/webhook', async (req, res) => {
-    console.log('Webhook received!');
+    const currentTime = new Date().toLocaleString(); // 獲取當前時間
+    console.log(`[${currentTime}] Webhook received!`);
+
     const events = req.body.events;
 
     for (const event of events) {
         if (event.type === 'message') {
             const userId = event.source.userId; // 獲取用戶 ID
-            console.log('接收到的 User ID:', userId);
+            console.log(`[${currentTime}] 接收到的 User ID:`, userId);
         }
     }
 
     res.sendStatus(200); // 回應 200 OK
 });
+
