@@ -7,7 +7,9 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const axios = require('axios');
+
 const app = express();
+const channelAccessToken = 'mPsgUlTwfjMxmpTk34VQkaLyVjleuKixbUgfDOHunXfNcUvwEOhHWD0HdGY3SHPqc/ATmziZlgpOIPUZkH38dOo5f8dgkKOKgevfi5UdPWeOnr7Ow9PXaYwMBuiGtMloWrOzdEOWLV95RRKP5w46aQdB04t89/1O/w1cDnyilFU=';
 
 app.use(bodyParser.json());
 app.use(cors());
