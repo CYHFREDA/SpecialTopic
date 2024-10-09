@@ -161,7 +161,7 @@ app.listen(PORT, () => {
 
 // Webhook 端點
 app.post('/webhook', async (req, res) => {
-    const currentTime = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });  // 獲取時間
+    const currentTime = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
     console.log(`[${currentTime}] Webhook received!`);
 
     const events = req.body.events;
@@ -169,10 +169,61 @@ app.post('/webhook', async (req, res) => {
     for (const event of events) {
         if (event.type === 'message') {
             const userId = event.source.userId; // 獲取用戶 ID
+            const userMessage = event.message.text; // 獲取用戶發送的訊息
             console.log(`[${currentTime}] 接收到的 User ID:`, userId);
+            console.log(`[${currentTime}] 接收到的訊息:`, userMessage);
+
+            // 根據用戶的訊息進行回覆
+            const replyMessage = handleMessage(userMessage);
+            await sendLineMessage(userId, replyMessage);
         }
     }
 
     res.sendStatus(200); // 回應 200 OK
 });
+
+// 根據用戶的訊息處理回覆
+function handleMessage(message) {
+    // 根據不同的訊息內容生成回覆
+    if (message.includes('打卡')) {
+        return '您已成功打卡！';
+    } else if (message.includes('你好')) {
+        return '您好！有什麼可以幫助您的嗎？';
+    } else {
+        return '謝謝您的訊息！';
+    }
+}
+
+// 發送訊息到特定用戶的函數
+async function sendLineMessage(userId, message) {
+    const url = 'https://api.line.me/v2/bot/message/push';
+
+    const data = {
+        to: userId,
+        messages: [
+            {
+                type: 'text',
+                text: message
+            }
+        ]
+    };
+
+    try {
+        const response = await axios.post(url, data, {
+            headers: {
+                'Authorization': `Bearer ${channelAccessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status === 200) {
+            console.log('訊息發送成功！');
+        } else {
+            console.log(`訊息發送失敗，狀態碼：${response.status}`);
+        }
+    } catch (error) {
+        console.error('發送訊息時發生錯誤:', error);
+    }
+}
+
 
