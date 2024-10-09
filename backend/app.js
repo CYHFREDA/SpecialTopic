@@ -167,7 +167,7 @@ app.post('/webhook', async (req, res) => {
     const events = req.body.events;
 
     for (const event of events) {
-        if (event.type === 'message') {
+        if (event.type === 'message' && event.message.type === 'text') { // 確保是文本訊息
             const userId = event.source.userId; // 獲取用戶 ID
             const userMessage = event.message.text; // 獲取用戶發送的訊息
             console.log(`[${currentTime}] 接收到的 User ID:`, userId);
@@ -176,6 +176,8 @@ app.post('/webhook', async (req, res) => {
             // 根據用戶的訊息進行回覆
             const replyMessage = handleMessage(userMessage);
             await sendLineMessage(userId, replyMessage);
+        } else {
+            console.log('未處理的事件類型或非文本訊息:', event);
         }
     }
 
@@ -225,5 +227,3 @@ async function sendLineMessage(userId, message) {
         console.error('發送訊息時發生錯誤:', error);
     }
 }
-
-
