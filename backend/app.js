@@ -83,9 +83,9 @@ app.post('/api/login', async (req, res) => {
 // 打卡上班
 app.post('/api/clock-in', async (req, res) => {
     try {
-        const { username, userId } = req.body; // 獲取用戶名稱和用戶 ID ,  userId 需修改為和access_token吻合的
-        if (!username || !userId) {
-            return res.status(400).json({ message: '缺少用戶名稱或用戶 ID' }); // 400 Bad Request
+        const { username } = req.body; // 獲取用戶名稱
+        if (!username) {
+            return res.status(400).json({ message: '缺少用戶名稱' }); // 400 Bad Request
         }
         
         // 查找用戶以確認其存在
@@ -95,11 +95,7 @@ app.post('/api/clock-in', async (req, res) => {
         }
 
         const record = new ClockRecord({ user: username, time: new Date(), type: '上班打卡' });
-        await record.save();
-        
-        // 發送 Line 訊息通知
-        await sendLineMessage(userId, `${username} 打卡成功，開始一天的工作！`);
-        
+        await record.save();        
         res.sendStatus(200); // 200 OK
     } catch (error) {
         console.error('打卡上班錯誤:', error);
@@ -162,37 +158,6 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
-// 發送訊息到特定用戶的函數
-async function sendLineMessage(userId, message) {
-    const url = 'https://api.line.me/v2/bot/message/push';
-    
-    const data = {
-        to: userId,
-        messages: [
-            {
-                type: 'text',
-                text: message
-            }
-        ]
-    };
-
-    try {
-        const response = await axios.post(url, data, {
-            headers: {
-                'Authorization': `Bearer ${channelAccessToken}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (response.status === 200) {
-            console.log('訊息發送成功！');
-        } else {
-            console.log(`訊息發送失敗，狀態碼：${response.status}`);
-        }
-    } catch (error) {
-        console.error('發送訊息時發生錯誤:', error);
-    }
-}
 
 // Webhook 端點
 app.post('/webhook', async (req, res) => {
