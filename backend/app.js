@@ -192,7 +192,7 @@ function handleMessage(message) {
     } else if (message.includes('你好')) {
         return '您好！有什麼可以幫助您的嗎？';
     } else {
-        return '謝謝您的訊息！';
+        return '謝謝您的訊息！我們會盡快回覆您！';
     }
 }
 
