@@ -24,23 +24,10 @@
             border: 1px solid #e5e5e5;
         }
 
-        @media (min-width: 768px) {
-            .navbar-nav {
-                display: -ms-flexbox;
-                display: flex;
-            }
-
-            .navbar-nav .nav-item {
-                -ms-flex: 1 0 auto;
-                flex: 1 0 auto;
-            }
-        }
-
         .section-container {
             margin-top: 20px;
         }
 
-        /* Main marketing message and sign up button */
         .jumbotron {
             text-align: center;
             background-color: transparent;
@@ -51,14 +38,15 @@
             font-size: 21px;
         }
 
-        /* Responsive: Portrait tablets and up */
-        @media screen and (min-width: 768px) {
-            /* Remove the padding we set earlier */
-            .masthead,
-            .marketing,
-            .footer {
-                padding-right: 0;
-                padding-left: 0;
+        @media (min-width: 768px) {
+            .navbar-nav {
+                display: -ms-flexbox;
+                display: flex;
+            }
+
+            .navbar-nav .nav-item {
+                -ms-flex: 1 0 auto;
+                flex: 1 0 auto;
             }
         }
     </style>
@@ -75,6 +63,15 @@
             fetchUsers(); // 確保在頁面加載時獲取使用者
             fetchRecords(); // 確保在頁面加載時獲取打卡紀錄
         };
+
+        function showSection(section) {
+            // 隱藏所有部分
+            document.querySelectorAll('.section-container').forEach(function (el) {
+                el.style.display = 'none';
+            });
+            // 顯示所選部分
+            document.getElementById(section).style.display = 'block';
+        }
     </script>
 </head>
 <body>
@@ -90,29 +87,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav text-md-center nav-justified w-100">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('announcements-section')">發佈公告</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Projects</a>
+                    <a class="nav-link" href="#" onclick="showSection('users-section')">管理使用者</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Downloads</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown01">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
+                    <a class="nav-link" href="#" onclick="showSection('records-section')">打卡紀錄</a>
                 </li>
             </ul>
         </div>
@@ -134,7 +116,7 @@
 <!-- 原有的功能區 -->
 <div class="container">
     <!-- 公告部分 -->
-    <div class="section-container">
+    <div id="announcements-section" class="section-container">
         <h2>發佈公告</h2>
         <div class="mb-3">
             <label for="title" class="form-label">公告標題</label>
@@ -162,7 +144,7 @@
     </div>
 
     <!-- 使用者管理部分 -->
-    <div class="section-container">
+    <div id="users-section" class="section-container" style="display: none;">
         <h2>管理使用者</h2>
         <div class="mb-3">
             <label for="username" class="form-label">使用者名稱</label>
@@ -179,7 +161,7 @@
     </div>
 
     <!-- 打卡紀錄部分 -->
-    <div class="section-container">
+    <div id="records-section" class="section-container" style="display: none;">
         <h2>打卡紀錄</h2>
         <ul id="records-list" class="list-group"></ul>
     </div>
