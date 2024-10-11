@@ -33,11 +33,6 @@
             background-color: transparent;
         }
 
-        .jumbotron .btn {
-            padding: 14px 24px;
-            font-size: 21px;
-        }
-
         @media (min-width: 768px) {
             .navbar-nav {
                 display: -ms-flexbox;
@@ -72,6 +67,15 @@
             // 顯示所選部分
             document.getElementById(section).style.display = 'block';
         }
+
+        function showWelcome() {
+            // 隱藏所有部分
+            document.querySelectorAll('.section-container').forEach(function (el) {
+                el.style.display = 'none';
+            });
+            // 顯示默認歡迎畫面
+            document.getElementById('welcome-section').style.display = 'block';
+        }
     </script>
 </head>
 <body>
@@ -101,14 +105,13 @@
     </nav>
 </header>
 
-<!-- 新增的 jumbotron -->
-<div class="container">
+<!-- 默認歡迎畫面 -->
+<div id="welcome-section" class="container section-container">
     <div class="jumbotron">
-        <h1>Marketing stuff!</h1>
-        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
-            nibh, ut fermentum massa justo sit amet.</p>
+        <h1>歡迎來到控制台</h1>
+        <p class="lead">請使用上方導航欄選擇您需要的功能。</p>
         <p>
-            <a class="btn btn-lg btn-success" href="#" role="button">Get started today</a>
+            <a class="btn btn-lg btn-success" href="#" role="button" onclick="showSection('announcements-section')">開始使用</a>
         </p>
     </div>
 </div>
@@ -116,7 +119,7 @@
 <!-- 原有的功能區 -->
 <div class="container">
     <!-- 公告部分 -->
-    <div id="announcements-section" class="section-container">
+    <div id="announcements-section" class="section-container" style="display: none;">
         <h2>發佈公告</h2>
         <div class="mb-3">
             <label for="title" class="form-label">公告標題</label>
