@@ -7,161 +7,142 @@
     <!-- 引入 Bootstrap 和 Google Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./indexjs/auth.js" defer></script>
     <script src="./indexjs/clock.js" defer></script>
     <script src="./indexjs/records.js" defer></script>
     <script src="./indexjs/announcements.js" defer></script>
-    <style>
-        /* Move down content because we have a fixed navbar that is 3.5rem tall */
-        body {
-            padding-top: 3.5rem;
-            font-family: 'Noto Sans', sans-serif;
-        }
-        .navbar {
-            margin-bottom: 2rem;
-        }
-        h2 {
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 0.5rem;
-        }
-    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="#">打卡系統</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<div class="site-wrapper">
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showAuthForm()">登入/註冊</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showClockInOut()">打卡功能</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showRecords()">查詢打卡記錄</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showAnnouncements()">公告</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="搜索" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
-            </form>
-        </div>
-    </nav>
+    <div class="site-wrapper-inner">
 
-    <main role="main" class="container">
-        <!-- 用戶登入/註冊 -->
-        <div id="auth-form">
-            <h2>用戶登入/註冊</h2>
-            <form>
-                <div class="form-group">
-                    <input type="text" id="username" class="form-control" placeholder="請輸入用戶名" required>
+        <div class="cover-container">
+
+            <header class="masthead clearfix">
+                <div class="inner">
+                    <h3 class="masthead-brand">打卡系統</h3>
+                    <nav class="nav nav-masthead">
+                        <a class="nav-link active" href="#" onclick="showAuthForm()">登入/註冊</a>
+                        <a class="nav-link" href="#" onclick="showClockInOut()">打卡功能</a>
+                        <a class="nav-link" href="#" onclick="showRecords()">查詢打卡記錄</a>
+                        <a class="nav-link" href="#" onclick="showAnnouncements()">公告</a>
+                    </nav>
                 </div>
-                <div class="form-group">
-                    <input type="password" id="password" class="form-control" placeholder="請輸入密碼" required>
+            </header>
+
+            <main role="main" class="inner cover">
+                <!-- 用戶登入/註冊 -->
+                <div id="auth-form">
+                    <h2>用戶登入/註冊</h2>
+                    <form>
+                        <div class="form-group">
+                            <input type="text" id="username" class="form-control" placeholder="請輸入用戶名" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="password" class="form-control" placeholder="請輸入密碼" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="authenticate('login')">登入</button>
+                        <button type="button" class="btn btn-secondary" onclick="authenticate('register')">註冊</button>
+                    </form>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="authenticate('login')">登入</button>
-                <button type="button" class="btn btn-secondary" onclick="authenticate('register')">註冊</button>
-            </form>
-        </div>
 
-        <!-- 打卡功能 -->
-        <div id="clock-form" class="d-none">
-            <h2>打卡功能</h2>
-            <form>
-                <div class="form-group">
-                    <input type="text" id="user" class="form-control" placeholder="請輸入用戶名" required>
+                <!-- 打卡功能 -->
+                <div id="clock-form" class="d-none">
+                    <h2>打卡功能</h2>
+                    <form>
+                        <div class="form-group">
+                            <input type="text" id="user" class="form-control" placeholder="請輸入用戶名" required>
+                        </div>
+                        <button type="button" class="btn btn-success" onclick="clockIn()">上班打卡</button>
+                        <button type="button" class="btn btn-danger" onclick="clockOut()">打卡下班</button>
+                        <button type="button" class="btn btn-info" onclick="fetchRecords()">查詢打卡記錄</button>
+                    </form>
                 </div>
-                <button type="button" class="btn btn-success" onclick="clockIn()">上班打卡</button>
-                <button type="button" class="btn btn-danger" onclick="clockOut()">打卡下班</button>
-                <button type="button" class="btn btn-info" onclick="fetchRecords()">查詢打卡記錄</button>
-            </form>
+
+                <!-- 查詢打卡記錄 -->
+                <div id="records-list" class="d-none">
+                    <h2>查詢打卡記錄</h2>
+                    <ul class="list-group mb-4"></ul>
+                </div>
+
+                <!-- 控制台公告 -->
+                <div id="announcements" class="d-none">
+                    <h2>公告</h2>
+                    <ul class="alert alert-secondary"></ul>
+                </div>
+            </main>
+
+            <footer class="mastfoot">
+                <div class="inner">
+                    <p>打卡系統由 <a href="https://getbootstrap.com/">Bootstrap</a> 提供支持.</p>
+                </div>
+            </footer>
+
         </div>
 
-        <!-- 查詢打卡記錄 -->
-        <div id="records-list" class="d-none">
-            <h2>查詢打卡記錄</h2>
-            <ul class="list-group mb-4"></ul>
-        </div>
+    </div>
 
-        <!-- 控制台公告 -->
-        <div id="announcements" class="d-none">
-            <h2>公告</h2>
-            <ul class="alert alert-secondary"></ul>
-        </div>
-    </main>
+</div>
 
-    <footer class="container">
-        <p>&copy; 公司 2017</p>
-    </footer>
+<script>
+    // 顯示用戶登入/註冊表單
+    function showAuthForm() {
+        $('#auth-form').show(); // 顯示登入註冊區域
+        $('#clock-form, #records-list, #announcements').hide(); // 隱藏其他區域
+    }
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // 顯示用戶登入/註冊表單
-        function showAuthForm() {
-            $('#auth-form').show(); // 顯示登入註冊區域
-            $('#clock-form, #records-list, #announcements').hide(); // 隱藏其他區域
+    // 顯示打卡功能表單
+    function showClockInOut() {
+        $('#clock-form').show(); // 顯示打卡功能區域
+        $('#auth-form, #records-list, #announcements').hide(); // 隱藏其他區域
+    }
+
+    // 顯示查詢打卡記錄
+    function showRecords() {
+        $('#records-list').show(); // 顯示查詢打卡記錄區域
+        $('#auth-form, #clock-form, #announcements').hide(); // 隱藏其他區域
+    }
+
+    // 顯示公告
+    function showAnnouncements() {
+        $('#announcements').show(); // 顯示公告區域
+        $('#auth-form, #clock-form, #records-list').hide(); // 隱藏其他區域
+    }
+
+    // 假設的登入/註冊函數
+    function authenticate(action) {
+        const username = $('#username').val();
+        const password = $('#password').val();
+        if (action === 'login') {
+            alert(`登入：用戶名: ${username}, 密碼: ${password}`);
+            // 在這裡添加實際的登入邏輯
+        } else if (action === 'register') {
+            alert(`註冊：用戶名: ${username}, 密碼: ${password}`);
+            // 在這裡添加實際的註冊邏輯
         }
+    }
 
-        // 顯示打卡功能表單
-        function showClockInOut() {
-            $('#clock-form').show(); // 顯示打卡功能區域
-            $('#auth-form, #records-list, #announcements').hide(); // 隱藏其他區域
-        }
+    // 上班打卡函數
+    function clockIn() {
+        const user = $('#user').val();
+        alert(`上班打卡：用戶名: ${user}`);
+        // 在這裡添加實際的打卡邏輯
+    }
 
-        // 顯示查詢打卡記錄
-        function showRecords() {
-            $('#records-list').show(); // 顯示查詢打卡記錄區域
-            $('#auth-form, #clock-form, #announcements').hide(); // 隱藏其他區域
-        }
+    // 下班打卡函數
+    function clockOut() {
+        const user = $('#user').val();
+        alert(`打卡下班：用戶名: ${user}`);
+        // 在這裡添加實際的打卡邏輯
+    }
 
-        // 顯示公告
-        function showAnnouncements() {
-            $('#announcements').show(); // 顯示公告區域
-            $('#auth-form, #clock-form, #records-list').hide(); // 隱藏其他區域
-        }
-
-        // 假設的登入/註冊函數
-        function authenticate(action) {
-            const username = $('#username').val();
-            const password = $('#password').val();
-            if (action === 'login') {
-                alert(`登入：用戶名: ${username}, 密碼: ${password}`);
-                // 在這裡添加實際的登入邏輯
-            } else if (action === 'register') {
-                alert(`註冊：用戶名: ${username}, 密碼: ${password}`);
-                // 在這裡添加實際的註冊邏輯
-            }
-        }
-
-        // 上班打卡函數
-        function clockIn() {
-            const user = $('#user').val();
-            alert(`上班打卡：用戶名: ${user}`);
-            // 在這裡添加實際的打卡邏輯
-        }
-
-        // 下班打卡函數
-        function clockOut() {
-            const user = $('#user').val();
-            alert(`打卡下班：用戶名: ${user}`);
-            // 在這裡添加實際的打卡邏輯
-        }
-
-        // 預設顯示登入/註冊表單
-        $(document).ready(function() {
-            showAuthForm();
-        });
-    </script>
+    // 預設顯示登入/註冊表單
+    $(document).ready(function() {
+        showAuthForm();
+    });
+</script>
 </body>
 </html>
