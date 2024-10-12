@@ -9,110 +9,49 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="./control.css">
-
+    
+    <!-- 引入動態獲取公告、使用者和打卡紀錄的 JavaScript 文件 -->
+    <script src="./controljs/announcements.js" defer></script>
+    <script src="./controljs/users.js" defer></script>
+    <script src="./controljs/records.js" defer></script>
+    
     <script>
-        // 返回上一頁
         function goBack() {
             window.history.back(); 
         }
 
-        // 頁面加載時自動獲取公告、使用者和打卡紀錄
         window.onload = function() {
-            fetchAnnouncements(); // 獲取公告
-            fetchUsers(); // 獲取使用者
-            fetchRecords(); // 獲取打卡紀錄
+            fetchAnnouncements(); // 確保在頁面加載時獲取公告
+            fetchUsers(); // 確保在頁面加載時獲取使用者
+            fetchRecords(); // 確保在頁面加載時獲取打卡紀錄
         };
 
-        // 顯示選定部分的內容
         function showSection(section) {
+            // 隱藏所有部分
             document.querySelectorAll('.section-container').forEach(function (el) {
                 el.style.display = 'none';
             });
+            // 顯示所選部分
             document.getElementById(section).style.display = 'block';
         }
 
-        // 默認顯示歡迎畫面
         function showWelcome() {
+            // 隱藏所有部分
             document.querySelectorAll('.section-container').forEach(function (el) {
                 el.style.display = 'none';
             });
+            // 顯示默認歡迎畫面
             document.getElementById('welcome-section').style.display = 'block';
-        }
-
-        // 獲取公告動態數據
-        function fetchAnnouncements() {
-            fetch('/api/announcements')  // 假設的公告 API URL
-                .then(response => response.json())
-                .then(data => {
-                    const announcementsList = document.getElementById('announcements-list');
-                    announcementsList.innerHTML = '';  // 清空現有的公告列表
-                    
-                    data.forEach(announcement => {
-                        const announcementCard = `
-                            <div class="col-md-4">
-                                <div class="card mb-4">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${announcement.title}</h5>
-                                        <p class="card-text">${announcement.content}</p>
-                                        <p class="text-muted"><small>發布時間：${new Date(announcement.created_at).toLocaleString()}</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        announcementsList.innerHTML += announcementCard;
-                    });
-                })
-                .catch(error => console.error('Error fetching announcements:', error));
-        }
-
-        // 獲取使用者動態數據
-        function fetchUsers() {
-            fetch('/api/users')  // 假設的使用者 API URL
-                .then(response => response.json())
-                .then(data => {
-                    const usersList = document.getElementById('users-list');
-                    usersList.innerHTML = '';  // 清空使用者列表
-                    
-                    data.forEach(user => {
-                        const userItem = `
-                            <li class="list-group-item">
-                                ${user.username} (創建時間: ${new Date(user.created_at).toLocaleString()})
-                            </li>
-                        `;
-                        usersList.innerHTML += userItem;
-                    });
-                })
-                .catch(error => console.error('Error fetching users:', error));
-        }
-
-        // 獲取打卡紀錄動態數據
-        function fetchRecords() {
-            fetch('/api/records')  // 假設的打卡紀錄 API URL
-                .then(response => response.json())
-                .then(data => {
-                    const recordsList = document.getElementById('records-list');
-                    recordsList.innerHTML = '';  // 清空打卡紀錄列表
-                    
-                    data.forEach(record => {
-                        const recordItem = `
-                            <li class="list-group-item">
-                                ${record.user} 打卡於 ${new Date(record.timestamp).toLocaleString()}
-                            </li>
-                        `;
-                        recordsList.innerHTML += recordItem;
-                    });
-                })
-                .catch(error => console.error('Error fetching records:', error));
         }
     </script>
 </head>
 <body>
 
-<!-- header 和導航欄 -->
+<!-- 新增的 header 和導航欄 -->
 <header class="masthead">
-    <h3 class="text-muted" onclick="showWelcome()" style="cursor: pointer;">
-        <i class="fa-brands fa-octopus-deploy" style="margin-right: 10px;"></i> 控制台
-    </h3>
+        <h3 class="text-muted" onclick="showWelcome()" style="cursor: pointer;">
+            <i class="fa-brands fa-octopus-deploy" style="margin-right: 10px;"></i> 控制台
+        </h3>
     <nav class="navbar navbar-expand-md navbar-light bg-light rounded mb-3">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -145,51 +84,55 @@
     </div>
 </div>
 
-<div class="container">
-    <!-- 公告部分 -->
-    <div id="announcements-section" class="section-container" style="display: none;">
-        <h2>發佈公告</h2>
-        <div class="mb-3">
-            <label for="title" class="form-label">公告標題</label>
-            <input type="text" id="title" class="form-control" placeholder="輸入公告標題" required>
-        </div>
-        <div class="mb-3">
-            <label for="content" class="form-label">公告內容</label>
-            <textarea id="content" class="form-control" placeholder="輸入公告內容" required></textarea>
-        </div>
-        <button class="btn btn-primary" onclick="postAnnouncement()">發佈公告</button>
-
-        <h2 class="mt-5">現有公告</h2>
-        <div id="announcements-list" class="row"></div>
+<!-- 公告部分 -->
+<div id="announcements-section" class="section-container" style="display: none;">
+    <h2>發佈公告</h2>
+    <div class="mb-3">
+        <label for="title" class="form-label">公告標題</label>
+        <input type="text" id="title" class="form-control" placeholder="輸入公告標題" required>
     </div>
-
-    <!-- 使用者管理部分 -->
-    <div id="users-section" class="section-container" style="display: none;">
-        <h2>管理使用者</h2>
-        <div class="mb-3">
-            <label for="username" class="form-label">使用者名稱</label>
-            <input type="text" id="username" class="form-control" placeholder="輸入使用者名稱" required>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">使用者密碼</label>
-            <input type="password" id="password" class="form-control" placeholder="輸入使用者密碼" required>
-        </div>
-        <button class="btn btn-success" onclick="postUser()">添加使用者</button>
-
-        <h2 class="mt-5">現有使用者</h2>
-        <ul id="users-list" class="list-group"></ul>
+    <div class="mb-3">
+        <label for="content" class="form-label">公告內容</label>
+        <textarea id="content" class="form-control" placeholder="輸入公告內容" required></textarea>
     </div>
+    <button class="btn btn-primary" onclick="postAnnouncement()">發佈公告</button>
 
-    <!-- 打卡紀錄部分 -->
-    <div id="records-section" class="section-container" style="display: none;">
-        <h2>打卡紀錄</h2>
-        <ul id="records-list" class="list-group"></ul>
+    <h2 class="mt-5">現有公告</h2>
+    <div id="announcements-list" class="row">
+        <!-- 現有公告會通過動態加載 -->
     </div>
+</div>
 
-    <!-- 返回按鈕 -->
-    <div class="container text-center">
-        <button class="btn btn-secondary" onclick="goBack()" style="display: block; margin: 20px auto;">返回打卡系統</button>
+<!-- 使用者管理部分 -->
+<div id="users-section" class="section-container" style="display: none;">
+    <h2>管理使用者</h2>
+    <div class="mb-3">
+        <label for="username" class="form-label">使用者名稱</label>
+        <input type="text" id="username" class="form-control" placeholder="輸入使用者名稱" required>
     </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">使用者密碼</label>
+        <input type="password" id="password" class="form-control" placeholder="輸入使用者密碼" required>
+    </div>
+    <button class="btn btn-success" onclick="postUser()">添加使用者</button>
+
+    <h2 class="mt-5">現有使用者</h2>
+    <ul id="users-list" class="list-group">
+        <!-- 現有使用者會通過動態加載 -->
+    </ul>
+</div>
+
+<!-- 打卡紀錄部分 -->
+<div id="records-section" class="section-container" style="display: none;">
+    <h2>打卡紀錄</h2>
+    <ul id="records-list" class="list-group">
+        <!-- 打卡紀錄會通過動態加載 -->
+    </ul>
+</div>
+
+<!-- 返回按鈕 -->
+<div class="container text-center">
+    <button class="btn btn-secondary" onclick="goBack()" style="display: block; margin: 20px auto;">返回打卡系統</button>
 </div>
 
 <!-- 新增的 footer -->
