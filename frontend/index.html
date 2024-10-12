@@ -25,7 +25,7 @@
                 <div class="inner">
                     <h3 class="masthead-brand">打卡系統</h3>
                     <nav class="nav nav-masthead">
-                        <a class="nav-link active" href="#" onclick="showAuthForm()">登入/註冊</a>
+                        <a class="nav-link" href="#" onclick="showAuthForm()">登入/註冊</a>
                         <a class="nav-link" href="#" onclick="showClockInOut()">打卡功能</a>
                         <a class="nav-link" href="#" onclick="showRecords()">查詢打卡記錄</a>
                         <a class="nav-link" href="#" onclick="showAnnouncements()">公告</a>
@@ -50,7 +50,7 @@
                 </div>
 
                 <!-- 打卡功能 -->
-                <div id="clock-form" class="d-none">
+                <div id="clock-form" style="display:none;">
                     <h2>打卡功能</h2>
                     <form>
                         <div class="form-group">
@@ -62,13 +62,13 @@
                 </div>
 
                 <!-- 查詢打卡記錄 -->
-                <div id="records-list" class="d-none">
+                <div id="records-list" style="display:none;">
                     <h2>查詢打卡記錄</h2>
                     <ul id="records" class="list-group mb-4"></ul>
                 </div>
 
                 <!-- 控制台公告 -->
-                <div id="announcements" class="d-none">
+                <div id="announcements" style="display:none;">
                     <h2>公告</h2>
                     <ul id="announcement-list" class="alert alert-secondary"></ul>
                 </div>
@@ -111,65 +111,6 @@
         $('#announcements').show(); // 顯示公告區域
         $('#auth-form, #clock-form, #records-list').hide(); // 隱藏其他區域
         fetchAnnouncements(); // 獲取公告
-    }
-
-    // 模擬登入/註冊函數
-    function authenticate(action) {
-        const username = $('#username').val();
-        const password = $('#password').val();
-        if (action === 'login') {
-            alert(`登入：用戶名: ${username}, 密碼: ${password}`);
-            // 在這裡添加實際的登入邏輯
-        } else if (action === 'register') {
-            alert(`註冊：用戶名: ${username}, 密碼: ${password}`);
-            // 在這裡添加實際的註冊邏輯
-        }
-    }
-
-    // 上班打卡
-    function clockIn() {
-        const user = $('#user').val();
-        alert(`上班打卡成功：用戶名: ${user}`);
-        // 在這裡添加實際的上班打卡邏輯
-    }
-
-    // 下班打卡
-    function clockOut() {
-        const user = $('#user').val();
-        alert(`下班打卡成功：用戶名: ${user}`);
-        // 在這裡添加實際的下班打卡邏輯
-    }
-
-    // 獲取打卡記錄
-    function fetchRecords() {
-        const recordsList = $('#records');
-        recordsList.empty(); // 清空打卡記錄
-
-        // 模擬打卡記錄（這裡應替換為實際的資料請求）
-        const records = [
-            { user: 'User1', time: '2024-10-12 09:00:00', type: '上班' },
-            { user: 'User2', time: '2024-10-12 17:00:00', type: '下班' },
-        ];
-
-        records.forEach(record => {
-            recordsList.append(`<li class="list-group-item">${record.user} - ${record.time} - ${record.type}</li>`);
-        });
-    }
-
-    // 獲取公告
-    function fetchAnnouncements() {
-        const announcementList = $('#announcement-list');
-        announcementList.empty(); // 清空公告
-
-        // 模擬公告（這裡應替換為實際的資料請求）
-        const announcements = [
-            '2024-10-12：系統維護通知。',
-            '2024-10-10：打卡功能已更新。',
-        ];
-
-        announcements.forEach(announcement => {
-            announcementList.append(`<li>${announcement}</li>`);
-        });
     }
 
     // 預設顯示登入/註冊表單
