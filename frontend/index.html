@@ -7,6 +7,10 @@
     <!-- 引入 Bootstrap 和 Google Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+    <script src="./indexjs/auth.js" defer></script>
+    <script src="./indexjs/clock.js" defer></script>
+    <script src="./indexjs/records.js" defer></script>
+    <script src="./indexjs/announcements.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -43,139 +47,5 @@
         <h2>公告</h2>
         <ul id="announcements" class="alert alert-secondary"></ul>
     </div>
-
-    <!-- JavaScript 功能 -->
-    <script>
-        async function authenticate(action) {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            const endpoint = action === 'login' ? '/api/login' : '/api/register';
-            const successMessage = action === 'login' ? '登入成功！' : '註冊成功，請登入！';
-            const alertMessage = action === 'login' ? '登入失敗：' : '註冊失敗：';
-
-            try {
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-
-                if (response.ok) {
-                    if (action === 'login') {
-                        alert(successMessage);
-                        window.location.href = '/control'; // 登入成功後跳轉到控制台
-                    } else {
-                        alert(successMessage);
-                    }
-                } else {
-                    const errorResponse = await response.json();
-                    console.error(`${action} error:`, errorResponse);
-                    alert(alertMessage + (errorResponse.message || '未知錯誤'));
-                }
-            } catch (error) {
-                console.error('Network error:', error);
-                alert(alertMessage + '無法連接到伺服器');
-            }
-        }
-
-        async function clockIn() {
-            const username = document.getElementById('user').value;
-            try {
-                const response = await fetch('/api/clock-in', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username })
-                });
-
-                if (response.ok) {
-                    alert('打卡上班成功！');
-                } else {
-                    const errorResponse = await response.json();
-                    console.error('Clock-in error:', errorResponse);
-                    alert('打卡上班失敗，請檢查用戶名。');
-                }
-            } catch (error) {
-                console.error('Network error:', error);
-                alert('打卡上班失敗：無法連接到伺服器');
-            }
-        }
-
-        async function clockOut() {
-            const username = document.getElementById('user').value;
-            try {
-                const response = await fetch('/api/clock-out', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username })
-                });
-
-                if (response.ok) {
-                    alert('打卡下班成功！');
-                } else {
-                    const errorResponse = await response.json();
-                    console.error('Clock-out error:', errorResponse);
-                    alert('打卡下班失敗，請檢查用戶名。');
-                }
-            } catch (error) {
-                console.error('Network error:', error);
-                alert('打卡下班失敗：無法連接到伺服器');
-            }
-        }
-
-        async function fetchRecords() {
-            try {
-                const response = await fetch('/api/records');
-                const records = await response.json();
-                const recordsList = document.getElementById('records-list');
-                recordsList.innerHTML = ''; // 清空現有記錄
-                records.forEach(record => {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'list-group-item';
-                    listItem.textContent = `${record.user} ${record.type} at ${new Date(record.time).toLocaleString()}`;
-                    recordsList.appendChild(listItem);
-                });
-            } catch (error) {
-                console.error('Fetch records error:', error);
-                alert('查詢打卡記錄失敗：無法連接到伺服器');
-            }
-        }
-
-        async function fetchAnnouncements() {
-            try {
-                const response = await fetch('/control/api/announcements');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const announcements = await response.json();
-                const announcementsDiv = document.getElementById('announcements');
-                announcementsDiv.innerHTML = ''; // 清空現有公告
-                
-                if (announcements.length === 0) {
-                    const noAnnouncement = document.createElement('li');
-                    noAnnouncement.textContent = '目前沒有公告。';
-                    announcementsDiv.appendChild(noAnnouncement);
-                } else {
-                    announcements.forEach(announcement => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = `${announcement.title}: ${announcement.content}`;
-                        announcementsDiv.appendChild(listItem);
-                    });
-                }
-            } catch (error) {
-                console.error('Fetch announcements error:', error);
-                alert('獲取公告失敗：無法連接到伺服器');
-            }
-        }
-
-        // 在頁面加載時獲取公告
-        window.onload = fetchAnnouncements;
-    </script>
 </body>
 </html>
