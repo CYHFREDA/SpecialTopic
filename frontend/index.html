@@ -121,12 +121,14 @@
             $('.d-none').hide();
             $('#records-list').show();
             // 這裡可以調用獲取打卡記錄的函數
+            $('#records-list .list-group').html('<li class="list-group-item">這裡顯示打卡記錄...</li>'); // 只是示例
         }
 
         function showAnnouncements() {
             $('.d-none').hide();
             $('#announcements').show();
             // 這裡可以調用獲取公告的函數
+            $('#announcements').html('<li>這裡顯示公告...</li>'); // 只是示例
         }
 
         // 預設顯示登入/註冊表單
