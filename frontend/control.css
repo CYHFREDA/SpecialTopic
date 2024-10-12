@@ -37,3 +37,28 @@
                 flex: 1 0 auto;
             }
         }
+/* 刪除按鈕的樣式 */
+.btn-delete {
+    background-color: #ff4d4d; /* 刪除按鈕的背景顏色 */
+    border: none; /* 移除邊框 */
+    color: white; /* 按鈕文字的顏色 */
+    padding: 10px 20px; /* 內邊距 */
+    font-size: 16px; /* 文字大小 */
+    font-weight: bold; /* 文字加粗 */
+    border-radius: 5px; /* 圓角 */
+    cursor: pointer; /* 滑鼠變成手形 */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 漸變效果 */
+}
+
+/* 滑鼠懸停時的效果 */
+.btn-delete:hover {
+    background-color: #e60000; /* 滑鼠懸停時變深 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 增加陰影效果 */
+}
+
+/* 點擊時的效果 */
+.btn-delete:active {
+    background-color: #cc0000; /* 點擊時變得更深 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 調整陰影效果 */
+}
+
