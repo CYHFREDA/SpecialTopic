@@ -15,35 +15,43 @@
         /* Move down content because we have a fixed navbar that is 3.5rem tall */
         body {
             padding-top: 3.5rem;
+            font-family: 'Noto Sans', sans-serif;
+        }
+        .navbar {
+            margin-bottom: 2rem;
+        }
+        .container {
+            max-width: 900px;
+        }
+        h2 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 0.5rem;
         }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <a class="navbar-brand" href="#">打卡系統</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">首頁 <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showAuthForm()">登入/註冊</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">鏈接</a>
+                    <a class="nav-link" href="#" onclick="showClockInOut()">打卡功能</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#">禁用</a>
+                    <a class="nav-link" href="#" onclick="showRecords()">查詢打卡記錄</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">下拉菜單</a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown01">
-                        <a class="dropdown-item" href="#">操作</a>
-                        <a class="dropdown-item" href="#">另一個操作</a>
-                        <a class="dropdown-item" href="#">這裡還有其他內容</a>
-                    </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showAnnouncements()">公告</a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
@@ -53,39 +61,46 @@
         </div>
     </nav>
 
-    <main role="main" class="container mt-4">
+    <main role="main" class="container">
         <!-- 用戶登入/註冊 -->
-        <h1>打卡系統</h1>
-        
-        <h2>用戶登入/註冊</h2>
-        <form id="auth-form" class="mb-4">
-            <div class="form-group">
-                <input type="text" id="username" class="form-control" placeholder="請輸入用戶名" required>
-            </div>
-            <div class="form-group">
-                <input type="password" id="password" class="form-control" placeholder="請輸入密碼" required>
-            </div>
-            <button type="button" class="btn btn-primary" onclick="authenticate('login')">登入</button>
-            <button type="button" class="btn btn-secondary" onclick="authenticate('register')">註冊</button>
-        </form>
+        <div id="auth-form" class="d-none">
+            <h2>用戶登入/註冊</h2>
+            <form>
+                <div class="form-group">
+                    <input type="text" id="username" class="form-control" placeholder="請輸入用戶名" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" class="form-control" placeholder="請輸入密碼" required>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="authenticate('login')">登入</button>
+                <button type="button" class="btn btn-secondary" onclick="authenticate('register')">註冊</button>
+            </form>
+        </div>
 
         <!-- 打卡功能 -->
-        <h2>打卡功能</h2>
-        <form id="clock-form" class="mb-4">
-            <div class="form-group">
-                <input type="text" id="user" class="form-control" placeholder="請輸入用戶名" required>
-            </div>
-            <button type="button" class="btn btn-success" onclick="clockIn()">上班打卡</button>
-            <button type="button" class="btn btn-danger" onclick="clockOut()">打卡下班</button>
-            <button type="button" class="btn btn-info" onclick="fetchRecords()">查詢打卡記錄</button>
-        </form>
+        <div id="clock-form" class="d-none">
+            <h2>打卡功能</h2>
+            <form>
+                <div class="form-group">
+                    <input type="text" id="user" class="form-control" placeholder="請輸入用戶名" required>
+                </div>
+                <button type="button" class="btn btn-success" onclick="clockIn()">上班打卡</button>
+                <button type="button" class="btn btn-danger" onclick="clockOut()">打卡下班</button>
+                <button type="button" class="btn btn-info" onclick="fetchRecords()">查詢打卡記錄</button>
+            </form>
+        </div>
 
         <!-- 查詢打卡記錄 -->
-        <ul id="records-list" class="list-group mb-4"></ul>
+        <div id="records-list" class="d-none">
+            <h2>查詢打卡記錄</h2>
+            <ul class="list-group mb-4"></ul>
+        </div>
 
         <!-- 控制台公告 -->
-        <h2>公告</h2>
-        <ul id="announcements" class="alert alert-secondary"></ul>
+        <div id="announcements" class="d-none">
+            <h2>公告</h2>
+            <ul class="alert alert-secondary"></ul>
+        </div>
     </main>
 
     <footer class="container">
@@ -94,5 +109,33 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+1pRrf7VS1B42gVe2HkLpD9a4f4Yp4DgT5q9g3E" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showAuthForm() {
+            $('.d-none').hide(); // 隱藏所有區域
+            $('#auth-form').show(); // 顯示登入註冊區域
+        }
+
+        function showClockInOut() {
+            $('.d-none').hide();
+            $('#clock-form').show();
+        }
+
+        function showRecords() {
+            $('.d-none').hide();
+            $('#records-list').show();
+            // 這裡可以調用獲取打卡記錄的函數
+        }
+
+        function showAnnouncements() {
+            $('.d-none').hide();
+            $('#announcements').show();
+            // 這裡可以調用獲取公告的函數
+        }
+
+        // 預設顯示登入/註冊表單
+        $(document).ready(function() {
+            showAuthForm();
+        });
+    </script>
 </body>
 </html>
