@@ -35,7 +35,7 @@
                 // 創建刪除按鈕
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = '刪除';
-                deleteButton.className = 'delete-button';
+                deleteButton.className = 'btn btn-danger btn-sm';
                 deleteButton.onclick = () => deleteAnnouncement(announcement._id);
                 listItem.appendChild(deleteButton);
                 
