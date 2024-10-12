@@ -18,7 +18,7 @@ async function postAnnouncement() {
         document.getElementById('content').value = '';
     } else {
         const { error } = await response.json();
-        alert(`發佈公告時發生錯誤: ${error}`); // 修正此行
+        alert(`發佈公告時發生錯誤: ${error}`); 
     }
 }
 
@@ -31,7 +31,7 @@ async function fetchAnnouncements() {
 
     announcements.forEach(announcement => {
         const listItem = document.createElement('li');
-        listItem.innerHTML = `<strong>${announcement.title}</strong>: ${announcement.content}`; // 修正此行
+        listItem.innerHTML = `<strong>${announcement.title}</strong>: ${announcement.content}`; 
         
         // 創建刪除按鈕
         const deleteButton = document.createElement('button');
@@ -46,7 +46,7 @@ async function fetchAnnouncements() {
 
 // 刪除公告的函數
 async function deleteAnnouncement(id) {
-    const response = await fetch(`/control/api/announcements/${id}`, { // 修正此行
+    const response = await fetch(`/control/api/announcements/${id}`, { 
         method: 'DELETE'
     });
 
@@ -55,6 +55,6 @@ async function deleteAnnouncement(id) {
         fetchAnnouncements(); // 刪除後重新載入公告列表
     } else {
         const { error } = await response.json();
-        alert(`刪除公告時發生錯誤: ${error}`); // 修正此行
+        alert(`刪除公告時發生錯誤: ${error}`); 
     }
 }
