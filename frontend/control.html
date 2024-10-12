@@ -95,7 +95,7 @@
 
         // 獲取公告函數
         function fetchAnnouncements() {
-            fetch('/api/announcements') // 替換為你的 API 端點
+            fetch('/control/api/announcements') // 替換為你的 API 端點
                 .then(response => response.json())
                 .then(data => {
                     const announcementsList = document.getElementById('announcements-list');
