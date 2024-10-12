@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><i class="fas fa-cog"></i> 控制台</title>
-    <!-- 引入 Bootstrap 和 Google Fonts -->
+    <title>控制台</title> 
+    <!-- 引入 Bootstrap 和 Font Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="./control.css">
@@ -13,7 +13,7 @@
     <script src="./controll/records.js" defer></script>
     <script>
         function goBack() {
-            window.history.back(); // 返回上一頁
+            window.history.back(); 
         }
 
         window.onload = function() {
@@ -46,7 +46,7 @@
 <!-- 新增的 header 和導航欄 -->
 <header class="masthead">
     <h3 class="text-muted">
-    <img src="path/to/icon.png" alt="icon" style="width: 20px; height: 20px; margin-right: 10px;">控制台
+        <i class="fas fa-cog" style="margin-right: 10px;"></i> 控制台
     </h3>
     <nav class="navbar navbar-expand-md navbar-light bg-light rounded mb-3">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -80,7 +80,7 @@
     </div>
 </div>
 
-<!-- 原有的功能區 -->
+<!-- 其餘代碼保持不變 -->
 <div class="container">
     <!-- 公告部分 -->
     <div id="announcements-section" class="section-container" style="display: none;">
@@ -97,12 +97,11 @@
 
         <h2 class="mt-5">現有公告</h2>
         <div id="announcements-list" class="row">
-            <!-- 單個公告的卡片範例 -->
             <div class="col-md-4">
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title">公告標題</h5>
-                        <p class="card-text">這是一段公告內容的範例，可以根據實際的公告進行替換。內容會顯示在這裡，讓使用者清楚看到公告的詳細信息。</p>
+                        <p class="card-text">這是一段公告內容的範例，可以根據實際的公告進行替換。</p>
                         <p class="text-muted"><small>發布時間：2024-10-11</small></p>
                     </div>
                 </div>
