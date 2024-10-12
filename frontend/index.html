@@ -60,7 +60,7 @@
 
     <main role="main" class="container">
         <!-- 用戶登入/註冊 -->
-        <div id="auth-form" class="d-none">
+        <div id="auth-form">
             <h2>用戶登入/註冊</h2>
             <form>
                 <div class="form-group">
@@ -109,30 +109,26 @@
     <script>
         // 顯示用戶登入/註冊表單
         function showAuthForm() {
-            $('.d-none').hide(); // 隱藏所有區域
             $('#auth-form').show(); // 顯示登入註冊區域
+            $('#clock-form, #records-list, #announcements').hide(); // 隱藏其他區域
         }
 
         // 顯示打卡功能表單
         function showClockInOut() {
-            $('.d-none').hide();
-            $('#clock-form').show();
+            $('#clock-form').show(); // 顯示打卡功能區域
+            $('#auth-form, #records-list, #announcements').hide(); // 隱藏其他區域
         }
 
         // 顯示查詢打卡記錄
         function showRecords() {
-            $('.d-none').hide();
-            $('#records-list').show();
-            // 這裡可以調用獲取打卡記錄的函數
-            $('#records-list .list-group').html('<li class="list-group-item">這裡顯示打卡記錄...</li>'); // 只是示例
+            $('#records-list').show(); // 顯示查詢打卡記錄區域
+            $('#auth-form, #clock-form, #announcements').hide(); // 隱藏其他區域
         }
 
         // 顯示公告
         function showAnnouncements() {
-            $('.d-none').hide();
-            $('#announcements').show();
-            // 這裡可以調用獲取公告的函數
-            $('#announcements').html('<li>這裡顯示公告...</li>'); // 只是示例
+            $('#announcements').show(); // 顯示公告區域
+            $('#auth-form, #clock-form, #records-list').hide(); // 隱藏其他區域
         }
 
         // 假設的登入/註冊函數
