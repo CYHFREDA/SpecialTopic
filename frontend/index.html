@@ -7,7 +7,7 @@
     <!-- 引入 Bootstrap 和 Google Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./indexjs/auth.js" defer></script>
     <script src="./indexjs/clock.js" defer></script>
@@ -58,20 +58,19 @@
                         </div>
                         <button type="button" class="btn btn-success" onclick="clockIn()">上班打卡</button>
                         <button type="button" class="btn btn-danger" onclick="clockOut()">打卡下班</button>
-                        <button type="button" class="btn btn-info" onclick="fetchRecords()">查詢打卡記錄</button>
                     </form>
                 </div>
 
                 <!-- 查詢打卡記錄 -->
                 <div id="records-list" class="d-none">
                     <h2>查詢打卡記錄</h2>
-                    <ul class="list-group mb-4"></ul>
+                    <ul id="records" class="list-group mb-4"></ul>
                 </div>
 
                 <!-- 控制台公告 -->
                 <div id="announcements" class="d-none">
                     <h2>公告</h2>
-                    <ul class="alert alert-secondary"></ul>
+                    <ul id="announcement-list" class="alert alert-secondary"></ul>
                 </div>
             </main>
 
@@ -104,15 +103,17 @@
     function showRecords() {
         $('#records-list').show(); // 顯示查詢打卡記錄區域
         $('#auth-form, #clock-form, #announcements').hide(); // 隱藏其他區域
+        fetchRecords(); // 獲取打卡記錄
     }
 
     // 顯示公告
     function showAnnouncements() {
         $('#announcements').show(); // 顯示公告區域
         $('#auth-form, #clock-form, #records-list').hide(); // 隱藏其他區域
+        fetchAnnouncements(); // 獲取公告
     }
 
-    // 假設的登入/註冊函數
+    // 模擬登入/註冊函數
     function authenticate(action) {
         const username = $('#username').val();
         const password = $('#password').val();
@@ -125,18 +126,50 @@
         }
     }
 
-    // 上班打卡函數
+    // 上班打卡
     function clockIn() {
         const user = $('#user').val();
-        alert(`上班打卡：用戶名: ${user}`);
-        // 在這裡添加實際的打卡邏輯
+        alert(`上班打卡成功：用戶名: ${user}`);
+        // 在這裡添加實際的上班打卡邏輯
     }
 
-    // 下班打卡函數
+    // 下班打卡
     function clockOut() {
         const user = $('#user').val();
-        alert(`打卡下班：用戶名: ${user}`);
-        // 在這裡添加實際的打卡邏輯
+        alert(`下班打卡成功：用戶名: ${user}`);
+        // 在這裡添加實際的下班打卡邏輯
+    }
+
+    // 獲取打卡記錄
+    function fetchRecords() {
+        const recordsList = $('#records');
+        recordsList.empty(); // 清空打卡記錄
+
+        // 模擬打卡記錄（這裡應替換為實際的資料請求）
+        const records = [
+            { user: 'User1', time: '2024-10-12 09:00:00', type: '上班' },
+            { user: 'User2', time: '2024-10-12 17:00:00', type: '下班' },
+        ];
+
+        records.forEach(record => {
+            recordsList.append(`<li class="list-group-item">${record.user} - ${record.time} - ${record.type}</li>`);
+        });
+    }
+
+    // 獲取公告
+    function fetchAnnouncements() {
+        const announcementList = $('#announcement-list');
+        announcementList.empty(); // 清空公告
+
+        // 模擬公告（這裡應替換為實際的資料請求）
+        const announcements = [
+            '2024-10-12：系統維護通知。',
+            '2024-10-10：打卡功能已更新。',
+        ];
+
+        announcements.forEach(announcement => {
+            announcementList.append(`<li>${announcement}</li>`);
+        });
     }
 
     // 預設顯示登入/註冊表單
