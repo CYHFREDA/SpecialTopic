@@ -1,166 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+    <style>
+        body {
+            padding-top: 20px;
+        }
 
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f0f2f5;
-    margin: 0;
-    padding: 0;
-    color: #333;
-}
+        .footer {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+            text-align: center; /* 置中對齊 */
+        }
 
-.container {
-    width: 90%;
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: #ffffff;
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
+        .navbar {
+            background-image: linear-gradient(to bottom, #f7f7f7 0%, #eee 100%);
+            border: 1px solid #e5e5e5;
+        }
 
-h1 {
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 2.8em;
-    font-weight: 600;
-}
+        .section-container {
+            margin-top: 20px;
+        }
 
-h2 {
-    color: #34495e;
-    margin-top: 30px;
-    padding-bottom: 10px;
-    font-size: 1.8em;
-    font-weight: 500;
-    border-bottom: 2px solid #3498db;
-}
+        .jumbotron {
+            text-align: center;
+            background-color: transparent;
+        }
 
-/* 輸入框樣式調整 */
-input[type="text"],
-input[type="password"],
-textarea {
-    width: 100%;
-    max-width: 100%;
-    padding: 8px 10px; /* 減少內邊距，使框框變小 */
-    margin: 8px 0; /* 調整上下邊距 */
-    border: 1.5px solid #bdc3c7;
-    border-radius: 5px;
-    font-size: 0.95rem; /* 調小字體 */
-    background-color: #f9f9f9; /* 柔和背景色 */
-    color: #333;
-    transition: border-color 0.3s ease-in-out;
-}
+        @media (min-width: 768px) {
+            .navbar-nav {
+                display: -ms-flexbox;
+                display: flex;
+            }
 
-input[type="text"]:focus,
-input[type="password"]:focus,
-textarea:focus {
-    border-color: #3498db; /* 聚焦時顏色 */
-    outline: none;
-    background-color: #ffffff;
-}
-
-/* 調整 textarea 框框高度 */
-textarea {
-    height: 100px; /* 調小高度 */
-    resize: vertical; /* 允許垂直調整高度 */
-}
-
-/* 統一按鈕樣式 */
-button,
-.change-password-button,
-.delete-button {
-    padding: 8px 16px;
-    color: #fff;
-    background-color: #3498db;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    display: inline-block;
-    margin-left: 10px; /* 調整按鈕之間的間距 */
-}
-
-button:hover,
-.change-password-button:hover,
-.delete-button:hover {
-    background-color: #2980b9;
-    transform: translateY(-2px);
-}
-
-/* 修改密碼和刪除按鈕的配色 */
-.change-password-button {
-    background-color: #27ae60; /* 綠色 */
-}
-
-.change-password-button:hover {
-    background-color: #219150; /* 更深的綠色 */
-}
-
-.delete-button {
-    background-color: #e74c3c; /* 紅色 */
-}
-
-.delete-button:hover {
-    background-color: #c0392b; /* 更深的紅色 */
-}
-
-/* 列表樣式 */
-ul {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 25px;
-}
-
-/* Flexbox 佈局，將按鈕放到列表項目的右側 */
-li {
-    padding: 12px;
-    border: 1px solid #ecf0f1;
-    border-radius: 8px;
-    background-color: #ffffff;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color 0.3s ease;
-}
-
-li:hover {
-    background-color: #f9f9f9;
-}
-
-/* 密碼輸入框與按鈕對齊 */
-li input[type="password"] {
-    margin-right: 10px;
-    flex: 1;
-    padding: 6px 8px; /* 調整內邊距，讓輸入框更小 */
-    font-size: 0.85rem; /* 縮小字體大小 */
-    border: 1.5px solid #bdc3c7;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    transition: border-color 0.3s ease-in-out;
-}
-
-/* 聚焦時的樣式 */
-li input[type="password"]:focus {
-    border-color: #3498db; /* 當聚焦時的顏色 */
-    background-color: #ffffff;
-    outline: none;
-}
-
-/* 響應式樣式 */
-@media (max-width: 768px) {
-    .container {
-        width: 95%;
-        padding: 20px;
-    }
-
-    h1 {
-        font-size: 2.2em;
-    }
-
-    h2 {
-        font-size: 1.6em;
-    }
-}
+            .navbar-nav .nav-item {
+                -ms-flex: 1 0 auto;
+                flex: 1 0 auto;
+            }
+        }
