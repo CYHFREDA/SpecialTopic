@@ -9,12 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="./control.css">
-    
-    <!-- 引入動態獲取公告、使用者和打卡紀錄的 JavaScript 文件 -->
     <script src="./controljs/announcements.js" defer></script>
     <script src="./controljs/users.js" defer></script>
     <script src="./controljs/records.js" defer></script>
-    
     <script>
         function goBack() {
             window.history.back(); 
@@ -43,15 +40,132 @@
             // 顯示默認歡迎畫面
             document.getElementById('welcome-section').style.display = 'block';
         }
+
+        // 發佈公告函數
+        function postAnnouncement() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+
+            fetch('/api/announcements', { // 替換為你的 API 端點
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title, content }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    fetchAnnouncements(); // 重新獲取公告
+                    document.getElementById('title').value = '';
+                    document.getElementById('content').value = '';
+                } else {
+                    console.error('Error posting announcement:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Error posting announcement:', error);
+            });
+        }
+
+        // 添加使用者函數
+        function postUser() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('/api/users', { // 替換為你的 API 端點
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    fetchUsers(); // 重新獲取使用者
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
+                } else {
+                    console.error('Error posting user:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Error posting user:', error);
+            });
+        }
+
+        // 獲取公告函數
+        function fetchAnnouncements() {
+            fetch('/api/announcements') // 替換為你的 API 端點
+                .then(response => response.json())
+                .then(data => {
+                    const announcementsList = document.getElementById('announcements-list');
+                    announcementsList.innerHTML = ''; // 清空之前的內容
+                    data.forEach(announcement => {
+                        const announcementItem = document.createElement('div');
+                        announcementItem.classList.add('col-md-4');
+                        announcementItem.innerHTML = `
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">${announcement.title}</h5>
+                                    <p class="card-text">${announcement.content}</p>
+                                    <p class="text-muted"><small>發布時間：${new Date(announcement.time).toLocaleString()}</small></p>
+                                </div>
+                            </div>
+                        `;
+                        announcementsList.appendChild(announcementItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching announcements:', error);
+                });
+        }
+
+        // 獲取使用者函數
+        function fetchUsers() {
+            fetch('/api/users') // 替換為你的 API 端點
+                .then(response => response.json())
+                .then(data => {
+                    const usersList = document.getElementById('users-list');
+                    usersList.innerHTML = ''; // 清空之前的內容
+                    data.forEach(user => {
+                        const userItem = document.createElement('li');
+                        userItem.classList.add('list-group-item');
+                        userItem.textContent = user.username; // 假設有 username 屬性
+                        usersList.appendChild(userItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching users:', error);
+                });
+        }
+
+        // 獲取打卡紀錄函數
+        function fetchRecords() {
+            fetch('/api/records') // 替換為你的 API 端點
+                .then(response => response.json())
+                .then(data => {
+                    const recordsList = document.getElementById('records-list');
+                    recordsList.innerHTML = ''; // 清空之前的內容
+                    data.forEach(record => {
+                        const recordItem = document.createElement('li');
+                        recordItem.classList.add('list-group-item');
+                        recordItem.textContent = `${record.username} - ${new Date(record.time).toLocaleString()}`; // 假設有 username 和 time 屬性
+                        recordsList.appendChild(recordItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching records:', error);
+                });
+        }
     </script>
 </head>
 <body>
 
 <!-- 新增的 header 和導航欄 -->
 <header class="masthead">
-        <h3 class="text-muted" onclick="showWelcome()" style="cursor: pointer;">
-            <i class="fa-brands fa-octopus-deploy" style="margin-right: 10px;"></i> 控制台
-        </h3>
+    <h3 class="text-muted" onclick="showWelcome()" style="cursor: pointer;">
+        <i class="fa-brands fa-octopus-deploy" style="margin-right: 10px;"></i> 控制台
+    </h3>
     <nav class="navbar navbar-expand-md navbar-light bg-light rounded mb-3">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,55 +198,63 @@
     </div>
 </div>
 
-<!-- 公告部分 -->
-<div id="announcements-section" class="section-container" style="display: none;">
-    <h2>發佈公告</h2>
-    <div class="mb-3">
-        <label for="title" class="form-label">公告標題</label>
-        <input type="text" id="title" class="form-control" placeholder="輸入公告標題" required>
-    </div>
-    <div class="mb-3">
-        <label for="content" class="form-label">公告內容</label>
-        <textarea id="content" class="form-control" placeholder="輸入公告內容" required></textarea>
-    </div>
-    <button class="btn btn-primary" onclick="postAnnouncement()">發佈公告</button>
+<!-- 其餘代碼保持不變 -->
+<div class="container">
+    <!-- 公告部分 -->
+    <div id="announcements-section" class="section-container" style="display: none;">
+        <h2>發佈公告</h2>
+        <div class="mb-3">
+            <label for="title" class="form-label">公告標題</label>
+            <input type="text" id="title" class="form-control" placeholder="輸入公告標題" required>
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label">公告內容</label>
+            <textarea id="content" class="form-control" placeholder="輸入公告內容" required></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="postAnnouncement()">發佈公告</button>
 
-    <h2 class="mt-5">現有公告</h2>
-    <div id="announcements-list" class="row">
-        <!-- 現有公告會通過動態加載 -->
+        <h2 class="mt-5">現有公告</h2>
+        <div id="announcements-list" class="row">
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">公告標題</h5>
+                        <p class="card-text">這是一段公告內容的範例，可以根據實際的公告進行替換。</p>
+                        <p class="text-muted"><small>發布時間：2024-10-11</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-<!-- 使用者管理部分 -->
-<div id="users-section" class="section-container" style="display: none;">
-    <h2>管理使用者</h2>
-    <div class="mb-3">
-        <label for="username" class="form-label">使用者名稱</label>
-        <input type="text" id="username" class="form-control" placeholder="輸入使用者名稱" required>
+    <!-- 使用者管理部分 -->
+    <div id="users-section" class="section-container" style="display: none;">
+        <h2>管理使用者</h2>
+        <div class="mb-3">
+            <label for="username" class="form-label">使用者名稱</label>
+            <input type="text" id="username" class="form-control" placeholder="輸入使用者名稱" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">使用者密碼</label>
+            <input type="password" id="password" class="form-control" placeholder="輸入使用者密碼" required>
+        </div>
+        <button class="btn btn-success" onclick="postUser()">添加使用者</button>
+
+        <h2 class="mt-5">現有使用者</h2>
+        <ul id="users-list" class="list-group"></ul>
     </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">使用者密碼</label>
-        <input type="password" id="password" class="form-control" placeholder="輸入使用者密碼" required>
+
+    <!-- 打卡紀錄部分 -->
+    <div id="records-section" class="section-container" style="display: none;">
+        <h2>打卡紀錄</h2>
+        <ul id="records-list" class="list-group"></ul>
     </div>
-    <button class="btn btn-success" onclick="postUser()">添加使用者</button>
 
-    <h2 class="mt-5">現有使用者</h2>
-    <ul id="users-list" class="list-group">
-        <!-- 現有使用者會通過動態加載 -->
-    </ul>
-</div>
+    <!-- 返回按鈕 -->
+    <div class="container text-center">
+        <button class="btn btn-secondary" onclick="goBack()" style="display: block; margin: 20px auto;">返回打卡系統</button>
+    </div>
 
-<!-- 打卡紀錄部分 -->
-<div id="records-section" class="section-container" style="display: none;">
-    <h2>打卡紀錄</h2>
-    <ul id="records-list" class="list-group">
-        <!-- 打卡紀錄會通過動態加載 -->
-    </ul>
-</div>
-
-<!-- 返回按鈕 -->
-<div class="container text-center">
-    <button class="btn btn-secondary" onclick="goBack()" style="display: block; margin: 20px auto;">返回打卡系統</button>
 </div>
 
 <!-- 新增的 footer -->
