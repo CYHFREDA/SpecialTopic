@@ -1,7 +1,7 @@
 name: Deploy to Server #name: 定義這個工作流程的名稱。在這個例子中，名字是 "Deploy to Server"，這會顯示在 GitHub Actions 的 UI 中，讓你知道這個工作流程的用途。
 
 on: # on: 定義工作流程的觸發條件。
-   workflow_dispatch:
+   push:
     branches: # branches: 限定觸發條件，只有在 main 分支上進行 push 時，這個工作流程才會被執行。這意味著你在提交（push）代碼到 main 分支時，工作流程會自動開始。
       - main
 
