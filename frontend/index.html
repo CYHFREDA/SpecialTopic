@@ -46,8 +46,9 @@
                         <div class="form-group">
                             <input type="text" id="username" class="form-control" placeholder="請輸入用戶名" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group position-relative">
                             <input type="password" id="password" class="form-control" placeholder="請輸入密碼" required>
+                            <i class="fas fa-eye" id="togglePassword" style="position: absolute; right: 10px; top: 10px; cursor: pointer;"></i>
                         </div>
                         <button type="button" class="btn btn-primary" onclick="authenticate('login')">登入</button>
                         <button type="button" class="btn btn-secondary" onclick="authenticate('register')">註冊</button>
@@ -117,6 +118,14 @@
         $('#auth-form, #clock-form, #records-list').hide(); // 隱藏其他區域
         fetchAnnouncements(); // 獲取公告
     }
+
+    // 切換密碼顯示
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordInput = document.getElementById('password');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.classList.toggle('fa-eye-slash'); // 切換圖標
+    });
 
     // 預設顯示登入/註冊表單
     $(document).ready(function() {
