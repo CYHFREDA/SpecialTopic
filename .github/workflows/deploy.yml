@@ -1,0 +1,46 @@
+name: Deploy to Server #name: 定義這個工作流程的名稱。在這個例子中，名字是 "Deploy to Server"，這會顯示在 GitHub Actions 的 UI 中，讓你知道這個工作流程的用途。
+
+on: # on: 定義工作流程的觸發條件。這裡的意思是當發生 push 操作時，這個工作流程會被觸發。
+  push:
+    branches: # branches: 限定觸發條件，只有在 main 分支上進行 push 時，這個工作流程才會被執行。這意味著你在提交（push）代碼到 main 分支時，工作流程會自動開始。
+      - main
+
+jobs: #jobs: 一個工作流程可以包含多個任務。這裡我們定義了一個名為 deploy 的任務，它會執行一系列步驟。
+  deploy: # deploy: 這是任務名稱，你可以自定義，這個名稱幫助你區分不同的任務。這裡的意思是 "部署"。
+    runs-on: ubuntu-latest # runs-on: 定義 GitHub Actions 使用的運行環境。在這個例子中，選擇的是 ubuntu-latest，即使用最新版本的 Ubuntu 作為運行環境。
+
+    steps: # steps: 定義任務中的每個步驟。每個步驟可以是執行一段代碼、調用一個行動（action）等。
+    - name: Checkout code  # name: 定義每個步驟的名稱，這個步驟名為 "Checkout code"，即檢出代碼。
+      uses: actions/checkout@v3 #uses: 這是一個 GitHub Action，它指的是從 actions/checkout 倉庫中使用第三版（@v3）的 Action。這個 Action 的作用是將當前倉庫中的代碼檢出到 GitHub Actions 的工作目錄中，讓後續的步驟能夠使用代碼來執行部署。
+      
+    - name: Backup current branch packages
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: 0.tcp.jp.ngrok.io
+        port: 17739
+        username: root
+        key: ${{ secrets.specialtopic }}
+        script: |
+          TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+          if [ ! -d /opt/backupdata ]; then
+          mkdir -p /opt/backupdata
+          fi
+          cd /opt/specialtopic
+          tar -zcvf /opt/backupdata/backup_$TIMESTAMP.tar.gz .
+          echo "Backup completed at $TIMESTAMP"
+          
+          cd /opt/backupdata  
+          ls -tp | grep -v '/$' | tail -n +4 | xargs -I {} rm -- {}
+          echo " 刪除舊的備份，只保留最新的3個"
+          
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: 0.tcp.jp.ngrok.io  
+        port: 17739  # 使用 ngrok 提供的端口
+        username: root
+        key: ${{ secrets.specialtopic }}   
+        script: |
+          cd /opt/specialtopic
+          git pull origin main && docker-compose down && docker-compose up -d --build
+          docker exec nginx nginx -s reload
