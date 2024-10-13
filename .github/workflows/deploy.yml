@@ -37,7 +37,7 @@ jobs: #jobs: 一個工作流程可以包含多個任務。這裡我們定義了�
       uses: appleboy/ssh-action@v0.1.8
       with:
         host: 0.tcp.jp.ngrok.io  
-        port: 15637  # 使用 ngrok 提供的端口
+        port: 15637
         username: root
         key: ${{ secrets.specialtopic }}   
         script: |
