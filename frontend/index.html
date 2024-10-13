@@ -108,18 +108,32 @@
     }
 
     // 切換密碼顯示
-    document.getElementById('togglePassword').addEventListener('click', function () {
-        const passwordInput = document.getElementById('password');
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        
-        // 根據密碼顯示狀態切換圖標
-        if (type === 'text') {
-            this.classList.remove('fa-eye-slash'); // 隱藏密碼時顯示斜線眼睛
-            this.classList.add('fa-eye'); // 顯示正常眼睛
-        } else {
-            this.classList.remove('fa-eye'); // 顯示密碼時隱藏正常眼睛
-            this.classList.add('fa-eye-slash'); // 顯示斜線眼睛
+    let passwordVisible = false; // 狀態標記，跟踪密碼顯示狀態
+
+    const togglePasswordIcon = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePasswordIcon.addEventListener('mousedown', function () {
+        passwordVisible = true;
+        passwordInput.setAttribute('type', 'text'); // 顯示密碼
+        togglePasswordIcon.classList.remove('fa-eye-slash'); // 切換圖標
+        togglePasswordIcon.classList.add('fa-eye');
+    });
+
+    togglePasswordIcon.addEventListener('mouseup', function () {
+        if (!passwordVisible) return; // 如果沒有按下過則返回
+        passwordVisible = false;
+        passwordInput.setAttribute('type', 'password'); // 隱藏密碼
+        togglePasswordIcon.classList.remove('fa-eye'); // 切換圖標
+        togglePasswordIcon.classList.add('fa-eye-slash');
+    });
+
+    togglePasswordIcon.addEventListener('mouseleave', function () {
+        if (passwordVisible) {
+            passwordInput.setAttribute('type', 'password'); // 滑出時隱藏密碼
+            togglePasswordIcon.classList.remove('fa-eye'); // 切換圖標
+            togglePasswordIcon.classList.add('fa-eye-slash');
+            passwordVisible = false; // 重置狀態
         }
     });
 
