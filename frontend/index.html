@@ -16,14 +16,17 @@
     <script src="./indexjs/clock.js" defer></script>
     <script src="./indexjs/records.js" defer></script>
     <script src="./indexjs/announcements.js" defer></script>
+    <style>
+        /* 自訂樣式：將眼睛圖標設置為黑色 */
+        .fa-eye, .fa-eye-slash {
+            color: black; /* 設置顏色為黑色 */
+        }
+    </style>
 </head>
 <body>
 <div class="site-wrapper">
-
     <div class="site-wrapper-inner">
-
         <div class="cover-container">
-
             <header class="masthead clearfix">
                 <div class="inner">
                     <h3 class="masthead-brand">
@@ -37,7 +40,6 @@
                     </nav>
                 </div>
             </header>
-
             <main role="main" class="inner cover">
                 <!-- 用戶登入/註冊 -->
                 <div id="auth-form">
@@ -48,13 +50,12 @@
                         </div>
                         <div class="form-group position-relative">
                             <input type="password" id="password" class="form-control" placeholder="請輸入密碼" required>
-                            <i class="fa-regular fa-eye" id="togglePassword" style="position: absolute; right: 10px; top: 10px; cursor: pointer;"></i>
+                            <i class="fa-solid fa-eye" id="togglePassword" style="position: absolute; right: 10px; top: 10px; cursor: pointer;"></i>
                         </div>
                         <button type="button" class="btn btn-primary" onclick="authenticate('login')">登入</button>
                         <button type="button" class="btn btn-secondary" onclick="authenticate('register')">註冊</button>
                     </form>
                 </div>
-
                 <!-- 打卡功能 -->
                 <div id="clock-form" style="display:none;">
                     <h2>打卡功能</h2>
@@ -66,32 +67,25 @@
                         <button type="button" class="btn btn-danger" onclick="clockOut()">打卡下班</button>
                     </form>
                 </div>
-
                 <!-- 查詢打卡記錄 -->
                 <div id="records-list" style="display:none;">
                     <h2>查詢打卡記錄</h2>
                     <ul id="records" class="list-group mb-4"></ul>
                 </div>
-
                 <!-- 控制台公告 -->
                 <div id="announcements" style="display:none;">
                     <h2>公告</h2>
                     <ul id="announcement-list" class="alert alert-secondary"></ul>
                 </div>
             </main>
-
             <footer class="mastfoot">
                 <div class="inner">
                     <p>打卡系統由 <a href="https://getbootstrap.com/">Bootstrap</a> 提供支持.</p>
                 </div>
             </footer>
-
         </div>
-
     </div>
-
 </div>
-
 <script>
     // 顯示用戶登入/註冊表單
     function showAuthForm() {
@@ -124,7 +118,8 @@
         const passwordInput = document.getElementById('password');
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
-        this.classList.toggle('fa-regular fa-eye-slash'); // 切換圖標
+        this.classList.toggle('fa-eye-slash'); // 切換圖標
+        this.classList.toggle('fa-eye'); // 切換圖標
     });
 
     // 預設顯示登入/註冊表單
