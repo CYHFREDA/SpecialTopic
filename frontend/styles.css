@@ -147,6 +147,11 @@ body {
   }
 }
 
+/* 自訂樣式：將眼睛圖標設置為黑色 */
+  .fa-eye, .fa-eye-slash {
+     color: black; /* 設置顏色為黑色 */
+  }
+
 @media (min-width: 62em) {
   .masthead,
   .mastfoot,
