@@ -24,6 +24,10 @@ jobs:
           --health-retries=5
 
     steps:
+      - name: Clean up resources
+        run: |
+          docker-compose down || true
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -32,6 +36,10 @@ jobs:
 
       - name: Build and run containers
         run: docker-compose up --build -d
+
+      - name: Check Mongo logs
+        run: |
+          docker-compose logs mongo
 
   test:
     runs-on: ubuntu-latest
