@@ -21,11 +21,12 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '16' # 設置 Node.js 版本
-
-    - name: Install dependencies # 安裝依賴
+        
+# 安裝依賴
+    - name: Install dependencies
       run: |
-      cd backend
-      npm install # 安裝專案依賴
+        cd backend
+        npm install # 安裝專案依賴
 
     - name: Run tests  # 運行測試
       run: npm test # 運行測試，根據你的項目設置這個命令
