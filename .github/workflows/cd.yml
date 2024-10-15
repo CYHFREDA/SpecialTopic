@@ -1,44 +1,64 @@
 name: CD Pipeline
-   push:
-    branches: # branches: 限定觸發條件，只有在 main 分支上進行 push 時，這個工作流程才會被執行。這意味著你在提交（push）代碼到 main 分支時，工作流程會自動開始。
+on:
+  push:
+    branches:
       - main
 
-jobs: #jobs: 一個工作流程可以包含多個任務。這裡我們定義了一個名為 deploy 的任務，它會執行一系列步驟。
-  deploy: # deploy: 這是任務名稱，你可以自定義，這個名稱幫助你區分不同的任務。這裡的意思是 "部署"。
-    runs-on: ubuntu-latest # runs-on: 定義 GitHub Actions 使用的運行環境。在這個例子中，選擇的是 ubuntu-latest，即使用最新版本的 Ubuntu 作為運行環境。
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-    steps: # steps: 定義任務中的每個步驟。每個步驟可以是執行一段代碼、調用一個行動（action）等。
-    - name: Checkout code  # name: 定義每個步驟的名稱，這個步驟名為 "Checkout code"，即檢出代碼。
-      uses: actions/checkout@v3 #uses: 這是一個 GitHub Action，它指的是從 actions/checkout 倉庫中使用第三版（@v3）的 Action。這個 Action 的作用是將當前倉庫中的代碼檢出到 GitHub Actions 的工作目錄中，讓後續的步驟能夠使用代碼來執行部署。
-      
-    - name: Backup current branch packages
-      uses: appleboy/ssh-action@v0.1.8
-      with:
-        host: 0.tcp.jp.ngrok.io
-        port: 15637
-        username: root
-        key: ${{ secrets.specialtopic }}
-        script: |
-          TIMESTAMP=$(date +"%Y%m%d%H%M%S")
-          if [ ! -d /opt/backupdata ]; then
-          mkdir -p /opt/backupdata
-          fi
-          cd /opt/specialtopic
-          tar -zcvf /opt/backupdata/backup_$TIMESTAMP.tar.gz .
-          echo "Backup completed at $TIMESTAMP"
-          
-          cd /opt/backupdata  
-          ls -tp | grep -v '/$' | tail -n +4 | xargs -I {} rm -- {}
-          echo " 刪除舊的備份，只保留最新的3個"
-          
-    - name: Deploy via SSH
-      uses: appleboy/ssh-action@v0.1.8
-      with:
-        host: 0.tcp.jp.ngrok.io  
-        port: 15637
-        username: root
-        key: ${{ secrets.specialtopic }}   
-        script: |
-          cd /opt/specialtopic
-          git pull origin main && docker-compose down && docker-compose up -d --build
-          docker exec nginx nginx -s reload
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Backup current branch packages
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: 0.tcp.jp.ngrok.io
+          port: 15637
+          username: root
+          key: ${{ secrets.specialtopic }}
+          script: |
+            set -e  # 當腳本出現錯誤時終止執行
+            TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+            if [ ! -d /opt/backupdata ]; then
+              mkdir -p /opt/backupdata
+            fi
+            cd /opt/specialtopic
+            tar -zcvf /opt/backupdata/backup_$TIMESTAMP.tar.gz . 
+            echo "Backup completed at $TIMESTAMP"
+
+            # 清理舊備份
+            cd /opt/backupdata  
+            ls -tp | grep -v '/$' | tail -n +4 | xargs -I {} rm -- {}
+            echo "刪除舊的備份，只保留最新的3個"
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: 0.tcp.jp.ngrok.io
+          port: 15637
+          username: root
+          key: ${{ secrets.specialtopic }}
+          script: |
+            set -e  # 當腳本出現錯誤時終止執行
+            cd /opt/specialtopic
+            git pull origin main && docker-compose down && docker-compose up -d --build
+            docker exec nginx nginx -s reload
+
+      - name: Notify on successful deployment via Telegram
+        if: success()  # 只有在成功時發送通知
+        run: |
+          curl -s --data "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+          --data "text=🎉 *CD Pipeline 成功！*%0A%0A部署成功於分支: *${GITHUB_REF}*%0A提交信息: *${GITHUB_SHA}*%0A%0A🔍 請檢查應用程序運行狀態。" \
+          --data "parse_mode=MarkdownV2" \
+          "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+
+      - name: Notify on failure via Telegram
+        if: failure()  # 只有在失敗時發送通知
+        run: |
+          curl -s --data "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+          --data "text=⚠️ *CD Pipeline 失敗！*%0A%0A部署失敗於分支: *${GITHUB_REF}*%0A提交信息: *${GITHUB_SHA}*%0A%0A🔍 請檢查日誌以獲取詳細信息。" \
+          --data "parse_mode=MarkdownV2" \
+          "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
