@@ -25,8 +25,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: |
-          npm ci
+        run: npm install
           
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
