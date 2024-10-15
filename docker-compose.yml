@@ -26,6 +26,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro    
     environment:
+      - NODE_ENV=test # 這個環境變數用來標記是測試環境
       - MONGO_URI=mongodb://root:1qaz2wsx@mongo:27017/clockdb?authSource=admin
       - ALLOWED_ORIGINS=http://nginx
     depends_on:
@@ -55,6 +56,7 @@ services:
     ports:
       - "5002:5002"
     environment:
+      - NODE_ENV=test # 這個環境變數用來標記是測試環境
       - MONGO_URI=mongodb://root:1qaz2wsx@mongo:27017/clockdb?authSource=admin
       - ALLOWED_ORIGINS=http://nginx
     networks:
