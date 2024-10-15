@@ -7,7 +7,7 @@ function runBusinessLogic(input) {
 }
 
 // 從 API 獲取測試數據
-axios.get('https://api.example.com/test-data')
+axios.get('/api/announcements')
   .then(response => {
     const testData = response.data;
     try {
