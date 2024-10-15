@@ -2,12 +2,14 @@ const axios = require('axios');
 
 // 假設這是你的業務邏輯函數
 function runBusinessLogic(input) {
-  // 這裡可以放置你的業務邏輯
   return `處理的結果: ${input}`;
 }
 
+// 使用完整的 URL
+const apiUrl = 'http://nginx/api/announcements'; // 確保這是正確的 URL
+
 // 從 API 獲取測試數據
-axios.get('/api/announcements')
+axios.get(apiUrl)
   .then(response => {
     const testData = response.data;
     try {
