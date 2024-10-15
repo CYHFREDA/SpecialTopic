@@ -62,13 +62,14 @@ jobs:
         if: success()  # 只有在成功時發送通知
         run: |
           curl -s --data "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          --data "text=🎉 *CI Pipeline 成功！* \n\n部署成功於分支: *${GITHUB_REF}*\n提交信息: *${GITHUB_SHA}*\n\n🔍 請檢查應用程序運行狀態。" \
+          --data "text=🎉 *CI Pipeline 成功！*\n\n部署成功於分支: *${GITHUB_REF}*\n提交信息: *${GITHUB_SHA}*\n\n🔍 請檢查應用程序運行狀態。" \
+          --data "parse_mode=MarkdownV2" \
           "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
 
       - name: Notify on failure via Telegram
         if: failure()  # 只有在失敗時發送通知
         run: |
           curl -s --data "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          --data "text=⚠️ *CI Pipeline 失敗！* \n\n部署失敗於分支: *${GITHUB_REF}*\n提交信息: *${GITHUB_SHA}*\n\n📝 請檢查日誌以獲取詳細信息。" \
+          --data "text=⚠️ *CI Pipeline 失敗！*\n\n部署失敗於分支: *${GITHUB_REF}*\n提交信息: *${GITHUB_SHA}*\n\n📝 請檢查日誌以獲取詳細信息。" \
+          --data "parse_mode=MarkdownV2" \
           "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
-
