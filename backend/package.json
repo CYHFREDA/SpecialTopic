@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "test": "node app.js && echo 'Application is running smoothly!'",
-    "start": "node app.js"
+    "start": "node test.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
