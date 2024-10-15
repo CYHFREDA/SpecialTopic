@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request: # 也可以在 PR 建立時運行測試
+    branches:
+      - good
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code # 檢出代碼
+      uses: actions/checkout@v3
+      
+ # 添加安裝依賴和運行測試的步驟 (CI 部分)
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16' # 設置 Node.js 版本
+
+    - name: Install dependencies # 安裝依賴
+      run: npm install # 安裝專案依賴
+
+    - name: Run tests  # 運行測試
+      run: npm test # 運行測試，根據你的項目設置這個命令
