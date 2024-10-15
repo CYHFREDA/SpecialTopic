@@ -14,14 +14,15 @@ jest.mock('mongoose', () => {
     model: jest.fn().mockImplementation(() => {
       return {}; // 模擬 model 的返回值
     }),
+    disconnect: jest.fn().mockResolvedValue({}), // 模擬 disconnect 方法
   };
   return mMongoose;
 });
 
 describe('GET /', () => {
-  beforeAll(async () => {
-    // 這裡可以模擬連接或其他需要執行的前置操作
-  });
+  // beforeAll(async () => {
+  //   // 這裡可以模擬連接或其他需要執行的前置操作
+  // });
 
   afterAll(async () => {
     // 可以在這裡關閉 mongoose 連接
