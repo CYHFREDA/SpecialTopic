@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "test": "node app.js && echo 'Application is running smoothly!'",
-    "start": "node test.js"
+    "test": "node test.js && echo '應用程式運行順利！'",
+    "start": "node app.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
