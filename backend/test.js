@@ -2,7 +2,7 @@ const axios = require('axios');
 
 // 假設這是你的業務邏輯函數
 function runBusinessLogic(input) {
-  return `處理的結果: ${input}`;
+  return `處理的結果: ${input}`; // 根據實際需求調整
 }
 
 // 使用完整的 URL
@@ -12,14 +12,17 @@ const apiUrl = 'http://nginx/api/records'; // 確保這是正確的 URL
 axios.get(apiUrl)
   .then(response => {
     const testData = response.data;
-    try {
-      const result = runBusinessLogic(testData);
+
+    // 假設 API 返回的是一個數組，這裡只取第一個項目進行處理
+    if (Array.isArray(testData) && testData.length > 0) {
+      const firstItem = testData[0]; // 獲取第一個項目
+      const result = runBusinessLogic(firstItem); // 處理該項目
       console.log(result);
-      process.exit(0); // 正常退出
-    } catch (error) {
-      console.error('測試失敗:', error);
-      process.exit(1); // 當有錯誤發生時返回非零退出碼
+    } else {
+      console.log('沒有可用的測試數據');
     }
+
+    process.exit(0); // 正常退出
   })
   .catch(error => {
     console.error('無法獲取測試數據:', error);
