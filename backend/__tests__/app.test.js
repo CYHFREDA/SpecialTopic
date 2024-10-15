@@ -11,6 +11,9 @@ jest.mock('mongoose', () => {
     Schema: jest.fn().mockImplementation(() => {
       return {}; // 模擬 Schema 的返回值
     }),
+    model: jest.fn().mockImplementation(() => {
+      return {}; // 模擬 model 的返回值
+    }),
   };
   return mMongoose;
 });
