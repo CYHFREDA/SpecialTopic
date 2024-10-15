@@ -23,7 +23,9 @@ jobs:
         node-version: '16' # 設置 Node.js 版本
 
     - name: Install dependencies # 安裝依賴
-      run: npm install # 安裝專案依賴
+      run: |
+      cd backend
+      npm install # 安裝專案依賴
 
     - name: Run tests  # 運行測試
       run: npm test # 運行測試，根據你的項目設置這個命令
