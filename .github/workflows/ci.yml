@@ -19,7 +19,7 @@ jobs:
       - name: Cache Node.js dependencies
         uses: actions/cache@v3
         with:
-          path: node_modules
+          path: ./backend/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
@@ -39,6 +39,7 @@ jobs:
       - name: Build and run Docker containers
         run: |
           docker-compose up -d --build
+          docker ps
 
       - name: Wait for services to be ready
         run: |
@@ -55,18 +56,19 @@ jobs:
       - name: Shutdown containers
         run: |
           docker-compose down
+          docker volume prune -f
           
       - name: Notify on successful deployment via Telegram
         if: success()  # 只有在成功時發送通知
         run: |
           curl -s --data "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          --data "text=🎉 CI Pipeline 成功！\n\n部署成功於分支: *${GITHUB_REF}*\n提交信息: *${GITHUB_SHA}*\n\n請檢查應用程序運行狀態。" \
+          --data "text=🎉 *CI Pipeline 成功！* \n\n部署成功於分支: *${GITHUB_REF}*\n提交信息: *${GITHUB_SHA}*\n\n🔍 請檢查應用程序運行狀態。" \
           "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
 
       - name: Notify on failure via Telegram
         if: failure()  # 只有在失敗時發送通知
         run: |
           curl -s --data "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          --data "text=⚠️ CI Pipeline 失敗！\n\n部署失敗於分支: *${GITHUB_REF}*\n提交信息: *${GITHUB_SHA}*\n\n請檢查日誌以獲取詳細信息。" \
+          --data "text=⚠️ *CI Pipeline 失敗！* \n\n部署失敗於分支: *${GITHUB_REF}*\n提交信息: *${GITHUB_SHA}*\n\n📝 請檢查日誌以獲取詳細信息。" \
           "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
 
