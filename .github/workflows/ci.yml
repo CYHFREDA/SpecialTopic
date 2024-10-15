@@ -30,7 +30,7 @@ jobs:
 
       - name: Wait for services to be ready
         run: |
-          sleep 120  # 等待容器啟動
+          sleep 30  # 等待容器啟動
 
       - name: Run backend tests
         run: |
