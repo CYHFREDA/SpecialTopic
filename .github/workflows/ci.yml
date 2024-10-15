@@ -1,17 +1,14 @@
-name: CI Workflow
+name: CI 
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
     branches:
       - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     services:
       mongo:
         image: mongo:latest
@@ -20,31 +17,59 @@ jobs:
         env:
           MONGO_INITDB_ROOT_USERNAME: root
           MONGO_INITDB_ROOT_PASSWORD: 1qaz2wsx
+        volumes:
+          - mongodb_data:/data/db
         options: >-
-          --health-cmd "mongo --eval 'db.adminCommand(\"ping\")'" 
-          --health-interval 10s 
-          --health-timeout 5s 
-          --health-retries 5
+          --health-cmd="mongo --eval 'db.adminCommand(\"ping\")'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      backend:
+        build: ./backend
+        ports:
+          - 5001:5001
+        env:
+          MONGO_URI: mongodb://root:1qaz2wsx@mongo:27017/clockdb?authSource=admin
+          ALLOWED_ORIGINS: http://nginx
+        volumes:
+          - /etc/localtime:/etc/localtime:ro
+
+      control-backend:
+        build: ./control-backend
+        ports:
+          - 5002:5002
+        env:
+          MONGO_URI: mongodb://root:1qaz2wsx@mongo:27017/clockdb?authSource=admin
+          ALLOWED_ORIGINS: http://nginx
+
+      nginx:
+        image: nginx:latest
+        ports:
+          - 80:80
+        volumes:
+          - ./nginx:/etc/nginx
+          - ./frontend:/usr/share/nginx/html
+          - ./nginx/log:/var/log/nginx
+          - /etc/localtime:/etc/localtime:ro
+        depends_on:
+          - backend
+          - control-backend
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Build and run Docker Compose
-        run: |
-          docker-compose up -d --build
-          sleep 10 # 等待服務啟動
-          
-      - name: Check MongoDB logs
-        run: docker-compose logs mongo      
-      
+      - name: Build and run containers
+        run: docker-compose up --build -d
+
       - name: Run tests
         run: |
-          docker-compose exec backend npm install
-          docker-compose exec backend npm test -- --passWithNoTests
-          
-      - name: Tear down Docker Compose
+          docker-compose exec backend npm test
+          docker-compose exec control-backend npm test
+
+      - name: Stop and remove containers
         run: docker-compose down
