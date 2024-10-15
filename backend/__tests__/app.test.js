@@ -1,12 +1,19 @@
+// __tests__/app.test.js
 const request = require('supertest');
 const app = require('../app');
 const mongoose = require('mongoose');
 
 // 模擬 mongoose 的方法
-jest.mock('mongoose', () => ({
-  connect: jest.fn().mockResolvedValue({}),
-  set: jest.fn(),
-}));
+jest.mock('mongoose', () => {
+  const mMongoose = {
+    connect: jest.fn().mockResolvedValue({}),
+    set: jest.fn(),
+    Schema: jest.fn().mockImplementation(() => {
+      return {}; // 模擬 Schema 的返回值
+    }),
+  };
+  return mMongoose;
+});
 
 describe('GET /', () => {
   beforeAll(async () => {
