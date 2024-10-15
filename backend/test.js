@@ -6,7 +6,7 @@ function runBusinessLogic(input) {
 }
 
 // 使用完整的 URL
-const apiUrl = 'http://nginx/api/'; // 確保這是正確的 URL
+const apiUrl = 'http://nginx/api/records'; // 確保這是正確的 URL
 
 // 從 API 獲取測試數據
 axios.get(apiUrl)
