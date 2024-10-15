@@ -6,12 +6,12 @@ const server = http.createServer((req, res) => {
   res.end('Server is running!');
 });
 
-server.listen(5001, () => {
-  console.log('Test server is running on port 5001');
+server.listen(5002, () => {
+  console.log('測試伺服器在連接埠 5002 上運行');
 });
 
 // 假設您有一個正常執行的代碼功能
 setTimeout(() => {
-  console.log('Code is running smoothly!');
+  console.log('程式碼運行順利!');
   process.exit(0); // 正常退出
 }, 1000); // 延遲1秒以確認服務已啟動
