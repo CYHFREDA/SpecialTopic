@@ -1,39 +1,47 @@
-name: CI
+name: CI Workflow
 
 on:
   push:
     branches:
       - main
-  pull_request: # 也可以在 PR 建立時運行測試
+  pull_request:
     branches:
-      - good
+      - main
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+    
+    services:
+      mongo:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: 1qaz2wsx
+        options: >-
+          --health-cmd "mongo --eval 'db.adminCommand(\"ping\")'" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
 
     steps:
-    - name: Checkout code # 檢出代碼
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
       
- # 添加安裝依賴和運行測試的步驟 (CI 部分)
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16' # 設置 Node.js 版本
-        
-# 安裝依賴
-    - name: Install dependencies
-      run: |
-        cd backend
-        npm install 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-    - name: Install dependencies # 安裝依賴
-      run: |
-        cd backend
-        npm install # 安裝專案依賴
-
-    - name: Run tests  # 運行測試
-      run: |
-        cd backend 
-        npm test 
+      - name: Build and run Docker Compose
+        run: |
+          docker-compose up -d --build
+          sleep 10 # 等待服務啟動
+      
+      - name: Run tests
+        run: |
+          docker-compose exec backend npm install
+          docker-compose exec backend npm test -- --passWithNoTests
+          
+      - name: Tear down Docker Compose
+        run: docker-compose down
