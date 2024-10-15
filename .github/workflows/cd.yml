@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -16,7 +15,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: 0.tcp.jp.ngrok.io
-          port: 15637
+          port: 19772
           username: root
           key: ${{ secrets.specialtopic }}
           script: |
@@ -38,7 +37,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: 0.tcp.jp.ngrok.io
-          port: 15637
+          port: 19772
           username: root
           key: ${{ secrets.specialtopic }}
           script: |
@@ -46,6 +45,7 @@ jobs:
             cd /opt/specialtopic
             git pull origin main && docker-compose down && docker-compose up -d --build
             docker exec nginx nginx -s reload
+            docker ps
 
       - name: Notify on successful deployment via Telegram
         if: success()  # 只有在成功時發送通知
