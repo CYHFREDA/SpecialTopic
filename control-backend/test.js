@@ -1,17 +1,15 @@
-const http = require('http');
+// 假設這是你的業務邏輯函數
+function runBusinessLogic() {
+  // 這裡可以放置你的業務邏輯
+  return '程式碼運行順利!';
+}
 
-// 測試是否能啟動服務
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Server is running!');
-});
-
-server.listen(5002, () => {
-  console.log('測試伺服器在連接埠 5002 上運行');
-});
-
-// 假設您有一個正常執行的代碼功能
-setTimeout(() => {
-  console.log('程式碼運行順利!');
+// 進行簡單測試
+try {
+  const result = runBusinessLogic();
+  console.log(result);
   process.exit(0); // 正常退出
-}, 1000); // 延遲1秒以確認服務已啟動
+} catch (error) {
+  console.error('測試失敗:', error);
+  process.exit(1); // 當有錯誤發生時返回非零退出碼
+}
