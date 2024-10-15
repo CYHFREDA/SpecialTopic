@@ -37,6 +37,9 @@ jobs:
         run: |
           docker-compose up -d --build
           sleep 10 # 等待服務啟動
+          
+      - name: Check MongoDB logs
+        run: docker-compose logs mongo      
       
       - name: Run tests
         run: |
