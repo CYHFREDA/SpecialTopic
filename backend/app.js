@@ -237,14 +237,14 @@ app.post('/api/create-payment', async (req, res) => {
     const paymentData = {
         amount: 1000,
         currency: 'TWD',
-        orderId: 'ORDER_ID', // 確保這是唯一的訂單 ID
+        orderId: 'ORDER_ID_' + Date.now(), // 確保這是唯一的訂單 ID
         packages: [
             {
-                id: 'PACKAGE_ID', // 確保這是唯一的套餐 ID
+                id: 'PACKAGE_ID_' + Date.now(), // 確保這是唯一的套餐 ID
                 amount: 1000,
                 products: [
                     {
-                        id: 'PRODUCT_ID', // 確保這是唯一的商品 ID
+                        id: 'PRODUCT_ID_' + Date.now(), // 確保這是唯一的商品 ID
                         name: '商品名稱',
                         quantity: 1,
                         price: 1000,
