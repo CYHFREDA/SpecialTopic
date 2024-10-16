@@ -257,7 +257,3 @@ app.post('/api/create-payment', async (req, res) => {
         res.status(500).json({ message: '支付請求失敗', error: error.message });
     }
 });
-
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
