@@ -253,18 +253,17 @@ app.post('/api/create-payment', async (req, res) => {
             },
         ],
         redirectUrls: { // 重要：添加重定向 URL
-            confirmUrl: 'https://yourdomain.com/payment/confirm', // 替換為您的確認 URL
-            cancelUrl: 'https://yourdomain.com/payment/cancel', // 替換為您的取消 URL
+            confirmUrl: '/api/payment/confirm', // 替換為您的確認 URL
+            cancelUrl: '/api/payment/cancel', // 替換為您的取消 URL
         }
     };
 
     try {
-        const response = await axios.post('https://sandbox-api.line.me/v2/payments/request', paymentData, {
+        const response = await axios.post('https://sandbox-api.line.me/v3/payments/request', paymentData, {
             headers: {
                 'Content-Type': 'application/json',
                 'X-LINE-ChannelId': channelID,
                 'X-LINE-ChannelSecret': channelSecret,
-                'Authorization': `Bearer ${channelAccessToken}` // 使用 channelAccessToken 作為 Bearer Token
             },
         });
 
