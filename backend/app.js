@@ -229,32 +229,31 @@ async function sendLineMessage(userId, message) {
 }
 
 // LINE Pay API 配置
-const channelID = '2006462420'; // 替換為你的 Channel ID
-const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a'; // 替換為你的 Channel Secret
-
+const channelID = process.env.LINE_CHANNEL_ID; // 使用環境變數
+const channelSecret = process.env.LINE_CHANNEL_SECRET; // 使用環境變數
 // 創建支付的 API
 app.post('/api/create-payment', async (req, res) => {
     const paymentData = {
-        amount: 1000, // 支付金額，單位：TWD
+        amount: 1000,
         currency: 'TWD',
-        orderId: 'ORDER_ID', // 替換為唯一的訂單 ID
+        orderId: 'ORDER_ID', // 確保這是唯一的訂單 ID
         packages: [
             {
-                id: 'PACKAGE_ID', // 套餐 ID
-                amount: 1000, // 套餐金額
+                id: 'PACKAGE_ID', // 確保這是唯一的套餐 ID
+                amount: 1000,
                 products: [
                     {
-                        id: 'PRODUCT_ID', // 商品 ID
+                        id: 'PRODUCT_ID', // 確保這是唯一的商品 ID
                         name: '商品名稱',
-                        quantity: 1, // 數量
-                        price: 1000, // 價格
+                        quantity: 1,
+                        price: 1000,
                     },
                 ],
             },
         ],
-        redirectUrls: { // 重要：添加重定向 URL
-            confirmUrl: '/api/payment/confirm', // 替換為您的確認 URL
-            cancelUrl: '/api/payment/cancel', // 替換為您的取消 URL
+        redirectUrls: {
+            confirmUrl: '/api/payment/confirm',
+            cancelUrl: '/api/payment/cancel',
         }
     };
 
@@ -267,7 +266,6 @@ app.post('/api/create-payment', async (req, res) => {
             },
         });
 
-        // 檢查 API 回應是否有效
         if (response.data && response.data.info && response.data.info.paymentUrl) {
             res.json({ returnUrl: response.data.info.paymentUrl.web });
         } else {
@@ -275,10 +273,13 @@ app.post('/api/create-payment', async (req, res) => {
         }
     } catch (error) {
         console.error('Payment request error:', error.response ? error.response.data : error.message);
+        console.error('Request config:', error.config);
         res.status(500).json({
             message: '支付請求失敗',
             error: error.response ? error.response.data : error.message
         });
     }
+});
+
 });
 
