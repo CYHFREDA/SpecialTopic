@@ -227,3 +227,37 @@ async function sendLineMessage(userId, message) {
         console.error('發送訊息時發生錯誤:', error);
     }
 }
+
+// LINE Pay API 配置
+const channelID = '2006462420'; // 替換為你的 Channel ID
+const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a'; // 替換為你的 Channel Secret
+
+// 創建支付的 API
+app.post('/api/create-payment', async (req, res) => {
+    const paymentData = {
+        // 這裡填寫你的支付資料
+        amount: 1000, // 支付金額，單位：TWD
+        currency: 'TWD',
+        orderId: 'ORDER_ID', // 替換為唯一的訂單 ID
+    };
+
+    try {
+        const response = await axios.post('https://sandbox-api.line.me/v2/payments/request', paymentData, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-LINE-ChannelId': channelID,
+                'X-LINE-ChannelSecret': channelSecret,
+            },
+        });
+
+        // 返回支付請求的結果
+        res.json({ returnUrl: response.data.info.paymentUrl.web });
+    } catch (error) {
+        console.error('Payment request error:', error);
+        res.status(500).json({ message: '支付請求失敗', error: error.message });
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+});
