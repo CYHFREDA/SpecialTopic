@@ -252,10 +252,6 @@ app.post('/api/create-payment', async (req, res) => {
                 ],
             },
         ],
-        redirectUrls: {
-            confirmUrl: '/api/payment/confirm',
-            cancelUrl: '/api/payment/cancel',
-        }
     };
 
     try {
