@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>打卡系統</title>
     <link rel="icon" href="./indexjs/1.png" type="image/png">
-    <!-- 引入 Font Awesome 圖示-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- 引入 Bootstrap 和 Google Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -16,6 +14,7 @@
     <script src="./indexjs/clock.js" defer></script>
     <script src="./indexjs/records.js" defer></script>
     <script src="./indexjs/announcements.js" defer></script>
+    <script src="./indexjs/payment.js" defer></script>
 </head>
 <body>
 <div class="site-wrapper">
@@ -31,6 +30,7 @@
                         <a class="nav-link" href="#" onclick="showClockInOut()">打卡功能</a>
                         <a class="nav-link" href="#" onclick="showRecords()">查詢打卡記錄</a>
                         <a class="nav-link" href="#" onclick="showAnnouncements()">公告</a>
+                        <a class="nav-link" href="#" onclick="showPayment()">支付</a> 
                     </nav>
                 </div>
             </header>
@@ -71,6 +71,11 @@
                     <h2>公告</h2>
                     <ul id="announcement-list" class="alert alert-secondary"></ul>
                 </div>
+                <!-- 支付功能 -->
+                <div id="payment-form" style="display:none;">
+                    <h2>支付功能</h2>
+                    <button id="payButton" class="btn btn-success">支付 TWD</button>
+                </div>
             </main>
             <footer class="mastfoot">
                 <div class="inner">
@@ -84,27 +89,34 @@
     // 顯示用戶登入/註冊表單
     function showAuthForm() {
         $('#auth-form').show(); // 顯示登入註冊區域
-        $('#clock-form, #records-list, #announcements').hide(); // 隱藏其他區域
+        $('#clock-form, #records-list, #announcements, #payment-form').hide(); // 隱藏其他區域
     }
 
     // 顯示打卡功能表單
     function showClockInOut() {
         $('#clock-form').show(); // 顯示打卡功能區域
-        $('#auth-form, #records-list, #announcements').hide(); // 隱藏其他區域
+        $('#auth-form, #records-list, #announcements, #payment-form').hide(); // 隱藏其他區域
     }
 
     // 顯示查詢打卡記錄
     function showRecords() {
         $('#records-list').show(); // 顯示查詢打卡記錄區域
-        $('#auth-form, #clock-form, #announcements').hide(); // 隱藏其他區域
+        $('#auth-form, #clock-form, #announcements, #payment-form').hide(); // 隱藏其他區域
         fetchRecords(); // 獲取打卡記錄
     }
 
     // 顯示公告
     function showAnnouncements() {
         $('#announcements').show(); // 顯示公告區域
-        $('#auth-form, #clock-form, #records-list').hide(); // 隱藏其他區域
+        $('#auth-form, #clock-form, #records-list, #payment-form').hide(); // 隱藏其他區域
         fetchAnnouncements(); // 獲取公告
+    }
+
+    // 顯示支付表單
+    function showPayment() {
+        $('#payment-form').show(); // 顯示支付功能區域
+        $('#auth-form, #clock-form, #records-list, #announcements').hide(); // 隱藏其他區域
+        fetchPayment(); // 獲取支付
     }
 
     // 切換密碼顯示
