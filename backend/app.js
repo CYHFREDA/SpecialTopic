@@ -273,10 +273,12 @@ app.post('/api/create-payment', async (req, res) => {
         }
     } catch (error) {
         console.error('Payment request error:', error.response ? error.response.data : error.message);
-        console.error('Request config:', error.config);
+        console.error('Request config:', error.config); // 紀錄請求的配置
+        console.error('Response status:', error.response ? error.response.status : 'No response status');
         res.status(500).json({
             message: '支付請求失敗',
-            error: error.response ? error.response.data : error.message
+            error: error.response ? error.response.data : error.message,
+            status: error.response ? error.response.status : 'No response status'
         });
     }
 });
