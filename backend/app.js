@@ -269,7 +269,7 @@ app.post('/api/create-payment', async (req, res) => {
         if (response.data && response.data.info && response.data.info.paymentUrl) {
             res.json({ returnUrl: response.data.info.paymentUrl.web });
         } else {
-            res.status(500).json({ message: '支付請求成功，但未返回有效的付款網址' });
+            res.status(501).json({ message: '支付請求成功，但未返回有效的付款網址' });
         }
     } catch (error) {
         console.error('Payment request error:', error.response ? error.response.data : error.message);
