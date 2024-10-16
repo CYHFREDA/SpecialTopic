@@ -280,6 +280,3 @@ app.post('/api/create-payment', async (req, res) => {
         });
     }
 });
-
-});
-
