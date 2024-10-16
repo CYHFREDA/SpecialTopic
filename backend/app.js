@@ -231,20 +231,23 @@ async function sendLineMessage(userId, message) {
 // LINE Pay API 配置
 const channelID = '2006462420'; 
 const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a'; 
-
+// 生成唯一的 ID 函數
+const generateUniqueId = (prefix) => {
+    return `${prefix}_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+};
 // 創建支付的 API
 app.post('/api/create-payment', async (req, res) => {
     const paymentData = {
         amount: 1000,
         currency: 'TWD',
-        orderId: 'ORDER_ID_' + Date.now(), // 確保這是唯一的訂單 ID
+        orderId: generateUniqueId('ORDER_ID'), // 生成唯一的訂單 ID
         packages: [
             {
-                id: 'PACKAGE_ID_' + Date.now(), // 確保這是唯一的套餐 ID
+                id: generateUniqueId('PACKAGE_ID'), // 生成唯一的套餐 ID
                 amount: 1000,
                 products: [
                     {
-                        id: 'PRODUCT_ID_' + Date.now(), // 確保這是唯一的商品 ID
+                        id: generateUniqueId('PRODUCT_ID'), // 生成唯一的商品 ID
                         name: '商品名稱',
                         quantity: 1,
                         price: 1000,
