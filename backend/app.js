@@ -229,8 +229,8 @@ async function sendLineMessage(userId, message) {
 }
 
 // LINE Pay API 配置
-const channelID = 2006462420; 
-const channelSecret = 8c832c018d09a8be1738b32a3be1ee0a; 
+const channelID = '2006462420'; 
+const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a'; 
 
 // 創建支付的 API
 app.post('/api/create-payment', async (req, res) => {
