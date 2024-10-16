@@ -235,10 +235,24 @@ const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a'; // 替換為你的 Cha
 // 創建支付的 API
 app.post('/api/create-payment', async (req, res) => {
     const paymentData = {
-        // 這裡填寫你的支付資料
+        productName: '商品名稱', // 商品名稱
         amount: 1000, // 支付金額，單位：TWD
         currency: 'TWD',
         orderId: 'ORDER_ID', // 替換為唯一的訂單 ID
+        packages: [
+            {
+                id: 'PACKAGE_ID', // 套餐 ID
+                amount: 1000, // 套餐金額
+                products: [
+                    {
+                        id: 'PRODUCT_ID', // 商品 ID
+                        name: '商品名稱',
+                        quantity: 1, // 數量
+                        price: 1000, // 價格
+                    },
+                ],
+            },
+        ],
     };
 
     try {
@@ -250,10 +264,18 @@ app.post('/api/create-payment', async (req, res) => {
             },
         });
 
-        // 返回支付請求的結果
-        res.json({ returnUrl: response.data.info.paymentUrl.web });
+        // 檢查 API 回應是否有效
+        if (response.data && response.data.info && response.data.info.paymentUrl) {
+            res.json({ returnUrl: response.data.info.paymentUrl.web });
+        } else {
+            res.status(500).json({ message: '支付請求成功，但未返回有效的付款網址' });
+        }
     } catch (error) {
-        console.error('Payment request error:', error);
-        res.status(500).json({ message: '支付請求失敗', error: error.message });
+        console.error('Payment request error:', error.response ? error.response.data : error.message);
+        res.status(500).json({
+            message: '支付請求失敗',
+            error: error.response ? error.response.data : error.message
+        });
     }
 });
+
