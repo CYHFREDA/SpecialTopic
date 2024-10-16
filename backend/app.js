@@ -235,7 +235,6 @@ const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a'; // 替換為你的 Cha
 // 創建支付的 API
 app.post('/api/create-payment', async (req, res) => {
     const paymentData = {
-        productName: '商品名稱', // 商品名稱
         amount: 1000, // 支付金額，單位：TWD
         currency: 'TWD',
         orderId: 'ORDER_ID', // 替換為唯一的訂單 ID
@@ -253,6 +252,10 @@ app.post('/api/create-payment', async (req, res) => {
                 ],
             },
         ],
+        redirectUrls: { // 重要：添加重定向 URL
+            confirmUrl: 'https://yourdomain.com/payment/confirm', // 替換為您的確認 URL
+            cancelUrl: 'https://yourdomain.com/payment/cancel', // 替換為您的取消 URL
+        }
     };
 
     try {
@@ -261,6 +264,7 @@ app.post('/api/create-payment', async (req, res) => {
                 'Content-Type': 'application/json',
                 'X-LINE-ChannelId': channelID,
                 'X-LINE-ChannelSecret': channelSecret,
+                'Authorization': `Bearer ${channelAccessToken}` // 使用 channelAccessToken 作為 Bearer Token
             },
         });
 
