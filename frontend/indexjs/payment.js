@@ -1,5 +1,5 @@
-// payment.js 當用戶點擊支付按鈕時的事件
-document.getElementById('payButton').addEventListener('click', function() {
+// 將支付邏輯封裝成 fetchPayment 函數
+function fetchPayment() {
     // 發送支付請求
     fetch('/api/create-payment', { // 使用 POST 方法
         method: 'POST',
@@ -9,7 +9,6 @@ document.getElementById('payButton').addEventListener('click', function() {
         body: JSON.stringify({
             productName: '商品名稱', // 這裡填寫商品名稱等必要資料
             amount: 1000 // 這裡填寫支付金額等必要資料
-            // 根據你的需求可以添加更多的支付數據
         })
     })
     .then(response => {
@@ -29,4 +28,9 @@ document.getElementById('payButton').addEventListener('click', function() {
     .catch(error => {
         console.error('Error:', error);
     });
+}
+
+// 綁定支付按鈕事件
+document.getElementById('payButton').addEventListener('click', function() {
+    fetchPayment(); // 當按鈕被點擊時，調用 fetchPayment 函數
 });
