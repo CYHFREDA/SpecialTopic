@@ -259,7 +259,7 @@ app.post('/api/create-payment', async (req, res) => {
     };
 
     try {
-        const response = await axios.post('https://sandbox-api.line.me/v3/payments/request', paymentData, {
+        const response = await axios.post('https://sandbox-api-pay.line.me/v3/payments/request', paymentData, {
             headers: {
                 'Content-Type': 'application/json',
                 'X-LINE-ChannelId': channelID,
