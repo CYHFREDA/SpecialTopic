@@ -237,32 +237,44 @@ const generateUniqueId = (prefix) => `${prefix}_${Date.now()}_${Math.floor(Math.
 
 // 創建支付的 API
 app.post('/api/create-payment', async (req, res) => {
+    const orderId = `o_${Date.now()}`; // 生成唯一的訂單 ID
+    const packageId = `p_${Date.now()}`; // 生成唯一的套餐 ID
+    const productId = `pr_${Date.now()}`; // 生成唯一的商品 ID
+    const nonce = crypto.randomBytes(16).toString('hex'); // 生成 nonce
+    const amount = 1000; // 您可以根據需要調整金額
+    const currency = 'TWD'; // 或 'JPY'
+
     const paymentData = {
-        amount: 1000,
-        currency: 'TWD',
-        orderId: generateUniqueId('order'), // 生成唯一的訂單 ID
+        amount,
+        currency,
+        orderId,
         packages: [
             {
-                id: generateUniqueId('package'), // 生成唯一的套餐 ID
-                amount: 1000,
+                id: packageId,
+                amount,
                 products: [
                     {
-                        id: generateUniqueId('product'), // 生成唯一的商品 ID
+                        id: productId,
                         name: '商品名稱',
+                        imageUrl: 'https://pay-store.example.com/images/product.jpg',
                         quantity: 1,
-                        price: 1000,
+                        price: amount,
                     },
                 ],
             },
         ],
     };
 
+    // 生成簽名
+    const signature = generateSignature(paymentData, nonce, channelSecret); // 這是您需要實現的簽名生成函數
+
     try {
         const response = await axios.post('https://sandbox-api-pay.line.me/v3/payments/request', paymentData, {
             headers: {
                 'Content-Type': 'application/json',
                 'X-LINE-ChannelId': channelID,
-                'X-LINE-ChannelSecret': channelSecret,
+                'X-LINE-Authorization-Nonce': nonce,
+                'X-LINE-Authorization': signature,
             },
         });
 
@@ -274,13 +286,19 @@ app.post('/api/create-payment', async (req, res) => {
         }
     } catch (error) {
         console.error('Payment request error:', error.response ? error.response.data : error.message);
-        console.error('Request config:', error.config); // 紀錄請求的配置
-        console.error('Response status:', error.response ? error.response.status : 'No response status');
         res.status(500).json({
             message: '支付請求失敗',
             error: error.response ? error.response.data : error.message,
-            status: error.response ? error.response.status : 'No response status'
         });
     }
 });
+
+// 簽名生成函數範例
+function generateSignature(data, nonce, channelSecret) {
+    const timestamp = Math.floor(Date.now() / 1000);
+    const body = JSON.stringify(data);
+    
+    const signatureString = `POST\n/v3/payments/request\n${channelID}\n${timestamp}\n${nonce}\n${body}`;
+    return crypto.createHmac('sha256', channelSecret).update(signatureString).digest('base64');
+}
 
