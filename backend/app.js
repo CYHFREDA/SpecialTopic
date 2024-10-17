@@ -237,7 +237,7 @@ app.post('/api/create-payment', async (req, res) => {
     const orderId = `o_${Date.now()}`; // 生成唯一的訂單 ID
     const packageId = `p_${Date.now()}`; // 生成唯一的套餐 ID
     const productId = `pr_${Date.now()}`; // 生成唯一的商品 ID
-    const nonce = crypto.randomBytes(16).toString('hex'); // 生成 nonce
+    const nonce = crypto.randomUUID(); // 生成 UUID 版本 4 的 nonce
     const amount = 1000; // 您可以根據需要調整金額
     const currency = 'TWD'; // 或 'JPY'
 
