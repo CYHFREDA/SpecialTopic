@@ -269,7 +269,11 @@ const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a';
 app.post('/api/create-payment', async (req, res) => {
         try {
         const { orderId, amount, currency } = req.body;
-
+            
+        // 檢查必要參數
+        if (!orderId || !amount || !currency) {
+            return res.status(400).json({ message: 'orderId、amount 和 currency 是必需的。' });
+        }
         // 檢查訂單 ID 是否存在
         const existingTransaction = await getTransactionDetails(orderId);
         if (existingTransaction) {
