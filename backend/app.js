@@ -250,7 +250,17 @@ const getTransactionDetails = async (transactionId) => {
         return null; // 返回 null 如果查詢失敗
     }
 };
-
+//saveTransactionData 函數
+const saveTransactionData = async (transactionData) => {
+    try {
+        const transaction = new Transaction(transactionData);
+        await transaction.save();
+        console.log('交易資料已儲存:', transactionData);
+    } catch (error) {
+        console.error('儲存交易資料時發生錯誤:', error);
+        throw error; // 向上拋出錯誤，以便調用者知道發生了錯誤
+    }
+};
 // LINE Pay API 配置
 const channelID = '2006462420'; 
 const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a'; 
