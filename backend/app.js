@@ -281,7 +281,7 @@ app.post('/api/create-payment', async (req, res) => {
 
     try {
         // 在儲存之前檢查交易是否已存在
-        const existingTransaction = await Transaction.findOne({ transactionId });
+        const existingTransaction = await Transaction.findOne({ transactionId: orderId });
         if (existingTransaction) {
             return res.status(400).json({ message: '此交易已存在' }); // 400 Bad Request
         }
