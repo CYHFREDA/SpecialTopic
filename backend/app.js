@@ -241,13 +241,17 @@ const Transaction = mongoose.model('Transaction', transactionSchema);
 // 實現 getTransactionDetails 函數
 async function getTransactionDetails(transactionId) {
     try {
-        const transaction = await Transaction.findOne({ transactionId }); // 查詢交易
-        return transaction; // 返回查詢到的交易資料
+        const transaction = await Transaction.findOne({ transactionId });
+        if (!transaction) {
+            console.log('未找到交易資料，transactionId:', transactionId);
+        }
+        return transaction;
     } catch (error) {
         console.error('查詢交易資料錯誤:', error);
-        return null; // 返回 null 以便上層處理
+        return null;
     }
 }
+
 
 // LINE Pay API 配置
 const channelID = '2006462420'; 
@@ -288,6 +292,8 @@ app.post('/api/create-payment', async (req, res) => {
                 currency,
                 status: '待處理' // 或根據實際情況設置狀態
             });
+            
+            console.log('儲存交易資料:', transaction);
             await transaction.save();
 
             res.json({ returnUrl: response.data.info.paymentUrl.web });
@@ -310,7 +316,7 @@ app.get('/api/transaction', async (req, res) => {
 
     // 查詢交易細節
     const transactionDetails = await getTransactionDetails(transactionId);
-
+    console.log('查詢的 transactionId:', transactionId);
     if (transactionDetails) {
         // 根據交易狀態決定是否重定向
         if (transactionDetails.status === '成功') {
