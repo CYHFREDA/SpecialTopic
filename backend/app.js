@@ -242,24 +242,12 @@ app.post('/api/create-payment', async (req, res) => {
     const currency = 'TWD'; // 或 'JPY'
 
     const paymentData = {
-        amount,
-        currency,
+	    amount,
         orderId,
-        packages: [
-            {
-                id: packageId,
-                amount,
-                products: [
-                    {
-                        id: productId,
-                        name: '商品名稱',
-                        imageUrl: 'https://pay-store.example.com/images/product.jpg',
-                        quantity: 1,
-                        price: amount,
-                    },
-                ],
-            },
-        ],
+        currency,
+	    "productName": "ithome",
+	    "productImageUrl": "https://ithelp.ithome.com.tw/images/ironman/11th/event/kv_event/kv-bg-addfly.png",
+	    "confirmUrl": "http://192.168.61.15:5001",
     };
 
     // 定義簽名生成函數
@@ -281,8 +269,7 @@ app.post('/api/create-payment', async (req, res) => {
     console.log('請求標頭:', {
         'Content-Type': 'application/json',
         'X-LINE-ChannelId': channelID,
-        'X-LINE-Authorization-Nonce': nonce,
-        'X-LINE-Authorization': signature,
+        'X-LINE-ChannelSecret': channelSecret,
     });
 
     try {
@@ -290,8 +277,7 @@ app.post('/api/create-payment', async (req, res) => {
             headers: {
                 'Content-Type': 'application/json',
                 'X-LINE-ChannelId': channelID,
-                'X-LINE-Authorization-Nonce': nonce,
-                'X-LINE-Authorization': signature,
+                'X-LINE-ChannelSecret': channelSecret,
             },
         });
 
