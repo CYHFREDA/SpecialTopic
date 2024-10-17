@@ -283,8 +283,21 @@ app.post('/api/create-payment', async (req, res) => {
     }
 });
 
-app.get('/api/transaction', (req, res) => {
+app.get('/api/transaction', async (req, res) => {
     const transactionId = req.query.transactionId;
-    // 在這裡處理交易 ID，查詢相應的數據或執行相應的邏輯
-    res.json({ message: 'Transaction details', transactionId });
+
+    // 在這裡查詢交易細節
+    const transactionDetails = await getTransactionDetails(transactionId); // 您需要實現這個函數
+
+    if (transactionDetails) {
+        // 根據交易狀態決定是否重定向
+        if (transactionDetails.status === '成功') {
+            // 重定向到打卡頁面
+            res.redirect('/');
+        } else {
+            res.send('交易未成功，請稍後重試。');
+        }
+    } else {
+        res.status(404).send('找不到交易資料');
+    }
 });
