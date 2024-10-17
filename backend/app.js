@@ -293,29 +293,24 @@ app.post('/api/create-payment', async (req, res) => {
         console.log('API 響應:', response.data);
 
         // 檢查是否成功生成交易
-        if (response.data.returnCode === '0000') {
-            const transactionId = response.data.info.transactionId; // API 返回的 transactionId
-            console.log('生成的交易 ID:', transactionId);
+if (response.data.returnCode === '0000') {
+    const transactionId = response.data.info.transactionId; // API 返回的 transactionId
+    console.log('生成的交易 ID:', transactionId);
 
-            // 在儲存之前檢查交易是否已存在
-            const existingTransaction = await Transaction.findOne({ transactionId });
-            if (existingTransaction) {
-                return res.status(400).json({ message: '此交易已存在' }); // 400 Bad Request
-            }
+    // 儲存交易資料到資料庫
+    const transactionData = {
+        transactionId,
+        amount,
+        currency,
+        status: '待處理'
+    };
 
-            // 儲存交易資料到資料庫
-            const transactionData = {
-                transactionId,
-                amount,
-                currency,
-                status: '待處理'
-            };
-
-            await saveTransactionData(transactionData); // 假設你有一個函數來儲存資料
-            res.status(200).json({ message: '交易已創建', transactionId });
-        } else {
-            res.status(400).json({ message: '無效的 API 響應' });
-        }
+    await saveTransactionData(transactionData); // 假設你有一個函數來儲存資料
+    res.status(200).json({ message: '交易已創建', transactionId }); // 成功的返回
+} else {
+    console.error('LINE Pay 付款請求失敗:', response.data);
+    res.status(400).json({ message: 'LINE Pay 付款請求失敗' }); // 錯誤的返回
+}
     } catch (error) {
         console.error('錯誤:', error);
         res.status(500).json({ message: '伺服器錯誤' });
