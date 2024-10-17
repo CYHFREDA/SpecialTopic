@@ -296,10 +296,11 @@ app.post('/api/create-payment', async (req, res) => {
 
             console.log('儲存交易資料:', transaction);
             await transaction.save();
-
+            
+            // 在返回的 URL 中添加 transactionId
             res.json({ 
-                returnUrl: response.data.info.paymentUrl.web,
-                transactionId: response.data.info.transactionId // 添加交易 ID 
+                returnUrl: response.data.info.paymentUrl.web + `?transactionId=${response.data.info.transactionId}`,
+                transactionId: response.data.info.transactionId 
             });
             
         } else {
