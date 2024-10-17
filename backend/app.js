@@ -296,20 +296,21 @@ app.post('/api/create-payment', async (req, res) => {
 
         // 記錄響應信息
         console.log('API 響應:', response.data);
-        const transactionId = response.data.info.transactionId;
-
-        // 儲存交易資料
+        // 準備交易資料
         const transactionData = {
-            transactionId,
+            transactionId: orderId, // 使用剛生成的 orderId 作為交易 ID
             amount,
             currency,
-            status: '待處理'
+            status: 'pending',
         };
-        await saveTransactionData(transactionData); // 儲存交易資料
-        res.status(200).json({ message: '交易已創建', transactionId });
+        // 儲存交易資料
+        await saveTransactionData(transactionData);
+
+        // 回傳成功訊息
+        res.json({ message: '支付請求已創建', linePayResponseData: linePayResponse.data });
     } catch (error) {
-        console.error('錯誤:', error);
-        res.status(500).json({ message: '伺服器錯誤' });
+        console.error('創建支付請求時發生錯誤:', error);
+        res.status(500).json({ message: '創建支付請求失敗。', error });
     }
 });
 
