@@ -322,7 +322,7 @@ app.post('/api/create-payment', async (req, res) => {
 
 //訂單返回的路徑
 app.get('/api/transaction', async (req, res) => {
-    const transactionId = response.data.info.transactionId;
+    const { transactionId } = req.query; // 從查詢參數中獲取 transactionId
 
     // 查詢交易細節
     const transactionDetails = await getTransactionDetails(transactionId);
