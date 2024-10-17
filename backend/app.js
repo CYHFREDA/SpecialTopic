@@ -290,16 +290,7 @@ app.post('/api/create-payment', async (req, res) => {
 
         // 記錄響應信息
         console.log('API 響應:', response.data);
-        console.log('生成的交易 ID:', response.data.info.transactionId);
-        
         const transactionId = response.data.info.transactionId;
-
-        // 在儲存之前檢查交易是否已存在
-        const existingTransaction = await Transaction.findOne({ transactionId });
-        if (existingTransaction) {
-            return res.status(400).json({ message: '此交易已存在' }); // 400 Bad Request
-        }
-
         // 儲存交易資料到資料庫
         const transaction = new Transaction({
             transactionId,
