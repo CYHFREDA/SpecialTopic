@@ -242,19 +242,8 @@ app.post('/api/create-payment', async (req, res) => {
         amount,
         currency,
         orderId,
-        packages: [
-            {
-                amount,
-                products: [
-                    {
-                        name: "這是好吃的",
-                        imageUrl: "https://pay-store.example.com/images/product.jpg",
-                        quantity: 1,
-                        price: amount,
-                    },
-                ],
-            },
-        ],
+        productName: "這是好吃的",
+        productImageUrl: "https://pay-store.example.com/images/product.jpg",
         confirmUrl: "/api/transaction",
     };
 
