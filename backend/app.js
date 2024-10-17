@@ -250,7 +250,6 @@ const getTransactionDetails = async (transactionId) => {
         return null; // 返回 null 如果查詢失敗
     }
 };
-console.log('儲存交易資料:', transaction);
 
 // LINE Pay API 配置
 const channelID = '2006462420'; 
