@@ -305,7 +305,7 @@ app.post('/api/create-payment', async (req, res) => {
         };
         // 儲存交易資料
         await saveTransactionData(transactionData);
-
+        console.log('LINE Pay API Response:', response.data);
         // 回傳成功訊息
         res.json({ message: '支付請求已創建', linePayResponseData: response.data });
     } catch (error) {
