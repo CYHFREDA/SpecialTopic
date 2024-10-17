@@ -267,7 +267,7 @@ app.post('/api/create-payment', async (req, res) => {
         orderId,
         productName: "Line Pay",
         productImageUrl: "https://play-lh.googleusercontent.com/227YjLBcUSi_M1OZ6GGFlcfZ9vCi9bZ79SmTMDffF79n0DbcjlAmBIB-V2O7-lOb3xac",
-        confirmUrl: "http://192.168.61.15/api/transaction",
+        confirmUrl: "http://192.168.61.15/api/transaction?transactionId=${transactionId}",
     };
 
     try {
@@ -321,10 +321,10 @@ app.post('/api/create-payment', async (req, res) => {
 //訂單返回的路徑
 app.get('/api/transaction', async (req, res) => {
     const { transactionId } = req.query; // 從查詢參數中獲取 transactionId
-
+    console.log('查詢的 transactionId:', transactionId);
     // 查詢交易細節
     const transactionDetails = await getTransactionDetails(transactionId);
-    console.log('訂單返回查詢的 transactionId:', transactionId);
+    console.log('查詢的交易資料:', transactionDetails);
     if (transactionDetails) {
         // 根據交易狀態決定是否重定向
         if (transactionDetails.status === '成功') {
