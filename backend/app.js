@@ -228,6 +228,27 @@ async function sendLineMessage(userId, message) {
     }
 }
 
+// 交易記錄 Schema
+const transactionSchema = new mongoose.Schema({
+    transactionId: { type: String, required: true, unique: true },
+    amount: Number,
+    currency: String,
+    status: String, // 假設這裡有交易狀態
+});
+
+const Transaction = mongoose.model('Transaction', transactionSchema);
+
+// 實現 getTransactionDetails 函數
+async function getTransactionDetails(transactionId) {
+    try {
+        const transaction = await Transaction.findOne({ transactionId }); // 查詢交易
+        return transaction; // 返回查詢到的交易資料
+    } catch (error) {
+        console.error('查詢交易資料錯誤:', error);
+        return null; // 返回 null 以便上層處理
+    }
+}
+
 // LINE Pay API 配置
 const channelID = '2006462420'; 
 const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a'; 
@@ -247,15 +268,6 @@ app.post('/api/create-payment', async (req, res) => {
         confirmUrl: "http://192.168.61.15/api/transaction",
     };
 
-
-    // 記錄請求信息
-    console.log('請求支付資料:', JSON.stringify(paymentData, null, 2));
-    console.log('請求標頭:', {
-        'Content-Type': 'application/json',
-        'X-LINE-ChannelId': channelID,
-        'X-LINE-ChannelSecret': channelSecret,
-    });
-
     try {
         const response = await axios.post('https://sandbox-api-pay.line.me/v2/payments/request', paymentData, {
             headers: {
@@ -269,6 +281,15 @@ app.post('/api/create-payment', async (req, res) => {
         console.log('API 響應:', response.data);
 
         if (response.data && response.data.info && response.data.info.paymentUrl) {
+            // 儲存交易資料到資料庫
+            const transaction = new Transaction({
+                transactionId: response.data.info.transactionId, // 獲取交易 ID
+                amount,
+                currency,
+                status: '待處理' // 或根據實際情況設置狀態
+            });
+            await transaction.save();
+
             res.json({ returnUrl: response.data.info.paymentUrl.web });
         } else {
             res.status(501).json({ message: '支付請求成功，但未返回有效的付款網址' });
@@ -283,17 +304,18 @@ app.post('/api/create-payment', async (req, res) => {
     }
 });
 
+//訂單返回的路徑
 app.get('/api/transaction', async (req, res) => {
     const transactionId = req.query.transactionId;
 
-    // 在這裡查詢交易細節
-    const transactionDetails = await getTransactionDetails(transactionId); // 您需要實現這個函數
+    // 查詢交易細節
+    const transactionDetails = await getTransactionDetails(transactionId);
 
     if (transactionDetails) {
         // 根據交易狀態決定是否重定向
         if (transactionDetails.status === '成功') {
-            // 重定向到打卡頁面
-            res.redirect('/');
+            // 重定向到打卡頁面或適當的頁面
+            res.redirect('/'); // 根據您的需求替換這裡的路由
         } else {
             res.send('交易未成功，請稍後重試。');
         }
