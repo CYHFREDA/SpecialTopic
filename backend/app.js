@@ -293,7 +293,7 @@ app.post('/api/create-payment', async (req, res) => {
         console.log('API 響應:', response.data);
 
         // 檢查是否成功生成交易
-        if (response.data.returnCode === '0000' && response.data.info) {
+        if (response.data.returnCode === '0000') {
             const transactionId = response.data.info.transactionId; // API 返回的 transactionId
             console.log('生成的交易 ID:', transactionId);
 
