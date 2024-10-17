@@ -258,9 +258,9 @@ const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a';
 // 創建支付的 API
 app.post('/api/create-payment', async (req, res) => {
     const orderId = `o_${Date.now()}`; // 生成唯一的訂單 ID
+    const transactionId = response.data.info.transactionId; // API 返回的 transactionId
     const amount = 500; // 您可以根據需要調整金額
     const currency = 'TWD'; // 或 'JPY'
-
     const paymentData = {
         amount,
         currency,
