@@ -241,17 +241,15 @@ const Transaction = mongoose.model('Transaction', transactionSchema);
 // 實現 getTransactionDetails 函數
 const getTransactionDetails = async (transactionId) => {
     try {
-        // 假設您使用 mongoose 與 MongoDB
+        console.log('查詢的 transactionId:', transactionId); // 日誌查詢的 transactionId
         const transaction = await Transaction.findOne({ transactionId });
-        console.log('查詢的交易資料:', transaction);
+        console.log('查詢的交易資料:', transaction); // 日誌查詢結果
         return transaction;
     } catch (error) {
         console.error('查詢交易詳細資料時發生錯誤:', error);
         return null; // 返回 null 如果查詢失敗
     }
 };
-
-
 
 // LINE Pay API 配置
 const channelID = '2006462420'; 
