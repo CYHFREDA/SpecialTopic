@@ -241,35 +241,28 @@ const Transaction = mongoose.model('Transaction', transactionSchema);
 // 實現 getTransactionDetails 函數
 const getTransactionDetails = async (transactionId) => {
     try {
-        console.log('getTransactionDetails查詢的 transactionId:', transactionId); // 日誌查詢的 transactionId
+        // 假設您使用 mongoose 與 MongoDB
         const transaction = await Transaction.findOne({ transactionId });
-        console.log('getTransactionDetails查詢的交易資料:', transaction); // 日誌查詢結果
+        console.log('查詢的交易資料:', transaction);
         return transaction;
     } catch (error) {
         console.error('查詢交易詳細資料時發生錯誤:', error);
         return null; // 返回 null 如果查詢失敗
     }
 };
-//saveTransactionData 函數
-const saveTransactionData = async (transactionData) => {
-    try {
-        const transaction = new Transaction(transactionData);
-        await transaction.save();
-        console.log('交易資料已儲存:', transactionData);
-    } catch (error) {
-        console.error('儲存交易資料時發生錯誤:', error);
-        throw error; // 向上拋出錯誤，以便調用者知道發生了錯誤
-    }
-};
+
+
+
 // LINE Pay API 配置
 const channelID = '2006462420'; 
 const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a'; 
 
 // 創建支付的 API
 app.post('/api/create-payment', async (req, res) => {
-    const orderId = `o_${Date.now()}`; 
-    const amount = 500; 
-    const currency = 'TWD'; 
+    const orderId = `o_${Date.now()}`; // 生成唯一的訂單 ID
+    const amount = 500; // 您可以根據需要調整金額
+    const currency = 'TWD'; // 或 'JPY'
+
     const paymentData = {
         amount,
         currency,
@@ -288,36 +281,47 @@ app.post('/api/create-payment', async (req, res) => {
             },
         });
 
+        // 記錄響應信息
         console.log('API 響應:', response.data);
-        const transactionId = response.data.info.transactionId;
-
-        if (transactionId) {
-            await saveTransactionData({
-                transactionId,
+        console.log('生成的交易 ID:', response.data.info.transactionId);
+        
+        if (response.data && response.data.info && response.data.info.paymentUrl) {
+            // 儲存交易資料到資料庫
+            const transaction = new Transaction({
+                transactionId: response.data.info.transactionId, // 獲取交易 ID
                 amount,
                 currency,
-                status: '待處理',
+                status: '待處理' // 或根據實際情況設置狀態
             });
-            res.status(200).json({ message: '交易已創建', transactionId });
+
+            console.log('儲存交易資料:', transaction);
+            await transaction.save();
+
+            res.json({ 
+                returnUrl: response.data.info.paymentUrl.web,
+                transactionId: response.data.info.transactionId // 添加交易 ID 
+            });
+            
         } else {
-            res.status(400).json({ message: '無效的 API 響應' });
+            res.status(501).json({ message: '支付請求成功，但未返回有效的付款網址' });
         }
     } catch (error) {
-        console.error('錯誤:', error);
-        if (error.response) {
-            console.error('API 回應錯誤:', error.response.data);
-        }
-        res.status(500).json({ message: '伺服器錯誤' });
+        // 記錄錯誤信息
+        console.error('支付請求錯誤:', error.response ? error.response.data : error.message);
+        res.status(500).json({
+            message: '支付請求失敗',
+            error: error.response ? error.response.data : error.message,
+        });
     }
 });
 
 //訂單返回的路徑
 app.get('/api/transaction', async (req, res) => {
-    const { transactionId } = req.query; // 從查詢參數中獲取 transactionId
-    console.log('查詢的 transactionId:', transactionId);
+    const transactionId = req.query.transactionId;
+
     // 查詢交易細節
     const transactionDetails = await getTransactionDetails(transactionId);
-    console.log('查詢的交易資料:', transactionDetails);
+    console.log('查詢的 transactionId:', transactionId);
     if (transactionDetails) {
         // 根據交易狀態決定是否重定向
         if (transactionDetails.status === '成功') {
