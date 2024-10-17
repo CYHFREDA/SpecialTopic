@@ -276,7 +276,7 @@ app.post('/api/create-payment', async (req, res) => {
         orderId,
         productName: "Line Pay",
         productImageUrl: "https://play-lh.googleusercontent.com/227YjLBcUSi_M1OZ6GGFlcfZ9vCi9bZ79SmTMDffF79n0DbcjlAmBIB-V2O7-lOb3xac",
-        confirmUrl: "http://192.168.61.15/api/transaction?transactionId=${orderId}",
+        confirmUrl: "http://192.168.61.15/api/transaction",
     };
 
     try {
