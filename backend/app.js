@@ -235,8 +235,6 @@ const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a';
 // 創建支付的 API
 app.post('/api/create-payment', async (req, res) => {
     const orderId = `o_${Date.now()}`; // 生成唯一的訂單 ID
-    const packageId = `p_${Date.now()}`; // 生成唯一的套餐 ID
-    const productId = `pr_${Date.now()}`; // 生成唯一的商品 ID
     const amount = 500; // 您可以根據需要調整金額
     const currency = 'TWD'; // 或 'JPY'
 
@@ -246,11 +244,9 @@ app.post('/api/create-payment', async (req, res) => {
         orderId,
         packages: [
             {
-                id: packageId,
                 amount,
                 products: [
                     {
-                        id: productId,
                         name: "這是好吃的",
                         imageUrl: "https://pay-store.example.com/images/product.jpg",
                         quantity: 1,
