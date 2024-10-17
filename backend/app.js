@@ -296,7 +296,11 @@ app.post('/api/create-payment', async (req, res) => {
             console.log('儲存交易資料:', transaction);
             await transaction.save();
 
-            res.json({ returnUrl: response.data.info.paymentUrl.web });
+            res.json({ 
+                returnUrl: response.data.info.paymentUrl.web,
+                transactionId: response.data.info.transactionId // 添加交易 ID 
+            });
+            
         } else {
             res.status(501).json({ message: '支付請求成功，但未返回有效的付款網址' });
         }
