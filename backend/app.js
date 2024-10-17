@@ -241,9 +241,9 @@ const Transaction = mongoose.model('Transaction', transactionSchema);
 // 實現 getTransactionDetails 函數
 const getTransactionDetails = async (transactionId) => {
     try {
-        console.log('查詢的 transactionId:', transactionId); // 日誌查詢的 transactionId
+        console.log('getTransactionDetails查詢的 transactionId:', transactionId); // 日誌查詢的 transactionId
         const transaction = await Transaction.findOne({ transactionId });
-        console.log('查詢的交易資料:', transaction); // 日誌查詢結果
+        console.log('getTransactionDetails查詢的交易資料:', transaction); // 日誌查詢結果
         return transaction;
     } catch (error) {
         console.error('查詢交易詳細資料時發生錯誤:', error);
@@ -324,7 +324,7 @@ app.get('/api/transaction', async (req, res) => {
 
     // 查詢交易細節
     const transactionDetails = await getTransactionDetails(transactionId);
-    console.log('查詢的 transactionId:', transactionId);
+    console.log('訂單返回查詢的 transactionId:', transactionId);
     if (transactionDetails) {
         // 根據交易狀態決定是否重定向
         if (transactionDetails.status === '成功') {
