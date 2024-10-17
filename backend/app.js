@@ -243,6 +243,7 @@ const getTransactionDetails = async (transactionId) => {
     try {
         // 假設您使用 mongoose 與 MongoDB
         const transaction = await Transaction.findOne({ transactionId });
+        console.log('查詢的交易資料:', transaction);
         return transaction;
     } catch (error) {
         console.error('查詢交易詳細資料時發生錯誤:', error);
@@ -282,7 +283,8 @@ app.post('/api/create-payment', async (req, res) => {
 
         // 記錄響應信息
         console.log('API 響應:', response.data);
-
+        console.log('生成的交易 ID:', response.data.info.transactionId);
+        
         if (response.data && response.data.info && response.data.info.paymentUrl) {
             // 儲存交易資料到資料庫
             const transaction = new Transaction({
@@ -291,7 +293,7 @@ app.post('/api/create-payment', async (req, res) => {
                 currency,
                 status: '待處理' // 或根據實際情況設置狀態
             });
-            
+
             console.log('儲存交易資料:', transaction);
             await transaction.save();
 
