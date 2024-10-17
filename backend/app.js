@@ -280,7 +280,7 @@ app.post('/api/create-payment', async (req, res) => {
         'X-LINE-ChannelId': channelID,
         'X-LINE-Authorization-Nonce': nonce,
         'X-LINE-Authorization': signature,
-        'X-LINE-MerchantDeviceProfileId': YOUR_DEVICE_PROFILE_ID, // 確保這裡是正確的變數
+        //'X-LINE-MerchantDeviceProfileId': YOUR_DEVICE_PROFILE_ID, // 確保這裡是正確的變數
     });
 
     try {
@@ -290,7 +290,7 @@ app.post('/api/create-payment', async (req, res) => {
                 'X-LINE-ChannelId': channelID,
                 'X-LINE-Authorization-Nonce': nonce,
                 'X-LINE-Authorization': signature,
-                'X-LINE-MerchantDeviceProfileId': YOUR_DEVICE_PROFILE_ID, // 確保這裡是正確的變數
+               // 'X-LINE-MerchantDeviceProfileId': YOUR_DEVICE_PROFILE_ID, // 確保這裡是正確的變數
             },
         });
 
