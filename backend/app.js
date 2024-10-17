@@ -262,19 +262,20 @@ app.post('/api/create-payment', async (req, res) => {
         ],
     };
 
-    // 生成簽名
-    const signature = generateSignature(paymentData, nonce, channelSecret); // 這是您需要實現的簽名生成函數
-
     // 定義簽名生成函數
     function generateSignature(paymentData, nonce, channelSecret) {
         const jsonData = JSON.stringify(paymentData); // 將資料轉為 JSON 格式
-        const stringToSign = `${channelSecret}${jsonData}${nonce}`; // 構建簽名字串
+        // 注意順序：應依據文件確認字串順序
+        const stringToSign = `${channelSecret}${nonce}${jsonData}`; 
         const signature = crypto.createHmac('sha256', channelSecret)
             .update(stringToSign)
             .digest('base64'); // 生成 Base64 編碼的 HMAC SHA256 簽名
         return signature;
     }
-    
+
+    // 生成簽名
+    const signature = generateSignature(paymentData, nonce, channelSecret);
+
     // 記錄請求信息
     console.log('請求支付資料:', JSON.stringify(paymentData, null, 2));
     console.log('請求標頭:', {
@@ -282,7 +283,6 @@ app.post('/api/create-payment', async (req, res) => {
         'X-LINE-ChannelId': channelID,
         'X-LINE-Authorization-Nonce': nonce,
         'X-LINE-Authorization': signature,
-        //'X-LINE-MerchantDeviceProfileId': YOUR_DEVICE_PROFILE_ID, // 確保這裡是正確的變數
     });
 
     try {
@@ -292,7 +292,6 @@ app.post('/api/create-payment', async (req, res) => {
                 'X-LINE-ChannelId': channelID,
                 'X-LINE-Authorization-Nonce': nonce,
                 'X-LINE-Authorization': signature,
-               // 'X-LINE-MerchantDeviceProfileId': YOUR_DEVICE_PROFILE_ID, // 確保這裡是正確的變數
             },
         });
 
@@ -313,4 +312,3 @@ app.post('/api/create-payment', async (req, res) => {
         });
     }
 });
-
