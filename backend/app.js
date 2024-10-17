@@ -265,6 +265,14 @@ app.post('/api/create-payment', async (req, res) => {
     // 生成簽名
     const signature = generateSignature(paymentData, nonce, channelSecret); // 這是您需要實現的簽名生成函數
 
+    // 定義簽名生成函數
+    function generateSignature(data, nonce, channelSecret) {
+        const stringToSign = `${JSON.stringify(data)}${nonce}`;
+        const hmac = crypto.createHmac('sha256', channelSecret);
+        hmac.update(stringToSign);
+        return hmac.digest('base64');
+    }
+    
     // 記錄請求信息
     console.log('請求支付資料:', JSON.stringify(paymentData, null, 2));
     console.log('請求標頭:', {
