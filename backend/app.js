@@ -258,7 +258,6 @@ const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a';
 // 創建支付的 API
 app.post('/api/create-payment', async (req, res) => {
     const orderId = `o_${Date.now()}`; // 生成唯一的訂單 ID
-    const transactionId = response.data.info.transactionId; // API 返回的 transactionId
     const amount = 500; // 您可以根據需要調整金額
     const currency = 'TWD'; // 或 'JPY'
     const paymentData = {
@@ -299,22 +298,26 @@ app.post('/api/create-payment', async (req, res) => {
             status: '待處理'
         });
 
-        console.log('儲存交易資料:', transaction);
-        await transaction.save();
-        
-        // 在返回的 URL 中添加 transactionId
-        res.json({ 
-            returnUrl: response.data.info.paymentUrl.web,
-            transactionId 
-        });
-
+        if (response && response.data && response.data.info) {
+            const transactionId = response.data.info.transactionId; // API 返回的 transactionId
+            console.log('生成的交易 ID:', transactionId);
+            
+            // 儲存交易資料的程式碼
+            const transactionData = {
+                transactionId: transactionId,
+                amount: 500,
+                currency: 'TWD',
+                status: '待處理',
+                // 其他需要的屬性
+            };
+            await saveTransactionData(transactionData); // 假設你有一個函數來儲存資料
+            res.status(200).json({ message: '交易已創建', transactionId });
+        } else {
+            res.status(400).json({ message: '無效的 API 響應' });
+        }
     } catch (error) {
-        // 記錄錯誤信息
-        console.error('支付請求錯誤:', error.response ? error.response.data : error.message);
-        res.status(500).json({
-            message: '支付請求失敗',
-            error: error.response ? error.response.data : error.message,
-        });
+        console.error('錯誤:', error);
+        res.status(500).json({ message: '伺服器錯誤' });
     }
 });
 
