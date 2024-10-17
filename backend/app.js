@@ -266,7 +266,7 @@ app.post('/api/create-payment', async (req, res) => {
         orderId,
         productName: "Line Pay",
         productImageUrl: "https://play-lh.googleusercontent.com/227YjLBcUSi_M1OZ6GGFlcfZ9vCi9bZ79SmTMDffF79n0DbcjlAmBIB-V2O7-lOb3xac",
-        confirmUrl: `http://192.168.61.15/api/transaction?transactionId=${orderId}`, // 確保使用反引號
+        confirmUrl: `http://192.168.61.15/api/transaction?transactionId=${orderId}`, // 修正這裡的反引號
     };
 
     try {
@@ -280,9 +280,7 @@ app.post('/api/create-payment', async (req, res) => {
 
         // 記錄響應信息
         console.log('API 響應:', response.data);
-        
-        const transactionId = response.data.info.transactionId; // API 返回的 transactionId
-        console.log('生成的交易 ID:', transactionId);
+        const transactionId = response.data.info.transactionId;
 
         // 在儲存之前檢查交易是否已存在
         const existingTransaction = await Transaction.findOne({ transactionId });
@@ -290,17 +288,15 @@ app.post('/api/create-payment', async (req, res) => {
             return res.status(400).json({ message: '此交易已存在' }); // 400 Bad Request
         }
 
-        // 儲存交易資料到資料庫
+        // 儲存交易資料
         const transactionData = {
-            transactionId: transactionId,
+            transactionId,
             amount,
             currency,
             status: '待處理'
         };
-        
         await saveTransactionData(transactionData); // 儲存交易資料
         res.status(200).json({ message: '交易已創建', transactionId });
-        
     } catch (error) {
         console.error('錯誤:', error);
         res.status(500).json({ message: '伺服器錯誤' });
