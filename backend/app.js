@@ -280,6 +280,12 @@ app.post('/api/create-payment', async (req, res) => {
     };
 
     try {
+        // 在儲存之前檢查交易是否已存在
+        const existingTransaction = await Transaction.findOne({ transactionId });
+        if (existingTransaction) {
+            return res.status(400).json({ message: '此交易已存在' }); // 400 Bad Request
+        }
+        
         const response = await axios.post('https://sandbox-api-pay.line.me/v2/payments/request', paymentData, {
             headers: {
                 'Content-Type': 'application/json',
@@ -291,12 +297,6 @@ app.post('/api/create-payment', async (req, res) => {
         // 記錄響應信息
         console.log('API 響應:', response.data);
         const transactionId = response.data.info.transactionId;
-
-        // 在儲存之前檢查交易是否已存在
-        const existingTransaction = await Transaction.findOne({ transactionId });
-        if (existingTransaction) {
-            return res.status(400).json({ message: '此交易已存在' }); // 400 Bad Request
-        }
 
         // 儲存交易資料
         const transactionData = {
