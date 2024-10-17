@@ -247,7 +247,7 @@ app.post('/api/create-payment', async (req, res) => {
         currency,
 	    "productName": "ithome",
 	    "productImageUrl": "https://ithelp.ithome.com.tw/images/ironman/11th/event/kv_event/kv-bg-addfly.png",
-	    "confirmUrl": "http://192.168.61.15:5001",
+	    "confirmUrl": "/api/transaction",
     };
 
     // 定義簽名生成函數
@@ -297,4 +297,10 @@ app.post('/api/create-payment', async (req, res) => {
             error: error.response ? error.response.data : error.message,
         });
     }
+});
+
+app.get('/api/transaction', (req, res) => {
+    const transactionId = req.query.transactionId;
+    // 在這裡處理交易 ID，查詢相應的數據或執行相應的邏輯
+    res.json({ message: 'Transaction details', transactionId });
 });
