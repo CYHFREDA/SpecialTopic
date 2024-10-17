@@ -237,32 +237,31 @@ app.post('/api/create-payment', async (req, res) => {
     const orderId = `o_${Date.now()}`; // 生成唯一的訂單 ID
     const packageId = `p_${Date.now()}`; // 生成唯一的套餐 ID
     const productId = `pr_${Date.now()}`; // 生成唯一的商品 ID
-    const nonce = crypto.randomUUID(); // 生成 UUID 版本 4 的 nonce
-    const amount = 1000; // 您可以根據需要調整金額
+    const amount = 500; // 您可以根據需要調整金額
     const currency = 'TWD'; // 或 'JPY'
 
     const paymentData = {
-	    amount,
-        orderId,
+        amount,
         currency,
-	    "productName": "ithome",
-	    "productImageUrl": "https://ithelp.ithome.com.tw/images/ironman/11th/event/kv_event/kv-bg-addfly.png",
-	    "confirmUrl": "/api/transaction",
+        orderId,
+        packages: [
+            {
+                id: packageId,
+                amount,
+                products: [
+                    {
+                        id: productId,
+                        name: "這是好吃的",
+                        imageUrl: "https://pay-store.example.com/images/product.jpg",
+                        quantity: 1,
+                        price: amount,
+                    },
+                ],
+            },
+        ],
+        confirmUrl: "/api/transaction",
     };
 
-    // 定義簽名生成函數
-    function generateSignature(paymentData, nonce, channelSecret) {
-        const jsonData = JSON.stringify(paymentData); // 將資料轉為 JSON 格式
-        // 注意順序：應依據文件確認字串順序
-        const stringToSign = `${channelSecret}${nonce}${jsonData}`; 
-        const signature = crypto.createHmac('sha256', channelSecret)
-            .update(stringToSign)
-            .digest('base64'); // 生成 Base64 編碼的 HMAC SHA256 簽名
-        return signature;
-    }
-
-    // 生成簽名
-    const signature = generateSignature(paymentData, nonce, channelSecret);
 
     // 記錄請求信息
     console.log('請求支付資料:', JSON.stringify(paymentData, null, 2));
