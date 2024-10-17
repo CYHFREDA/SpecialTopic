@@ -266,7 +266,7 @@ app.post('/api/create-payment', async (req, res) => {
         orderId,
         productName: "Line Pay",
         productImageUrl: "https://play-lh.googleusercontent.com/227YjLBcUSi_M1OZ6GGFlcfZ9vCi9bZ79SmTMDffF79n0DbcjlAmBIB-V2O7-lOb3xac",
-        confirmUrl: "http://192.168.61.15/api/transaction?transactionId=${orderId}",
+        confirmUrl: `http://192.168.61.15/api/transaction?transactionId=${orderId}`, // 確保使用反引號
     };
 
     try {
@@ -280,9 +280,9 @@ app.post('/api/create-payment', async (req, res) => {
 
         // 記錄響應信息
         console.log('API 響應:', response.data);
-        console.log('生成的交易 ID:', response.data.info.transactionId);
         
-        const transactionId = response.data.info.transactionId;
+        const transactionId = response.data.info.transactionId; // API 返回的 transactionId
+        console.log('生成的交易 ID:', transactionId);
 
         // 在儲存之前檢查交易是否已存在
         const existingTransaction = await Transaction.findOne({ transactionId });
@@ -291,35 +291,22 @@ app.post('/api/create-payment', async (req, res) => {
         }
 
         // 儲存交易資料到資料庫
-        const transaction = new Transaction({
-            transactionId,
+        const transactionData = {
+            transactionId: transactionId,
             amount,
             currency,
             status: '待處理'
-        });
-
-        if (response && response.data && response.data.info) {
-            const transactionId = response.data.info.transactionId; // API 返回的 transactionId
-            console.log('生成的交易 ID:', transactionId);
-            
-            // 儲存交易資料的程式碼
-            const transactionData = {
-                transactionId: transactionId,
-                amount: 500,
-                currency: 'TWD',
-                status: '待處理',
-                // 其他需要的屬性
-            };
-            await saveTransactionData(transactionData); // 假設你有一個函數來儲存資料
-            res.status(200).json({ message: '交易已創建', transactionId });
-        } else {
-            res.status(400).json({ message: '無效的 API 響應' });
-        }
+        };
+        
+        await saveTransactionData(transactionData); // 儲存交易資料
+        res.status(200).json({ message: '交易已創建', transactionId });
+        
     } catch (error) {
         console.error('錯誤:', error);
         res.status(500).json({ message: '伺服器錯誤' });
     }
 });
+
 
 //訂單返回的路徑
 app.get('/api/transaction', async (req, res) => {
