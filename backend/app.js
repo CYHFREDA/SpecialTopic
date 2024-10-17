@@ -239,18 +239,17 @@ const transactionSchema = new mongoose.Schema({
 const Transaction = mongoose.model('Transaction', transactionSchema);
 
 // 實現 getTransactionDetails 函數
-async function getTransactionDetails(transactionId) {
+const getTransactionDetails = async (transactionId) => {
     try {
+        // 假設您使用 mongoose 與 MongoDB
         const transaction = await Transaction.findOne({ transactionId });
-        if (!transaction) {
-            console.log('未找到交易資料，transactionId:', transactionId);
-        }
         return transaction;
     } catch (error) {
-        console.error('查詢交易資料錯誤:', error);
-        return null;
+        console.error('查詢交易詳細資料時發生錯誤:', error);
+        return null; // 返回 null 如果查詢失敗
     }
-}
+};
+
 
 
 // LINE Pay API 配置
