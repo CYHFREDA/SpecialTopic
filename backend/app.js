@@ -307,7 +307,7 @@ app.post('/api/create-payment', async (req, res) => {
         await saveTransactionData(transactionData);
 
         // 回傳成功訊息
-        res.json({ message: '支付請求已創建', linePayResponseData: linePayResponse.data });
+        res.json({ message: '支付請求已創建', linePayResponseData: response.data });
     } catch (error) {
         console.error('創建支付請求時發生錯誤:', error);
         res.status(500).json({ message: '創建支付請求失敗。', error });
