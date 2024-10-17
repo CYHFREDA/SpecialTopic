@@ -266,11 +266,13 @@ app.post('/api/create-payment', async (req, res) => {
     const signature = generateSignature(paymentData, nonce, channelSecret); // 這是您需要實現的簽名生成函數
 
     // 定義簽名生成函數
-    function generateSignature(data, nonce, channelSecret) {
-        const stringToSign = `${JSON.stringify(data)}${nonce}`;
-        const hmac = crypto.createHmac('sha256', channelSecret);
-        hmac.update(stringToSign);
-        return hmac.digest('base64');
+    function generateSignature(paymentData, nonce, channelSecret) {
+        const jsonData = JSON.stringify(paymentData); // 將資料轉為 JSON 格式
+        const stringToSign = `${channelSecret}${jsonData}${nonce}`; // 構建簽名字串
+        const signature = crypto.createHmac('sha256', channelSecret)
+            .update(stringToSign)
+            .digest('base64'); // 生成 Base64 編碼的 HMAC SHA256 簽名
+        return signature;
     }
     
     // 記錄請求信息
