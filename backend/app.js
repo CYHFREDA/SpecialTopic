@@ -267,33 +267,45 @@ const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a';
 
 // 創建支付的 API
 app.post('/api/create-payment', async (req, res) => {   
-        try {
+    try {
         const { orderId, amount, currency } = req.body;
-            
-        // 檢查訂單 ID 是否存在
+
+        // 確保這裡的 orderId 是唯一的且正確的
+        console.log("接收到的訂單 ID:", orderId);
+        console.log("接收到的金額:", amount);
+        console.log("接收到的貨幣:", currency);
+
+        // 檢查必需的參數是否存在
+        if (!orderId || !amount || !currency) {
+            return res.status(400).json({ message: "orderId、amount 和 currency 是必需的。" });
+        }
+
         const existingTransaction = await getTransactionDetails(orderId);
         if (existingTransaction) {
             return res.status(400).json({ message: '此訂單已存在，請勿重複請求。' });
         }
+
         const linePayUrl = 'https://sandbox-api-pay.line.me/v2/payments/request'; // 使用沙盒環境
         const payload = {
             productName: "Line Pay",
-            amount: 500,
-            currency: 'TWD',
-            orderId: `o_${Date.now()}`, // 使用唯一的訂單 ID
+            amount: amount, // 從請求中獲取
+            currency: currency, // 從請求中獲取
+            orderId: orderId, // 使用請求中的 orderId
             confirmUrl: 'http://192.168.61.15/api/transaction', // 替換為實際的確認網址
         };
+
         const response = await axios.post(linePayUrl, payload, {
             headers: {
                 'Content-Type': 'application/json',
-                'X-LINE-ChannelId':channelID,
+                'X-LINE-ChannelId': channelID,
                 'X-LINE-ChannelSecret': channelSecret,
             }
         });
+
         if (response.data.returnCode === '0000') {
             // 保存交易資料
             await saveTransactionData({
-                transactionId: orderId,
+                transactionId: orderId, // 確保這裡的 orderId 正確
                 amount: amount,
                 currency: currency,
                 status: 'PENDING',
@@ -315,6 +327,11 @@ app.get('/api/transaction', async (req, res) => {
     console.log('查詢的 transactionId:', transactionId);
 
     try {
+        // 確保這裡的 transactionId 是有效的
+        if (!transactionId) {
+            return res.status(400).send('transactionId 必須存在。');
+        }
+
         // 查詢交易細節
         const transactionDetails = await getTransactionDetails(transactionId);
         console.log('查詢的交易資料:', transactionDetails);
@@ -322,8 +339,7 @@ app.get('/api/transaction', async (req, res) => {
         if (transactionDetails) {
             // 根據交易狀態決定是否重定向
             if (transactionDetails.status === '成功') {
-                // 重定向到打卡頁面或適當的頁面
-                return res.redirect('/'); // 根據您的需求替換這裡的路由
+                return res.redirect('/'); // 根據需求替換路由
             } else if (transactionDetails.status === '失敗') {
                 return res.send('交易未成功，請稍後重試。');
             } else {
@@ -337,4 +353,3 @@ app.get('/api/transaction', async (req, res) => {
         return res.status(500).send('伺服器錯誤，請稍後再試。');
     }
 });
-
