@@ -285,27 +285,31 @@ app.post('/api/create-payment', async (req, res) => {
         console.log('API 響應:', response.data);
         console.log('生成的交易 ID:', response.data.info.transactionId);
         
-        if (response.data && response.data.info && response.data.info.paymentUrl) {
-            // 儲存交易資料到資料庫
-            const transaction = new Transaction({
-                transactionId: response.data.info.transactionId, // 獲取交易 ID
-                amount,
-                currency,
-                status: '待處理' // 或根據實際情況設置狀態
-            });
+        const transactionId = response.data.info.transactionId;
 
-            console.log('儲存交易資料:', transaction);
-            await transaction.save();
-            
-            // 在返回的 URL 中添加 transactionId
-            res.json({ 
-                returnUrl: response.data.info.paymentUrl.web + `?transactionId=${response.data.info.transactionId}`,
-                transactionId: response.data.info.transactionId 
-            });
-            
-        } else {
-            res.status(501).json({ message: '支付請求成功，但未返回有效的付款網址' });
+        // 在儲存之前檢查交易是否已存在
+        const existingTransaction = await Transaction.findOne({ transactionId });
+        if (existingTransaction) {
+            return res.status(400).json({ message: '此交易已存在' }); // 400 Bad Request
         }
+
+        // 儲存交易資料到資料庫
+        const transaction = new Transaction({
+            transactionId,
+            amount,
+            currency,
+            status: '待處理'
+        });
+
+        console.log('儲存交易資料:', transaction);
+        await transaction.save();
+        
+        // 在返回的 URL 中添加 transactionId
+        res.json({ 
+            returnUrl: response.data.info.paymentUrl.web,
+            transactionId 
+        });
+
     } catch (error) {
         // 記錄錯誤信息
         console.error('支付請求錯誤:', error.response ? error.response.data : error.message);
