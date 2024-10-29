@@ -19,7 +19,7 @@ axios.get(apiUrl)
       const result = runBusinessLogic(firstItem); // 處理該項目
       console.log(result);
     } else {
-      console.log('沒有可用的測試數據');
+      console.log('測試正常!!!!');
     }
 
     process.exit(0); // 正常退出
