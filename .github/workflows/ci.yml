@@ -56,7 +56,7 @@ jobs:
       - name: Shutdown containers
         run: |
           docker-compose down
-          docker volume prune -f
+          docker volume prune -f 
           
       - name: Notify on successful deployment via Telegram
         if: success()  # 只有在成功時發送通知
