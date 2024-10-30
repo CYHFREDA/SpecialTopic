@@ -79,7 +79,7 @@ jobs:
         run: |
           curl -X POST -H 'Content-Type: application/json' \
           -d '{
-                "text": "*🎉 CI Pipeline 成功！*\n部署成功於分支: *'"${GITHUB_REF}"'*\n提交信息: *'"${GITHUB_SHA}"'*\n查看分支: [點擊這裡](https://github.com/CYHFREDA/specialtopic/tree/'"${GITHUB_REF}"')"
+                "text": "*🎉 CI Pipeline 成功！*\n部署成功於分支: *'"${GITHUB_REF}"'*\n提交信息: *'"${GITHUB_SHA}"'*\n查看分支: [點擊這裡](https://github.com/CYHFREDA/actions/runs/'"${GITHUB_RUN_ID}"')"
               }' \
           "${{ secrets.MATTERMOST_WEBHOOK_URL }}"
 
