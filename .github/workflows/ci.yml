@@ -74,3 +74,17 @@ jobs:
           --data "parse_mode=MarkdownV2" \
           "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
 
+      - name: Notify on successful deployment via Mattermost
+        if: success()  # 只有在成功時發送通知
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+          -d '{"text": "🎉 *CI Pipeline 成功！*%0A%0A部署成功於分支: *'"${GITHUB_REF}"'*%0A提交信息: *'"${GITHUB_SHA}"'*%0A%0A🔍 請檢查應用程序運行狀態。"}' \
+          "${{ secrets.MATTERMOST_WEBHOOK_URL }}"
+
+      - name: Notify on failure via Mattermost
+        if: failure()  # 只有在失敗時發送通知
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+          -d '{"text": "⚠️ *CI Pipeline 失敗！*%0A%0A部署失敗於分支: *'"${GITHUB_REF}"'*%0A提交信息: *'"${GITHUB_SHA}"'*%0A%0A🔍 請檢查日誌以獲取詳細信息。"}' \
+          "${{ secrets.MATTERMOST_WEBHOOK_URL }}"
+
