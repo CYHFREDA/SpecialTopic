@@ -84,7 +84,7 @@ jobs:
           "${{ secrets.MATTERMOST_WEBHOOK_URL }}"
 
       - name: Notify on failure via Mattermost
-        if: failure()  # 只有在失敗時發送通知
+        if: failure()  # 只有在失敗時發送通知 
         run: |
           curl -X POST -H 'Content-Type: application/json' \
           -d '{
