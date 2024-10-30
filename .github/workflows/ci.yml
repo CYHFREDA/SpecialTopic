@@ -79,12 +79,7 @@ jobs:
         run: |
           curl -X POST -H 'Content-Type: application/json' \
           -d '{
-                "attachments": [
-                  {
-                    "text": ":tada: *CI Pipeline 成功！*\\n部署成功於分支: *'"${GITHUB_REF}"'*\\n提交信息: *'"${GITHUB_SHA}"'*\\n:mag: 請檢查應用程序運行狀態。",
-                    "color": "#36a64f"  # 自定義顏色（綠色表示成功）
-                  }
-                ]
+                "text": "🎉 *CI Pipeline 成功！*\\n\\n部署成功於分支: *'"${GITHUB_REF}"'*\\n提交信息: *'"${GITHUB_SHA}"'*\\n\\n🔍 請檢查應用程序運行狀態。"
               }' \
           "${{ secrets.MATTERMOST_WEBHOOK_URL }}"
 
@@ -93,11 +88,6 @@ jobs:
         run: |
           curl -X POST -H 'Content-Type: application/json' \
           -d '{
-                "attachments": [
-                  {
-                    "text": "⚠️ *CI Pipeline 失敗！*\\n部署失敗於分支: *'"${GITHUB_REF}"'*\\n提交信息: *'"${GITHUB_SHA}"'*\\n🔍 請檢查日誌以獲取詳細信息。",
-                    "color": "#ff0000"  # 自定義顏色（紅色表示失敗）
-                  }
-                ]
+                "text": "⚠️ *CI Pipeline 失敗！*\\n\\n部署失敗於分支: *'"${GITHUB_REF}"'*\\n提交信息: *'"${GITHUB_SHA}"'*\\n\\n🔍 請檢查日誌以獲取詳細信息。"
               }' \
           "${{ secrets.MATTERMOST_WEBHOOK_URL }}"
