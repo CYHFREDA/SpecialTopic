@@ -78,13 +78,18 @@ jobs:
         if: success()  # 只有在成功時發送通知
         run: |
           curl -X POST -H 'Content-Type: application/json' \
-          -d '{"text": "🎉 *CI Pipeline 成功！*%0A%0A部署成功於分支: *'"${GITHUB_REF}"'*%0A提交信息: *'"${GITHUB_SHA}"'*%0A%0A🔍 請檢查應用程序運行狀態。"}' \
+          -d '{
+                "text": ":tada: *CI Pipeline 成功！*\\n\\n部署成功於分支: *'"${GITHUB_REF}"'*\\n提交信息: *'"${GITHUB_SHA}"'*\\n\\n:mag: 請檢查應用程序運行狀態。"
+              }' \
           "${{ secrets.MATTERMOST_WEBHOOK_URL }}"
 
       - name: Notify on failure via Mattermost
         if: failure()  # 只有在失敗時發送通知
         run: |
           curl -X POST -H 'Content-Type: application/json' \
-          -d '{"text": "⚠️ *CI Pipeline 失敗！*%0A%0A部署失敗於分支: *'"${GITHUB_REF}"'*%0A提交信息: *'"${GITHUB_SHA}"'*%0A%0A🔍 請檢查日誌以獲取詳細信息。"}' \
+          -d '{
+                "text": "⚠️ *CI Pipeline 失敗！*\\n\\n部署失敗於分支: *'"${GITHUB_REF}"'*\\n提交信息: *'"${GITHUB_SHA}"'*\\n\\n🔍 請檢查日誌以獲取詳細信息。"
+              }' \
           "${{ secrets.MATTERMOST_WEBHOOK_URL }}"
+
 
