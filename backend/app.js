@@ -375,7 +375,7 @@ app.post('/api/create-ecpay-payment', async (req, res) => {
     });
 
     await transaction.save()
-        .then(async () => {
+        .then(() => {
             console.log('交易資料儲存成功:', transaction);
         })
         .catch(error => {
@@ -385,33 +385,29 @@ app.post('/api/create-ecpay-payment', async (req, res) => {
         });
 
     try {
-        // 發送綠界支付的請求
+        // 綠界支付的請求 URL
         const response = await axios.post('https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5', orderData);
 
-        // 記錄響應信息
-        console.log('綠界支付 API 響應:', response.data);
-
-        if (response.data.RtnCode === '1') {
-            // 成功處理支付
+        // 檢查支付回應結果
+        if (response.data.Status === '1') {
+            console.log('支付請求成功，返回支付網址:', response.data.PaymentURL);
             res.json({
-                paymentUrl: response.data.PaymentURL,  // 支付頁面的 URL
-                transactionId: orderData.MerchantTradeNo, // 記錄交易 ID
+                returnUrl: response.data.PaymentURL
             });
         } else {
-            console.error('綠界支付錯誤，RtnCode:', response.data.RtnCode);
+            console.error('支付請求失敗，原因:', response.data.Message);
             res.status(500).json({
                 message: '支付請求失敗',
-                error: response.data.RtnMsg,
+                error: response.data.Message
             });
         }
 
     } catch (error) {
-        console.error('發送支付請求錯誤:', error.response ? error.response.data : error.message);
+        // 記錄錯誤信息
+        console.error('支付請求錯誤:', error.response ? error.response.data : error.message);
         res.status(500).json({
-            message: '支付請求失敗',
+            message: '支付請求錯誤',
             error: error.response ? error.response.data : error.message,
         });
     }
 });
-
-
