@@ -384,44 +384,34 @@ app.post('/api/create-ecpay-payment', async (req, res) => {
             return;
         });
 
-    // 綠界支付的請求 URL
-    const response = await axios.post('https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5', orderData);
-
-    // 回傳支付請求的 URL 給前端
-    res.json({ 
-        paymentUrl: response.data.paymentUrl, 
-        orderData  // 回傳支付請求資料
-    });
-});
-
-// 綠界支付支付結果通知處理（通常是回傳給你設置的 ReturnURL）
-app.post('/api/transaction', async (req, res) => {
-    const { MerchantTradeNo, RtnCode, RtnMsg, TradeNo, TradeAmt } = req.body;
-
     try {
-        // 查詢該交易 ID 是否存在
-        const transaction = await Transaction.findOne({ transactionId: MerchantTradeNo });
+        // 發送綠界支付的請求
+        const response = await axios.post('https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5', orderData);
 
-        if (!transaction) {
-            return res.status(404).send('找不到交易資料');
-        }
+        // 記錄響應信息
+        console.log('綠界支付 API 響應:', response.data);
 
-        // 更新交易狀態
-        transaction.status = RtnCode === '1' ? '成功' : '失敗';
-        await transaction.save();
-
-        console.log('更新的交易資料:', transaction);
-
-        // 根據交易結果進行相應處理
-        if (transaction.status === '成功') {
-            // 如果交易成功，進行後續處理，如跳轉頁面等
-            res.redirect('/');  // 這裡根據需要更換為支付成功後的頁面
+        if (response.data.RtnCode === '1') {
+            // 成功處理支付
+            res.json({
+                paymentUrl: response.data.PaymentURL,  // 支付頁面的 URL
+                transactionId: orderData.MerchantTradeNo, // 記錄交易 ID
+            });
         } else {
-            res.send('交易未成功，請稍後重試。');
+            console.error('綠界支付錯誤，RtnCode:', response.data.RtnCode);
+            res.status(500).json({
+                message: '支付請求失敗',
+                error: response.data.RtnMsg,
+            });
         }
+
     } catch (error) {
-        console.error('處理交易結果錯誤:', error);
-        res.status(500).send('處理交易結果時發生錯誤');
+        console.error('發送支付請求錯誤:', error.response ? error.response.data : error.message);
+        res.status(500).json({
+            message: '支付請求失敗',
+            error: error.response ? error.response.data : error.message,
+        });
     }
 });
+
 
