@@ -56,14 +56,32 @@ jobs:
         if: success()  # 只有在成功時發送通知
         run: |
           curl -s --data "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          --data "text=🎉 *CD Pipeline 成功！*%0A%0A部署成功於分支: *${GITHUB_REF}*%0A提交信息: *${GITHUB_SHA}*%0A%0A🔍 請檢查應用程序運行狀態。" \
+          --data "text=🎉 *CD Pipeline 成功！*%0A%0A部署成功於分支: *${GITHUB_REF}*%0A提交信息: *${GITHUB_SHA}*%0A%0A🔍查看詳情: [OPEN URL](https://github.com/CYHFREDA/specialtopic/actions/runs/${GITHUB_RUN_ID})" \
           --data "parse_mode=MarkdownV2" \
           "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
 
       - name: Notify on failure via Telegram
-        if: failure()  # 只有在失敗時發送通知!
+        if: failure()  # 只有在失敗時發送通知
         run: |
           curl -s --data "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          --data "text=⚠️ *CD Pipeline 失敗！*%0A%0A部署失敗於分支: *${GITHUB_REF}*%0A提交信息: *${GITHUB_SHA}*%0A%0A🔍 請檢查日誌以獲取詳細信息。" \
+          --data "text=⚠️ *CD Pipeline 失敗！*%0A%0A部署失敗於分支: *${GITHUB_REF}*%0A提交信息: *${GITHUB_SHA}*%0A%0A🔍查看詳情: [OPEN URL](https://github.com/CYHFREDA/specialtopic/actions/runs/${GITHUB_RUN_ID})" \
           --data "parse_mode=MarkdownV2" \
           "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          
+      - name: Notify on successful deployment via Mattermost
+        if: success()  # 只有在成功時發送通知
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+          -d '{
+                "text": "🎉 *CD Pipeline 成功！*\n部署成功於分支: *'"${GITHUB_REF}"'*\n提交信息: *'"${GITHUB_SHA}"'*\n🔍查看詳情 : [OPEN URL](https://github.com/CYHFREDA/specialtopic/actions/runs/'"${GITHUB_RUN_ID}"')"
+              }' \
+          "${{ secrets.MATTERMOST_WEBHOOK_URL }}"
+
+      - name: Notify on failure via Mattermost
+        if: failure()  # 只有在失敗時發送通知 
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+          -d '{
+                "text": "⚠️ *CD Pipeline 失敗！*\n部署失敗於分支: *'"${GITHUB_REF}"'*\n提交信息: *'"${GITHUB_SHA}"'*\n🔍查看詳情 : [OPEN URL](https://github.com/CYHFREDA/specialtopic/actions/runs/'"${GITHUB_RUN_ID}"')"
+              }' \
+          "${{ secrets.MATTERMOST_WEBHOOK_URL }}"
