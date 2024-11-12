@@ -61,7 +61,7 @@ jobs:
           "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
 
       - name: Notify on failure via Telegram
-        if: failure()  # 只有在失敗時發送通知
+        if: failure()  # 只有在失敗時發送通知!
         run: |
           curl -s --data "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
           --data "text=⚠️ *CD Pipeline 失敗！*%0A%0A部署失敗於分支: *${GITHUB_REF}*%0A提交信息: *${GITHUB_SHA}*%0A%0A🔍 請檢查日誌以獲取詳細信息。" \
