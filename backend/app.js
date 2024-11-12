@@ -385,11 +385,11 @@ app.post('/api/create-ecpay-payment', async (req, res) => {
         });
 
     // 綠界支付的請求 URL
-    const paymentUrl = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';  // 綠界支付請求 URL
+    const response = await axios.post('https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5', orderData);
 
     // 回傳支付請求的 URL 給前端
     res.json({ 
-        paymentUrl,
+        paymentUrl: response.data.paymentUrl, 
         orderData  // 回傳支付請求資料
     });
 });
