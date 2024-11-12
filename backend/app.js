@@ -260,7 +260,7 @@ const channelSecret = '8c832c018d09a8be1738b32a3be1ee0a';
 // 創建支付的 API
 app.post('/api/create-payment', async (req, res) => {
     const orderId = `o_${Date.now()}`; // 生成唯一的訂單 ID
-    const amount = 500; // 您可以根據需要調整金額
+    const amount = 200; // 您可以根據需要調整金額
     const currency = 'TWD'; // 或 'JPY'
 
     const paymentData = {
@@ -270,6 +270,7 @@ app.post('/api/create-payment', async (req, res) => {
         productName: "Line Pay",
         productImageUrl: "https://play-lh.googleusercontent.com/227YjLBcUSi_M1OZ6GGFlcfZ9vCi9bZ79SmTMDffF79n0DbcjlAmBIB-V2O7-lOb3xac",
         confirmUrl: "http://192.168.61.15/api/transaction",
+        ReturnURL: 'https://192.168.61.15',
     };
 
     try {
@@ -334,3 +335,93 @@ app.get('/api/transaction', async (req, res) => {
         res.status(404).send('找不到交易資料');
     }
 });
+
+// 綠界支付
+app.post('/api/create-ecpay-payment', async (req, res) => {
+    const { productName, amount } = req.body;
+
+    const orderData = {
+        MerchantID: '3002599',  // 測試特店編號
+        MerchantTradeNo: 'DT' + Math.floor(Date.now() / 1000),  // 訂單編號
+        MerchantTradeDate: new Date().toISOString().slice(0, 19).replace('T', ' '),
+        PaymentType: 'aio',
+        TotalAmount: amount,
+        TradeDesc: '打賞支付',
+        ItemName: productName,
+        ReturnURL: 'https://192.168.61.15',  // 支付完成返回的 URL
+        HashKey: 'spPjZn66i0OhqJsQ',  // 串接金鑰
+        HashIV: 'hT5OJckN45isQTTs'    // 串接加密向量
+    };
+
+    // 計算並設置支付簽名
+    const generateCheckMacValue = (data) => {
+        const stringA = Object.keys(data).map(key => `${key}=${data[key]}`).join('&');
+        const stringB = `HashKey=${data.HashKey}&${stringA}&HashIV=${data.HashIV}`;
+        return crypto.createHash('sha256').update(stringB, 'utf8').digest('hex').toUpperCase();
+    };
+
+    // 計算支付請求的簽名
+    const checkMacValue = generateCheckMacValue(orderData);
+
+    // 添加簽名到請求資料
+    orderData.CheckMacValue = checkMacValue;
+
+    // 儲存交易資料到資料庫
+    const transaction = new Transaction({
+        transactionId: orderData.MerchantTradeNo,  // 訂單編號作為交易 ID
+        amount,
+        currency: 'TWD',  // 設置貨幣類型
+        status: '待處理'  // 初始狀態為待處理
+    });
+
+    await transaction.save()
+        .then(async () => {
+            console.log('交易資料儲存成功:', transaction);
+        })
+        .catch(error => {
+            console.error('儲存交易資料時發生錯誤:', error);
+            res.status(500).json({ message: '儲存交易資料時發生錯誤。' });
+            return;
+        });
+
+    // 綠界支付的請求 URL
+    const paymentUrl = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';  // 綠界支付請求 URL
+
+    // 回傳支付請求的 URL 給前端
+    res.json({ 
+        paymentUrl,
+        orderData  // 回傳支付請求資料
+    });
+});
+
+// 綠界支付支付結果通知處理（通常是回傳給你設置的 ReturnURL）
+app.post('/api/transaction', async (req, res) => {
+    const { MerchantTradeNo, RtnCode, RtnMsg, TradeNo, TradeAmt } = req.body;
+
+    try {
+        // 查詢該交易 ID 是否存在
+        const transaction = await Transaction.findOne({ transactionId: MerchantTradeNo });
+
+        if (!transaction) {
+            return res.status(404).send('找不到交易資料');
+        }
+
+        // 更新交易狀態
+        transaction.status = RtnCode === '1' ? '成功' : '失敗';
+        await transaction.save();
+
+        console.log('更新的交易資料:', transaction);
+
+        // 根據交易結果進行相應處理
+        if (transaction.status === '成功') {
+            // 如果交易成功，進行後續處理，如跳轉頁面等
+            res.redirect('/');  // 這裡根據需要更換為支付成功後的頁面
+        } else {
+            res.send('交易未成功，請稍後重試。');
+        }
+    } catch (error) {
+        console.error('處理交易結果錯誤:', error);
+        res.status(500).send('處理交易結果時發生錯誤');
+    }
+});
+
