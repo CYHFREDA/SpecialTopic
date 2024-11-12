@@ -7,8 +7,8 @@ function fetchPayment() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            productName: '商品名稱', // 這裡填寫商品名稱等必要資料
-            amount: 1000 // 這裡填寫支付金額等必要資料
+            productName: '打賞打賞', // 這裡填寫商品名稱等必要資料
+            amount: 200 // 這裡填寫支付金額等必要資料
         })
     })
     .then(response => {
